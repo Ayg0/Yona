@@ -23,14 +23,27 @@ The multiboot standard does not define the value of the stack pointer register
 (esp) and it is up to the kernel to provide a stack. This allocates room for a
 small stack by creating a symbol at the bottom of it, then allocating 16384
 bytes for it, and finally creating a symbol at the top. The stack grows
-downwards on x86. The stack is in its own section so it can be marked nobits,
+downwards on x86. The stack is in its own section so it can be marked nobits(next comment),
 which means the kernel file is smaller because it does not contain an
 uninitialized stack. The stack on x86 must be 16-byte aligned according to the
 System V ABI standard and de-facto extensions. The compiler will assume the
 stack is properly aligned and failure to align the stack will result in
 undefined behavior.
 */
-.section .bss
+
+/*  --- marked as NOBITS ---
+In the context of assembly language and linking, 
+a section marked as nobits is a section that doesn't occupy
+any space in the object file.
+It's typically used for uninitialized data sections. 
+By placing the stack in its own nobits section, 
+the assembler and linker are being instructed to reserve space
+for the stack in memory when the program is loaded, 
+but not to allocate any space for it in the binary file itself, 
+since it doesn't contain any meaningful initial data.
+*/
+
+.section .bss, "aw", @nobits
 .align 16
 stack_bottom:
 .skip 16384 # 16 KiB
@@ -84,7 +97,7 @@ _start:
 	stack since (pushed 0 bytes so far), so the alignment has thus been
 	preserved and the call is well defined.
 	*/
-	call kernel_main
+	call kmain
 
 	/*
 	If the system has nothing more to do, put the computer into an
@@ -100,7 +113,7 @@ _start:
 	*/
 	cli
 1:	hlt
-	jmp 1b
+	jmp 1b # jump backward to the previous local label 1
 
 /*
 Set the size of the _start symbol to the current location '.' minus its start.

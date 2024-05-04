@@ -2,7 +2,7 @@
 CC=i386-elf-gcc
 AS=i386-elf-as
 LDSCRIPT=src/linker.ld
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -fno-builtin -nostdlib -nodefaultlibs
 ASFLAGS=
 LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
 
@@ -12,8 +12,8 @@ SSRCS=src/boot.s
 COBJECTS = ${CSRCS:.c=.o}
 SOBJECTS = ${SSRCS:.s=.o}
 OBJECTS= ${COBJECTS} ${SOBJECTS}
-TARGET=myos.bin
-ISO=myos.iso
+TARGET=yona.bin
+ISO=yona.iso
 
 # Default target
 all: $(ISO)
@@ -38,4 +38,7 @@ $(TARGET): $(OBJECTS)
 
 # Clean rule
 clean:
-	rm -rf $(OBJECTS) $(TARGET) $(ISO) isodir
+	rm -rf $(OBJECTS) $(TARGET) isodir
+# fclean rule
+fclean: clean
+	rm -rf $(ISO)
