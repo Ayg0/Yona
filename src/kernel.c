@@ -1,9 +1,7 @@
 #include "vga.h"
 
 void kmain(){
-	// vga_puts("Hello", VGA_LIGHT_BLUE);
-	// vga_puts(", World", VGA_LIGHT_GREEN);
-	// vga_puts("!!!", VGA_LIGHT_BROWN);
-	vga_puts("42", VGA_LIGHT_RED);
+	kputs("Hello", 0, 0, GET_COLOR(VGA_YELLOW, VGA_DARK_GREY));
+	kputs("42", 79, 0, VGA_LIGHT_GREEN);
 	while(1);
 }

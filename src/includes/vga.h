@@ -1,4 +1,5 @@
 #pragma once
+# include "types.h"
 
 # define VIDEO_MEMORY 0xB8000
 
@@ -17,8 +18,12 @@ enum vgaColors{
     VGA_LIGHT_CYAN,
     VGA_LIGHT_RED,
     VGA_LIGHT_MAGENTA,
-    VGA_LIGHT_BROWN,
+    VGA_YELLOW,
     VGA_WHITE
 };
 
-void vga_puts(const char *s, int color);
+// get color from foreground and background colors
+# define GET_COLOR(FG_COLOR, BG_COLOR) ((BG_COLOR << 4) | FG_COLOR)
+
+void kputs(const char *s, int x, int y, uint8_t color);
+void kputC(const char c, int *x, int *y, uint8_t color);

@@ -9,7 +9,7 @@ LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
 
 kLIBSRC =	src/kLib/mem.c\
 			src/kLib/strings.c
-VGACRS = src/VGA/vgaInits.c
+VGACRS = src/VGA/vgaTextMode.c
 CSRCS=src/kernel.c ${kLIBSRC} ${VGACRS}
 SSRCS=src/boot.s
 
