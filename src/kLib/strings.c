@@ -39,20 +39,20 @@ size_t	strlcat(char *dest, const char *src, size_t size)
 }
 //  strchr
 char *strchr(const char *s, int c){
-    while (*s)
+    while (*s++)
         if (*s == (char)c)
             break;
-    return *s;
+    return (char *)s;
 }
 //  strrchr
 char *strrchr(const char *s, int c){
     size_t sLen = strlen(s);
     if ((char) c == '\0')
-		return (s + sLen);
+		return (char *)(s + sLen);
     while (sLen > 0)
     {
         if (s[sLen - 1] == (char)c)
-            return s + sLen;
+            return (char *)(s + sLen);
         sLen--;
     }
     return NULL;
@@ -72,7 +72,7 @@ int strcmp(const char *s1, const char *s2){
 //  strnstr
 char *strnstr(const char *big, const char *little, size_t len){
     if (!*little)
-        return big;
+        return (char *)big;
     size_t littleLen = strlen(little);
     size_t i = 0;
     while (big[i] && i < len)

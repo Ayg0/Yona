@@ -1,17 +1,9 @@
-void kmain(){
-	char* video_memory = (char*) 0xb8000;
+#include "vga.h"
 
-	*video_memory = 'H';
-	*(video_memory + 2*1) = 'e';
-	*(video_memory + 2*2) = 'l';
-	*(video_memory + 2*3) = 'l';
-	*(video_memory + 2*4) = 'o';
-	*(video_memory + 2*5) = ',';
-	*(video_memory + 2*6) = ' ';
-	*(video_memory + 2*7) = 'W';
-	*(video_memory + 2*8) = 'o';
-	*(video_memory + 2*9) = 'r';
-	*(video_memory + 2*10) = 'l';
-	*(video_memory + 2*11) = 'd';
-	*(video_memory + 2*12) = '!';
+void kmain(){
+	// vga_puts("Hello", VGA_LIGHT_BLUE);
+	// vga_puts(", World", VGA_LIGHT_GREEN);
+	// vga_puts("!!!", VGA_LIGHT_BROWN);
+	vga_puts("42", VGA_LIGHT_RED);
+	while(1);
 }
