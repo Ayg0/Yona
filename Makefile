@@ -2,11 +2,14 @@
 CC=i386-elf-gcc
 AS=i386-elf-as
 LDSCRIPT=src/linker.ld
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra -fno-builtin -nostdlib -nodefaultlibs
+CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra\
+		 -fno-builtin -nostdlib -nodefaultlibs -Isrc/includes
 ASFLAGS=
 LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
 
-CSRCS=src/kernel.c
+kLIBSRC =	src/kLib/mem.c\
+			src/kLib/strings.c
+CSRCS=src/kernel.c ${kLIBSRC}
 SSRCS=src/boot.s
 
 COBJECTS = ${CSRCS:.c=.o}
