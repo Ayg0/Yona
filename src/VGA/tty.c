@@ -35,9 +35,9 @@ void	initSession(_ttySession *Session){
 // change current Color, use -1 to keep the old value
 void	changeTtyColor(int8_t fgColor, int8_t bgColor){
 	if (fgColor == -1)
-		fgColor = mainTty.color & 0xff00;
+		fgColor = mainTty.color & 0x00ff;
 	else if (bgColor == -1)
-		bgColor = mainTty.color & 0x00ff;
+		bgColor = mainTty.color & 0xff00;
 	mainTty.color = GET_COLOR(fgColor, bgColor);
 }
 // print the VGA cell to the VM

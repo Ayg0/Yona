@@ -13,14 +13,14 @@ void fake_sleep(uint32_t iters){
 void kmain(){
 	initTty();
 	ttyAddStr("Hello World");
-	// switchSession(1);
-	// changeTtyColor(VGA_LIGHT_GREEN, -1);
-	// ttyAddStr("Potatoes");
-	// while (1)
-	// {
-	// 	switchSession(0);
-	// 	fake_sleep(20000);
-	// 	switchSession(1);
-	// 	fake_sleep(20000);
-	// }
+	switchSession(1);
+	changeTtyColor(VGA_LIGHT_GREEN, -1);
+	ttyAddStr("Potatoes");
+	while (1)
+	{
+		switchSession(0);
+		fake_sleep(20000);
+		switchSession(1);
+		fake_sleep(20000);
+	}
 }
