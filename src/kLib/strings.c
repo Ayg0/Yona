@@ -19,8 +19,7 @@ size_t	strlcpy(char *dest, const char *src, size_t size){
     return strlen(src);
 }
 //  strlcat
-size_t	strlcat(char *dest, const char *src, size_t size)
-{
+size_t	strlcat(char *dest, const char *src, size_t size){
     size_t destLen = strlen(dest);
     size_t srcLen = strlen(src);
     size_t copyLen;

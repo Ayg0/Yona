@@ -2,7 +2,8 @@
 # include "types.h"
 
 # define VIDEO_MEMORY 0xB8000
-
+# define TMWIDTH	80
+# define TMHEIGHT	24	// -1 for the status bar;
 enum vgaColors{
     VGA_BLACK,
     VGA_BLUE,
@@ -24,6 +25,8 @@ enum vgaColors{
 
 // get color from foreground and background colors
 # define GET_COLOR(FG_COLOR, BG_COLOR) ((BG_COLOR << 4) | FG_COLOR)
+// insert char With it's colors
+# define GET_CHAR(CHAR, COLOR) ((COLOR << 8) | CHAR)
 
 void kputs(const char *s, int x, int y, uint8_t color);
 void kputC(const char c, int *x, int *y, uint8_t color);

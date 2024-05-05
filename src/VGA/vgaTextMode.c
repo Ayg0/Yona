@@ -14,5 +14,5 @@ void kputC(const char c, int *x, int *y, uint8_t color){
     uint16_t *vMemory = (uint16_t*)VIDEO_MEMORY;
     if (*x >= 80)
         *x = 0, (*y)++;
-    vMemory[ *x + *y * 80] = color << 8 | c;
+    vMemory[ *x + *y * 80] = GET_CHAR(c, color);
 }

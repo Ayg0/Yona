@@ -7,9 +7,8 @@ CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra\
 ASFLAGS=
 LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
 
-kLIBSRC =	src/kLib/mem.c\
-			src/kLib/strings.c
-VGACRS = src/VGA/vgaTextMode.c
+kLIBSRC =	src/kLib/mem.c src/kLib/strings.c
+VGACRS = src/VGA/vgaTextMode.c src/VGA/tty.c
 CSRCS=src/kernel.c ${kLIBSRC} ${VGACRS}
 SSRCS=src/boot.s
 
