@@ -2,8 +2,7 @@
 # include "types.h"
 
 # define VIDEO_MEMORY 0xB8000
-# define TMWIDTH	80
-# define TMHEIGHT	24	// -1 for the status bar;
+
 enum vgaColors{
     VGA_BLACK,
     VGA_BLUE,

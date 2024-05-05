@@ -1,98 +1,143 @@
-# include "tty.h"
+#include "tty.h"
+#include "vga.h"
+#include "mem.h"
+extern _tty	mainTty;
 
-extern tty mainTty;
+/*
+	- [X] init the Tty
+	- [X] init Session
+	- [X] Change Color
+	- [X] add a character to the Session
+	- [X] add a string to the Session
+	- [X] clear the Tty Screen
+	- [X] clear the StatusBar
+	- [X] print the StatusBar content
+	- [X] print the ScreenContent
+	- [X] update StatusBar
+	- [X] switch Session
+*/
+// inits the mainTty
+void	initTty(){
+	mainTty.sessionsNb = 5;
+	mainTty.SelectedIndex = 0;
+	mainTty.currentSession = &mainTty.Sessions[mainTty.SelectedIndex];
+	mainTty.color = GET_COLOR(VGA_WHITE, VGA_BLACK);
 
-void initTty(tty *tty){
-	tty->nbrOfSessions = 5;
-	for (uint8_t i = 0; i < tty->nbrOfSessions; i++){
-		tty->selectedSession = &tty->AvailableSessions[i];
-		tty->selectedSession->cursor.x = 0;
-		tty->selectedSession->cursor.y = 0;
-	}
-	tty->Color = GET_COLOR(VGA_WHITE, VGA_BLACK);
-	selectSession(0);
+	for (uint8_t i = 0; i < mainTty.sessionsNb; i++)
+		initSession(mainTty.Sessions + i);
+	updateStatusBar();
+}
+// Inits the Session
+void	initSession(_ttySession *Session){
+	Session->cursor.x = 0;
+	Session->cursor.y = 0;
+}
+// change current Color, use -1 to keep the old value
+void	changeTtyColor(int8_t fgColor, int8_t bgColor){
+	if (fgColor == -1)
+		fgColor = mainTty.color & 0xff00;
+	else if (bgColor == -1)
+		bgColor = mainTty.color & 0x00ff;
+	mainTty.color = GET_COLOR(fgColor, bgColor);
+}
+// print the VGA cell to the VM
+void	cellToVM(uint16_t cell, int16_t x, int16_t y){
+	uint16_t	*videoMemory = (uint16_t *) VIDEO_MEMORY;
+
+	videoMemory[x + y * 80] = cell;
 }
 
-void setTtyCursor(int32_t x, int32_t y){
-	if (x >= TMWIDTH)
-		x = 0, y += 1;
-	if (y >= TMHEIGHT)
-		y = TMHEIGHT - 1;
-	mainTty.selectedSession->cursor.x = x;
-	mainTty.selectedSession->cursor.y = y;
+void	ttyAddChar(uint8_t c){
+	_pos		cursor = mainTty.currentSession->cursor;
+	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+
+	if (cursor.x >= TTY_WIDTH)
+		cursor.x = 0, cursor.y++;
+	if (cursor.y >= TTY_HEIGHT)
+		cursor.y = TTY_HEIGHT - 1; // fix You need to Scroll
+	sessionBuff[cursor.x + cursor.y * 80] = GET_CHAR(c, mainTty.color);
+	cellToVM(GET_CHAR(c, mainTty.color), cursor.x, cursor.y);
+	cursor.x++;
+	mainTty.currentSession->cursor = cursor;
+}
+// add char to Session (no Edit on Cursor nor preventing of errors)
+void	ttyAddCharPos(uint8_t c, int16_t x, int16_t y){
+	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+
+	sessionBuff[x + y * 80] = GET_CHAR(c, mainTty.color);
+	cellToVM(GET_CHAR(c, mainTty.color), x, y);
 }
 
-void updateStatusBar(uint8_t sessionIndex){
-	uint16_t i;
-	char *s = "Selected Session: X";
-
-	s[18] = sessionIndex + 48;
-	for (i = 0; *s; i++, s++)
-		mainTty.StatusBar.buff[i] = *s;
-	mainTty.StatusBar.buff[i] = 0;
-}
-
-void selectSession(uint8_t sessionIndex){
-	mainTty.selectedSIndex = sessionIndex;
-	mainTty.selectedSession = &mainTty.AvailableSessions[sessionIndex];
-	updateStatusBar(sessionIndex);
-	printSBarContent();
-}
-// no cursor Change :) 
-void kprintTtyC(char c, uint8_t x, uint8_t y, uint8_t color){
-	uint16_t *vMemory = (uint16_t*)VIDEO_MEMORY;
-
-    vMemory[x + y * TMWIDTH] = GET_CHAR(c, color);
-}
-// print a VGA character cell (16 bit), changesThe Cursor
-void kprintTtyVC(uint16_t	vgaCell){
-	pos cursor	= mainTty.selectedSession->cursor;
-	uint16_t *vMemory = (uint16_t*)VIDEO_MEMORY;
-
-	if (cursor.x >= TMWIDTH)
-        cursor.x = 0, cursor.y += 1;
-    vMemory[ cursor.x + cursor.y * TMWIDTH] = vgaCell;
-	mainTty.selectedSession->cursor = cursor;
-}
-
-void	clearTty(){
-	for (uint8_t i = 0; i < TMHEIGHT; i++)
-		for (uint8_t j = 0; j < TMWIDTH; j++)
-			kprintTtyC(' ', j, i, 0);
-}
-
-void	printSBarContent(){
-	char *statusBar = mainTty.StatusBar.buff;
-
-	for (uint16_t i = 0; *statusBar; i++, statusBar++){
-		kprintTtyC(*statusBar, i, 24, GET_COLOR(VGA_WHITE, VGA_BLACK));
-	}
-}
-
-void	printSessionContent(){
-	uint8_t *screenBuff = (uint8_t *)mainTty.selectedSession->sessionBuff;
-	clearTty();
-	for (uint8_t i = 0; i < TMHEIGHT; i++)
+void	ttyAddStr(uint8_t *s){
+	while (*s)
 	{
-		for (uint8_t j = 0; j < TMWIDTH; j++)
-		{
-			kprintTtyC(screenBuff[0], j, i, screenBuff[1]);
-			screenBuff += 2;
-		}
+		ttyAddChar(*s);
+		s++;
 	}
 }
-// cp a string to the screen buffer
-void	sToSession(char *s, uint8_t x, uint8_t y){
-	uint16_t *sessionBuffer = (uint16_t *)mainTty.selectedSession->sessionBuff;
+// add str to Session (no Edit on Cursor nor preventing of errors)
+void	ttyAddStrPos(uint8_t *s, int16_t x, int16_t y){
+	uint16_t	*sessionBuff = mainTty.currentSession->buff;
 
-	for (uint16_t i = x + y * 80; *s; i++, s++)
-		sessionBuffer[i] = GET_CHAR(*s, mainTty.Color);
+	while (*s)
+	{
+		ttyAddCharPos(*s, x, y);
+		s++;
+		x++;
+		if (x >= TTY_WIDTH)
+			x = 0, y++;
+		if (y >= TTY_HEIGHT)
+			y = TTY_HEIGHT - 1;
+	}
 }
-// set new colors to the tty, using -1 keeps the old values
-void	setTtyColor(int8_t foregroundColor, int8_t backgroundColor){
-	if (foregroundColor == -1)
-		foregroundColor = mainTty.Color & 0x00ff;
-	else if (backgroundColor == -1)
-		backgroundColor = mainTty.Color & 0xff00;
-	mainTty.Color = GET_COLOR(foregroundColor, backgroundColor);
+
+void clearTtySession(){
+	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+
+	CLEAR_MEM(uint16_t, sessionBuff, 1920);		// clear buffer
+	CLEAR_MEM(uint16_t, VIDEO_MEMORY, 1920);	// clear the screen
+}
+
+void clearTtyStatusBar(){
+
+	CLEAR_MEM(uint16_t, mainTty.statusBar.buff, 80);
+	CLEAR_MEM(uint16_t, VIDEO_MEMORY + 1920, 80);
+}
+
+void printTtySession(){
+	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+	uint16_t	*videoMemory = (uint16_t *) VIDEO_MEMORY;
+
+	for (uint16_t i = 0; i < 1920; i++)
+		videoMemory[i] = sessionBuff[i];
+}
+
+void printTtyStatusBar(){
+	uint16_t	*sessionBuff = mainTty.statusBar.buff;
+	uint16_t	*videoMemory = (uint16_t *) VIDEO_MEMORY + 1920;
+
+	for (uint16_t i = 0; i < 80; i++)
+		videoMemory[i] = sessionBuff[i];
+}
+
+void	updateStatusBar(){
+	char *s = "Selected Session: X";
+	uint16_t *statusBar = mainTty.statusBar.buff;
+	s[18] = mainTty.SelectedIndex + 48;
+
+	while (*s)
+	{
+		*statusBar = GET_CHAR(*s, GET_COLOR(VGA_WHITE, VGA_BLACK));
+		s++, statusBar++;
+	}
+	printTtyStatusBar();
+}
+
+void switchSession(uint8_t sessionIndex){
+	if (sessionIndex >= mainTty.sessionsNb)
+		return;
+	mainTty.SelectedIndex = sessionIndex;
+	mainTty.currentSession = &mainTty.Sessions[sessionIndex];
+	updateStatusBar();
+	printTtySession();
 }

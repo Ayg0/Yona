@@ -3,6 +3,7 @@
 		"vga.h": "c",
 		"tty.h": "c",
 		"strings.h": "c",
-		"str.h": "c"
+		"str.h": "c",
+		"types.h": "c"
 	}
 }
