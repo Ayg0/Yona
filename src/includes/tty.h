@@ -53,4 +53,5 @@ void	updateStatusBar();
 // miscellaneous
 void	cellToVM(uint16_t cell, int16_t x, int16_t y);
 void	changeTtyColor(int8_t fgColor, int8_t bgColor);
+void	setTtyCursor(int16_t x, int16_t y);
 

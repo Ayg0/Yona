@@ -7,9 +7,7 @@ CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra\
 ASFLAGS=
 LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
 
-kLIBSRC =	src/kLib/mem.c src/kLib/strings.c
-VGACRS = src/VGA/vgaTextMode.c src/VGA/tty.c
-CSRCS=src/kernel.c ${kLIBSRC} ${VGACRS}
+CSRCS=$(shell find src -type f -name "*.c")
 SSRCS=src/boot.s
 
 COBJECTS = ${CSRCS:.c=.o}
@@ -42,6 +40,7 @@ $(TARGET): $(OBJECTS)
 # Clean rule
 clean:
 	rm -rf $(OBJECTS) $(TARGET) isodir
+re: clean all
 # fclean rule
 fclean: clean
 	rm -rf $(ISO)

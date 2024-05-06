@@ -12,14 +12,14 @@ void fake_sleep(uint32_t iters){
 
 void kmain(){
 	initTty();
-	uint8_t i = 1;
+	// printTtySession();
+	fake_sleep(10000);
+	setTtyCursor(0, 20);
+	ttyAddStr("Hello");	
 	while (1)
 	{
-		changeTtyColor(i, -1);
-		i++;
-		if (i == 16)
-			i = 1;
-		ttyAddStr("Hello World\r\n");
-		fake_sleep(10000);
+		setTtyCursor(mainTty.currentSession->cursor.x + 1, mainTty.currentSession->cursor.y);
+		fake_sleep(5000);
 	}
+	
 }

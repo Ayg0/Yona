@@ -1,6 +1,7 @@
 #include "tty.h"
 #include "vga.h"
 #include "mem.h"
+
 extern _tty	mainTty;
 /*
 	- [X] init the Tty
@@ -26,6 +27,7 @@ void	initTty(){
 	for (uint8_t i = 0; i < mainTty.sessionsNb; i++)
 		initSession(mainTty.Sessions + i);
 	updateStatusBar();
+	enable_cursor(0, 31);
 }
 // Inits the Session
 void	initSession(_ttySession *Session){
@@ -41,14 +43,24 @@ void	changeTtyColor(int8_t fgColor, int8_t bgColor){
 	mainTty.color = GET_COLOR(fgColor, bgColor);
 }
 
-void	setTtyCursor(int16_t x, int16_t y){
+void	scrollSession(){
+	uint16_t	*sessionBuff = mainTty.currentSession->buff;
 
+	for (uint16_t i = 0; i < 24; i++)
+		memcpy(&sessionBuff[i * 80], &sessionBuff[(i + 1) * 80], 160);
+	printTtySession();
+}
+
+void	setTtyCursor(int16_t x, int16_t y){
 	if (x >= TTY_WIDTH)
 		x = 0, y++;
-	if (y >= TTY_HEIGHT)
-		y = TTY_HEIGHT - 1; // fix You need to Scroll
+	if (y >= TTY_HEIGHT){
+		scrollSession();
+		y = TTY_HEIGHT - 1;
+	}
 	mainTty.currentSession->cursor.x = x;
 	mainTty.currentSession->cursor.y = y;
+	update_cursor(x, y); // updates the VGA curson and not just my imaginary one
 }
 // print the VGA cell to the VM
 void	cellToVM(uint16_t cell, int16_t x, int16_t y){

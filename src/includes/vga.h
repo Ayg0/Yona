@@ -2,7 +2,17 @@
 # include "types.h"
 
 # define VIDEO_MEMORY 0xB8000
+# define VGA_WIDTH 80
+# define VGA_HEIGHT 25
 
+// DEVICE I/O ports
+# define VGA_CTRL 0x3D4
+/*
+	this is one of the most used indexed registers.
+	The index byte is written to the port given, then the data byte
+	can be read/written from/to port+1 (0x3D5)
+*/
+# define VGA_DATA 0x3D5
 enum vgaColors{
     VGA_BLACK,
     VGA_BLUE,
@@ -29,3 +39,9 @@ enum vgaColors{
 
 void kputs(const char *s, int x, int y, uint8_t color);
 void kputC(const char c, int *x, int *y, uint8_t color);
+
+// cursor:
+void		enable_cursor(uint8_t cursor_start, uint8_t cursor_end);
+void		disable_cursor();
+void		update_cursor(int x, int y);
+uint16_t	get_cursor_position(void);

@@ -17,6 +17,11 @@ https://wiki.osdev.org/GRUB#Installing_GRUB_2_on_OS_X
 https://wiki.osdev.org/Linker_Scripts
 ## MultiBoot Standard:
 https://en.wikipedia.org/wiki/Multiboot_specification
+## VGA:
+https://wiki.osdev.org/VGA_Hardware
+https://wiki.osdev.org/Text_Mode_Cursor
+https://wiki.osdev.org/Text_UI
+https://wiki.osdev.org/VGA_Resources
 
 ### For You Taha (myself)
 sudo docker container commit -a "0rayne" -m "added Grub" i386DevEnv i386_dev_env 
