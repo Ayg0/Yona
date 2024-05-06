@@ -12,15 +12,14 @@ void fake_sleep(uint32_t iters){
 
 void kmain(){
 	initTty();
-	ttyAddStr("Hello World");
-	switchSession(1);
-	changeTtyColor(VGA_LIGHT_GREEN, -1);
-	ttyAddStr("Potatoes");
+	uint8_t i = 1;
 	while (1)
 	{
-		switchSession(0);
-		fake_sleep(20000);
-		switchSession(1);
-		fake_sleep(20000);
+		changeTtyColor(i, -1);
+		i++;
+		if (i == 16)
+			i = 1;
+		ttyAddStr("Hello World\r\n");
+		fake_sleep(10000);
 	}
 }

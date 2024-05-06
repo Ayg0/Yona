@@ -40,7 +40,7 @@ void	initSession(_ttySession *Session);
 // Session Helpers
 void	ttyAddChar(uint8_t c);
 void	ttyAddCharPos(uint8_t c, int16_t x, int16_t y);
-void	ttyAddStr(uint8_t *s);
+void	ttyAddStr(char *s);
 void	ttyAddStrPos(uint8_t *s, int16_t x, int16_t y);
 void	switchSession(uint8_t sessionIndex);
 

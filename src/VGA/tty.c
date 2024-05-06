@@ -2,7 +2,6 @@
 #include "vga.h"
 #include "mem.h"
 extern _tty	mainTty;
-
 /*
 	- [X] init the Tty
 	- [X] init Session
@@ -15,6 +14,7 @@ extern _tty	mainTty;
 	- [X] print the ScreenContent
 	- [X] update StatusBar
 	- [X] switch Session
+	- [X] Set Cursor
 */
 // inits the mainTty
 void	initTty(){
@@ -35,10 +35,20 @@ void	initSession(_ttySession *Session){
 // change current Color, use -1 to keep the old value
 void	changeTtyColor(int8_t fgColor, int8_t bgColor){
 	if (fgColor == -1)
-		fgColor = mainTty.color & 0x00ff;
+		fgColor = mainTty.color & 0x0f;
 	else if (bgColor == -1)
-		bgColor = mainTty.color & 0xff00;
+		bgColor = mainTty.color & 0xf0;
 	mainTty.color = GET_COLOR(fgColor, bgColor);
+}
+
+void	setTtyCursor(int16_t x, int16_t y){
+
+	if (x >= TTY_WIDTH)
+		x = 0, y++;
+	if (y >= TTY_HEIGHT)
+		y = TTY_HEIGHT - 1; // fix You need to Scroll
+	mainTty.currentSession->cursor.x = x;
+	mainTty.currentSession->cursor.y = y;
 }
 // print the VGA cell to the VM
 void	cellToVM(uint16_t cell, int16_t x, int16_t y){
@@ -48,17 +58,16 @@ void	cellToVM(uint16_t cell, int16_t x, int16_t y){
 }
 
 void	ttyAddChar(uint8_t c){
-	_pos		cursor = mainTty.currentSession->cursor;
 	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+	_pos		cursor = mainTty.currentSession->cursor;
 
-	if (cursor.x >= TTY_WIDTH)
-		cursor.x = 0, cursor.y++;
-	if (cursor.y >= TTY_HEIGHT)
-		cursor.y = TTY_HEIGHT - 1; // fix You need to Scroll
+	if (c == '\r')
+		return setTtyCursor(0, cursor.y);
+	else if (c == '\n')
+		return setTtyCursor(cursor.x, cursor.y + 1);
 	sessionBuff[cursor.x + cursor.y * 80] = GET_CHAR(c, mainTty.color);
 	cellToVM(GET_CHAR(c, mainTty.color), cursor.x, cursor.y);
-	cursor.x++;
-	mainTty.currentSession->cursor = cursor;
+	setTtyCursor(cursor.x + 1, cursor.y);
 }
 // add char to Session (no Edit on Cursor nor preventing of errors)
 void	ttyAddCharPos(uint8_t c, int16_t x, int16_t y){
@@ -68,7 +77,7 @@ void	ttyAddCharPos(uint8_t c, int16_t x, int16_t y){
 	cellToVM(GET_CHAR(c, mainTty.color), x, y);
 }
 
-void	ttyAddStr(uint8_t *s){
+void	ttyAddStr(char *s){
 	while (*s)
 	{
 		ttyAddChar(*s);
@@ -77,8 +86,6 @@ void	ttyAddStr(uint8_t *s){
 }
 // add str to Session (no Edit on Cursor nor preventing of errors)
 void	ttyAddStrPos(uint8_t *s, int16_t x, int16_t y){
-	uint16_t	*sessionBuff = mainTty.currentSession->buff;
-
 	while (*s)
 	{
 		ttyAddCharPos(*s, x, y);

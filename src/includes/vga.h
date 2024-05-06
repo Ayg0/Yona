@@ -23,7 +23,7 @@ enum vgaColors{
 };
 
 // get color from foreground and background colors
-# define GET_COLOR(FG_COLOR, BG_COLOR) ((BG_COLOR << 4) | FG_COLOR)
+# define GET_COLOR(FG_COLOR, BG_COLOR) ((BG_COLOR << 4) | (FG_COLOR & 0x0f))
 // insert char With it's colors
 # define GET_CHAR(CHAR, COLOR) ((COLOR << 8) | CHAR)
 
