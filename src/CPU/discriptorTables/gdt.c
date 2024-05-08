@@ -2,6 +2,7 @@
 /* R
 	http://www.osdever.net/bkerndev/Docs/gdt.htm
 	https://wiki.osdev.org/GDT_Tutorial
+	https://www.youtube.com/watch?v=Wh5nPn2U_1w
 */
 
 gdt_entry	gdt_entries[GDT_ENTRIES];
@@ -25,8 +26,8 @@ void	initGdt(){
 	gdt_p.limit = (GDT_ENTRIES * sizeof(gdt_entry)) - 1;
 
 	setGdtEntry(0, 0, 0, 0, 0); // NULL Segment
-	setGdtEntry(1, 0xFFFFFFFF, 0x0, 0x9A, 0xCF);	// Code Segment
-	setGdtEntry(2, 0xFFFFFFFF, 0x0, 0x92, 0xCF);	// Data Segment
+	setGdtEntry(1, 0xFFFFFFFF, 0x0, 0x9A, 0xCF);	// Kernel Code Segment
+	setGdtEntry(2, 0xFFFFFFFF, 0x0, 0x92, 0xCF);	// Kernel Data Segment
 	
 	// loadGdt((uint32_t)&gdt_p);
 }

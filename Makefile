@@ -1,14 +1,14 @@
 # Variables
 CC=i386-elf-gcc
-AS=i386-elf-as
+AS=nasm
 LDSCRIPT=src/linker.ld
 CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra\
 		 -fno-builtin -nostdlib -nodefaultlibs -Isrc/includes
-ASFLAGS=
+ASFLAGS=-f elf32
 LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
 
 CSRCS=$(shell find src -type f -name "*.c")
-SSRCS=src/boot.s
+SSRCS=$(shell find src -type f -name "*.s")
 
 COBJECTS = ${CSRCS:.c=.o}
 SOBJECTS = ${SSRCS:.s=.o}
@@ -29,6 +29,8 @@ $(ISO): $(TARGET)
 # Rule to make the binary
 $(TARGET): $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJECTS)
+run:
+	qemu-system-i386 -cdrom yona.iso -serial file:serialLogs.txt
 
 # Rule to make the object files
 %.o: %.c

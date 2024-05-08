@@ -1,7 +1,8 @@
 #include "vga.h"
 #include "tty.h"
 #include "str.h"
-
+#include "serialPorts.h"
+#include "CPU/DiscriptorTables.h"
 _tty	mainTty;
 
 void fake_sleep(uint32_t iters) __attribute__((deprecated));
@@ -13,7 +14,11 @@ void fake_sleep(uint32_t iters){
 }
 
 void kmain(){
+	initSerial();
+	serialPutStr("[INFO]: SERIAL INIT SUCCESS\r\n");
 	initTty();
+	serialPutStr("[INFO]: TTY INIT SUCCESS\r\n");
+	// initDTs();
 	// printTtySession();
 	// fake_sleep(10000);
 	setTtyCursor(0, 20);
