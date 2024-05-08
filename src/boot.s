@@ -1,3 +1,12 @@
+/*	R
+	https://en.wikipedia.org/wiki/Multiboot_specification
+	https://wiki.osdev.org/GRUB#Using_GRUB_to_boot_your_OS  
+	https://github.com/gitGNU/objconv ; Where to get objConv  
+	https://www.gnu.org/software/grub/manual/grub/grub.html#Obtaining-and-Building-GRUB  
+	https://wiki.osdev.org/Multiboot#Header_Format  
+	https://wiki.osdev.org/GRUB#Installing_GRUB_2_on_OS_X
+*/
+
 /* Declare constants for the multiboot header. */
 .set ALIGN,    1<<0             /* align loaded modules on page boundaries */
 .set MEMINFO,  1<<1             /* provide memory map */

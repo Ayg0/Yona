@@ -1,6 +1,13 @@
 #pragma once
 # include "types.h"
 
+/*  R
+	https://wiki.osdev.org/VGA_Hardware
+	https://wiki.osdev.org/Text_Mode_Cursor
+	https://wiki.osdev.org/Text_UI
+	https://wiki.osdev.org/VGA_Resources
+*/
+
 # define VIDEO_MEMORY 0xB8000
 # define VGA_WIDTH 80
 # define VGA_HEIGHT 25

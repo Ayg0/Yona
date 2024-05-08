@@ -4,6 +4,8 @@
 
 _tty	mainTty;
 
+void fake_sleep(uint32_t iters) __attribute__((deprecated));
+
 void fake_sleep(uint32_t iters){
 	for (size_t volatile i = 0; i < iters; i++)
 		for (size_t j = 0; j < iters; j++)
@@ -13,7 +15,7 @@ void fake_sleep(uint32_t iters){
 void kmain(){
 	initTty();
 	// printTtySession();
-	fake_sleep(10000);
+	// fake_sleep(10000);
 	setTtyCursor(0, 20);
 	ttyAddStr("Hello");	
 	while (1)

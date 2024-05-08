@@ -40,11 +40,11 @@ void update_cursor(int x, int y)
 	uint16_t pos = y * VGA_WIDTH + x;
 	uint16_t *vidM = (uint16_t *)VIDEO_MEMORY;
  
-	PbyteOut(0x3D4, 0x0F);
-	PbyteOut(0x3D5, (uint8_t) (pos & 0xFF));
-	PbyteOut(0x3D4, 0x0E);
-	PbyteOut(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
-	vidM[pos] = GET_CHAR(0, GET_COLOR(VGA_WHITE, VGA_BLACK));
+	PbyteOut(VGA_CTRL, 0x0F);
+	PbyteOut(VGA_DATA, (uint8_t) (pos & 0xFF));
+	PbyteOut(VGA_CTRL, 0x0E);
+	PbyteOut(VGA_DATA, (uint8_t) ((pos >> 8) & 0xFF));
+	vidM[pos] = GET_CHAR(0, GET_COLOR(VGA_WHITE, VGA_BLACK));	// make sure that the cursor is visible;
 }
 
 uint16_t get_cursor_position(void)

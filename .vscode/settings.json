@@ -4,6 +4,7 @@
 		"tty.h": "c",
 		"strings.h": "c",
 		"str.h": "c",
-		"types.h": "c"
+		"types.h": "c",
+		"discriptortables.h": "c"
 	}
 }
