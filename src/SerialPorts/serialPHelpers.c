@@ -42,6 +42,13 @@ void serialPutChar(char a) {
    PbyteOut(PORT,a);
 }
 
+void	serialPutNbr(unsigned long a, unsigned long len, char *s)
+{
+	if (a >= len)
+		serialPutNbr((a / len), len, s);
+	serialPutChar(s[a % len]);
+}
+
 void serialPutStr(char* str) {
     for(size_t i = 0; str[i]; i++) {
         serialPutChar(str[i]);

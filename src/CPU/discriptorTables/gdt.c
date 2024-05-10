@@ -5,29 +5,29 @@
 	https://www.youtube.com/watch?v=Wh5nPn2U_1w
 */
 
-gdt_entry	gdt_entries[GDT_ENTRIES];
-gdt_ptr		gdt_p;
+gdtEntry	gdtEntries[GDT_ENTRIES];
+gdtPtr		gdtP;
 
 static void	setGdtEntry(uint32_t index, uint32_t limit, uint32_t base, uint8_t access_b, uint8_t flags){
 	// define the size of the segment:
-	gdt_entries[index].low_limit = limit & 0xFFFF;
-	gdt_entries[index].flags_highLimit = (limit >> 16) & 0x0F;	// limit at the last for bits
+	gdtEntries[index].lowLimit = limit & 0xFFFF;
+	gdtEntries[index].flags_highLimit = (limit >> 16) & 0x0F;	// limit at the last for bits
 	// define the base address of the segment:
-	gdt_entries[index].low_base	= base & 0xFFFF;
-	gdt_entries[index].middle_base = (base >> 16) & 0xFF;
-	gdt_entries[index].high_base = (base >> 24) & 0xFF;
+	gdtEntries[index].lowBase	= base & 0xFFFF;
+	gdtEntries[index].middleBase = (base >> 16) & 0xFF;
+	gdtEntries[index].highBase = (base >> 24) & 0xFF;
 	// define the access/flag bits:
-	gdt_entries[index].flags_highLimit |= flags & 0xF0;	// flags stored at the first 4 bits
-	gdt_entries[index].access_bytes = access_b;
+	gdtEntries[index].flags_highLimit |= flags & 0xF0;	// flags stored at the first 4 bits
+	gdtEntries[index].accessByte = access_b;
 }
 
 void	initGdt(){
-	gdt_p.base = (uint32_t)&gdt_entries;
-	gdt_p.limit = (GDT_ENTRIES * sizeof(gdt_entry)) - 1;
+	gdtP.base = (uint32_t)&gdtEntries;
+	gdtP.limit = (GDT_ENTRIES * sizeof(gdtEntry)) - 1;
 
-	setGdtEntry(0, 0, 0, 0, 0); // NULL Segment
+	setGdtEntry(0, 0, 0, 0, 0);						// NULL Segment
 	setGdtEntry(1, 0xFFFFFFFF, 0x0, 0x9A, 0xCF);	// Kernel Code Segment
 	setGdtEntry(2, 0xFFFFFFFF, 0x0, 0x92, 0xCF);	// Kernel Data Segment
 	
-	// loadGdt((uint32_t)&gdt_p);
+	loadGdt((uint32_t)&gdtP);
 }

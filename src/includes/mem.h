@@ -5,4 +5,5 @@
 									for (size_t i = 0; i < NB; i++)\
 										m[i] = 0;}
 
-void *memcpy(void *dest, const void *src, size_t n);
+void	*memcpy(void *dest, const void *src, size_t n);
+void    bzero(void *s, size_t n);

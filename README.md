@@ -3,6 +3,7 @@ Yona 32 Bit with grub instead of my custom bootloader
 # General Resources:
 https://littleosbook.github.io/#introduction  
 http://www.osdever.net/bkerndev/Docs/intro.htm  
+http://www.osdever.net/tutorials/  
 # More Resources ?
 Search **'R'** and you'll find resources on the same topic of the code in that file.
 ## What I used for building the cross-compiler:

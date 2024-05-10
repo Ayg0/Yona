@@ -5,6 +5,8 @@
 		"strings.h": "c",
 		"str.h": "c",
 		"types.h": "c",
-		"discriptortables.h": "c"
+		"discriptortables.h": "c",
+		"serialports.h": "c",
+		"mem.h": "c"
 	}
 }

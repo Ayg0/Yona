@@ -2,10 +2,12 @@
 CC=i386-elf-gcc
 AS=nasm
 LDSCRIPT=src/linker.ld
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra\
+# DO_I_SPEED=-O2
+DO_I_SPEED=
+CFLAGS=-std=gnu99 -ffreestanding ${DO_I_SPEED} -Wall -Wextra\
 		 -fno-builtin -nostdlib -nodefaultlibs -Isrc/includes
 ASFLAGS=-f elf32
-LDFLAGS=-T $(LDSCRIPT) -ffreestanding -O2 -nostdlib -lgcc
+LDFLAGS=-T $(LDSCRIPT) -ffreestanding ${DO_I_SPEED} -nostdlib -lgcc
 
 CSRCS=$(shell find src -type f -name "*.c")
 SSRCS=$(shell find src -type f -name "*.s")
