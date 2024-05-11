@@ -1,9 +1,9 @@
 # Yona
 YonaOs is a 32 bit hobby system made in C.
-#w Features:
-- it boots up  
-- it draw stuff  
-- it doesn't boom if you devide by zero.  
+# Features:
+- Has a printf-ish clone for you to have fun in the tty.  
+- interupts are working for you to hook whatever function with that IRQ.  
+- still working on the debugging system using Serial communication (Basics done).  
 # General Resources:
 https://littleosbook.github.io/#introduction  
 http://www.osdever.net/bkerndev/Docs/intro.htm  
