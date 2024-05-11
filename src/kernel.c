@@ -3,6 +3,8 @@
 #include "str.h"
 #include "serialPorts.h"
 #include "CPU/DiscriptorTables.h"
+#include "types.h"
+
 _tty	mainTty;
 
 extern gdtEntry	gdtEntries[GDT_ENTRIES];
@@ -23,18 +25,18 @@ void gdtTest() {
     /* Test data segment */
     asm volatile("mov %%ds, %0" : "=r" (addr));
     serialPutStr("Data Segment Base Address: ");
-	serialPutNbr(addr, 10, "0123456789");
+	serialPutNbr((uint32_t) addr, 10, "0123456789");
 	serialPutStr("\r\n");
 
     /* Test code segment */
     asm volatile("mov %%cs, %0" : "=r" (addr));
     serialPutStr("Code Segment Base Address: ");
-	serialPutNbr(addr, 10, "0123456789");
+	serialPutNbr((uint32_t) addr, 10, "0123456789");
 	serialPutStr("\r\n");
     /* Test stack segment */
     asm volatile("mov %%ss, %0" : "=r" (addr));
     serialPutStr("Stack Segment Base Address: ");
-	serialPutNbr(addr, 10, "0123456789");
+	serialPutNbr((uint32_t) addr, 10, "0123456789");
 	serialPutStr("\r\n");
 	/*Testing if paging Enabled*/
 	asm volatile("mov %%cr0, %0" : "=r" (cr0));
@@ -49,25 +51,27 @@ void gdtTest() {
 void timerFunction(registers Rs){
 	static uint32_t ticks;
 	ticks++;
-	serialPutNbr(ticks, 10, "0123456789");
-	serialPutStr("\r\n");
+	_pos pastPos =  mainTty.currentSession->cursor;
+	if (!(ticks % 5)){
+		setTtyCursor(0, 0);
+		ttyAddStr("Ticks: ");
+		ttyAddNbr(ticks, 10, "0123456789");
+		mainTty.currentSession->cursor = pastPos;
+	}
 }
 
-void kmain(){
+void kernelInits(){
 	initSerial();
 	serialPutStr("[INFO]: SERIAL INIT SUCCESS\r\n");
 	initDTs();
 	gdtTest();
-	setIRQHandler(0, timerFunction);
+	// setIRQHandler(0, timerFunction);
 	serialPutStr("[INFO]: DISCRIPTOR TABLES INIT SUCCESS\r\n");
 	initTty();
 	serialPutStr("[INFO]: TTY INIT SUCCESS\r\n");
-	setTtyCursor(0, 20);
-	ttyAddStr("Hello");	
-	while (1)
-	{
-		setTtyCursor(mainTty.currentSession->cursor.x + 1, mainTty.currentSession->cursor.y);
-		fake_sleep(5000);
-	}
-	
+}
+
+void kmain(){
+	kernelInits();
+	printfTty("Hello my name is %s, nice to see all %u of You !%s\r\n", "Taha", 700, "!!");
 }

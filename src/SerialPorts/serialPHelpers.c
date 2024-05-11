@@ -39,14 +39,14 @@ int isTransmitEmpty() {
 
 void serialPutChar(char a) {
    while (isTransmitEmpty() == 0);
-   PbyteOut(PORT,a);
+   PbyteOut(PORT, a);
 }
 
-void	serialPutNbr(unsigned long a, unsigned long len, char *s)
+void	serialPutNbr(uint32_t a, uint32_t len, char *base)
 {
 	if (a >= len)
-		serialPutNbr((a / len), len, s);
-	serialPutChar(s[a % len]);
+		serialPutNbr((a / len), len, base);
+	serialPutChar(base[a % len]);
 }
 
 void serialPutStr(char* str) {

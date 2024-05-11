@@ -38,7 +38,6 @@ void	initIdtEntry(uint8_t index, void *isr, uint8_t attr){
 
 }
 
-__attribute__((noreturn)) void	isrHandler(registers Rs);
 void	isrHandler(registers Rs){
 	if (Rs.intNbr < 32){
 		serialPutStr("[Fatal Error] Exception Raised => Nbr: ");

@@ -42,6 +42,7 @@ void	ttyAddChar(uint8_t c);
 void	ttyAddCharPos(uint8_t c, int16_t x, int16_t y);
 void	ttyAddStr(char *s);
 void	ttyAddStrPos(uint8_t *s, int16_t x, int16_t y);
+void	ttyAddNbr(uint32_t a, uint32_t len, char *base);
 void	switchSession(uint8_t sessionIndex);
 
 // Screen Helpers
@@ -54,4 +55,6 @@ void	updateStatusBar();
 void	cellToVM(uint16_t cell, int16_t x, int16_t y);
 void	changeTtyColor(int8_t fgColor, int8_t bgColor);
 void	setTtyCursor(int16_t x, int16_t y);
+// Printfs
+void	printfTty(const char *FmtS, ...);
 

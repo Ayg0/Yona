@@ -44,7 +44,7 @@ void update_cursor(int x, int y)
 	PbyteOut(VGA_DATA, (uint8_t) (pos & 0xFF));
 	PbyteOut(VGA_CTRL, 0x0E);
 	PbyteOut(VGA_DATA, (uint8_t) ((pos >> 8) & 0xFF));
-	vidM[pos] = GET_CHAR(0, GET_COLOR(VGA_WHITE, VGA_BLACK));	// make sure that the cursor is visible;
+	vidM[pos] = GET_CHAR(vidM[pos], GET_COLOR(VGA_WHITE, VGA_BLACK));	// make sure that the cursor is visible;
 }
 
 uint16_t get_cursor_position(void)

@@ -24,7 +24,7 @@ void *IRQRoutines[16] = {
     0, 0, 0, 0, 0, 0, 0, 0
 };
 // set a handler to the IRQ
-void	setIRQHandler(uint8_t irq, void (*handler)(registers *r)){
+void	setIRQHandler(uint8_t irq, void (*handler)(registers r)){
 	IRQRoutines[irq] = handler;
 }
 // reset the handler to NULL

@@ -8,6 +8,7 @@
 		"discriptortables.h": "c",
 		"serialports.h": "c",
 		"mem.h": "c",
-		"ports.h": "c"
+		"ports.h": "c",
+		"args.h": "c"
 	}
 }

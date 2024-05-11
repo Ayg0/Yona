@@ -12,8 +12,8 @@ LDFLAGS=-T $(LDSCRIPT) -ffreestanding ${DO_I_SPEED} -nostdlib -lgcc
 CSRCS=$(shell find src -type f -name "*.c")
 SSRCS=$(shell find src -type f -name "*.s")
 
-COBJECTS = ${CSRCS:.c=.o}
-SOBJECTS = ${SSRCS:.s=.o}
+COBJECTS = $(patsubst src/%,build/%,$(CSRCS:.c=.o))
+SOBJECTS = $(patsubst src/%,build/%,$(SSRCS:.s=.o))
 OBJECTS= ${COBJECTS} ${SOBJECTS}
 TARGET=yona.bin
 ISO=yona.iso
@@ -35,11 +35,13 @@ run:
 	qemu-system-i386 -cdrom yona.iso -serial file:serialLogs.txt
 
 # Rule to make the object files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+build/%.o: src/%.c
+			mkdir -p $(dir $@)
+			$(CC) $(CFLAGS) -c $< -o $@
 
-%.o: %.s
-	$(AS) $(ASFLAGS) $< -o $@
+build/%.o: src/%.s
+			mkdir -p $(dir $@)
+			$(AS) $(ASFLAGS) $< -o $@
 
 # Clean rule
 clean:

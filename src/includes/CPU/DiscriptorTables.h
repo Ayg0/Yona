@@ -109,4 +109,4 @@ extern	void	irq14();
 extern	void	irq15();
 
 void	clearIRQHandler(uint8_t irq);
-void	setIRQHandler(uint8_t irq, void (*handler)(registers *r));
+void	setIRQHandler(uint8_t irq, void (*handler)(registers r));

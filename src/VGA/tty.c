@@ -110,6 +110,12 @@ void	ttyAddStrPos(uint8_t *s, int16_t x, int16_t y){
 	}
 }
 
+void	ttyAddNbr(uint32_t a, uint32_t len, char *base){
+	if (a >= len)
+		ttyAddNbr((a / len), len, base);
+	ttyAddChar(base[a % len]);
+}
+
 void clearTtySession(){
 	uint16_t	*sessionBuff = mainTty.currentSession->buff;
 
