@@ -19,6 +19,7 @@ section .text
         mov esp, stackTop
 
         ; Call the main function written in C
+		; cli
         call kmain
 
         ; If kmain returns, halt the CPU

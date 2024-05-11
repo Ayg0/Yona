@@ -46,14 +46,19 @@ void gdtTest() {
 	serialPutStr("[DEBUG]: END TESTING GDT\r\n");
 }
 
+void timerFunction(registers Rs){
+	static uint32_t ticks;
+	ticks++;
+	serialPutNbr(ticks, 10, "0123456789");
+	serialPutStr("\r\n");
+}
+
 void kmain(){
 	initSerial();
 	serialPutStr("[INFO]: SERIAL INIT SUCCESS\r\n");
 	initDTs();
-	// __asm__ volatile ("int $0x0");
-	volatile int a = 5 / 0;
-	// serialPutNbr(a, 10, "0123456789");
-	// gdtTest();
+	gdtTest();
+	setIRQHandler(0, timerFunction);
 	serialPutStr("[INFO]: DISCRIPTOR TABLES INIT SUCCESS\r\n");
 	initTty();
 	serialPutStr("[INFO]: TTY INIT SUCCESS\r\n");

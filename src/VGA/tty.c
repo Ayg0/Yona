@@ -138,7 +138,6 @@ void printTtyStatusBar(){
 	for (uint16_t i = 0; i < 80; i++)
 		videoMemory[i] = sessionBuff[i];
 }
-
 void	updateStatusBar(){
 	char *s = "Selected Session: X";
 	uint16_t *statusBar = mainTty.statusBar.buff;

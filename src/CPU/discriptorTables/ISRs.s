@@ -1,4 +1,5 @@
 [extern isrHandler]
+[extern irqHandler]
 
 isr_common:
 	;	saving the cpu state:
@@ -23,6 +24,29 @@ isr_common:
 	sti		; set interrupts again.
 	iret	; pop eip, cs, eflgs, useresp, ss at the same time.
 
+; common IQR handler:
+irq_common:
+	pusha
+	mov ax, ds
+	push eax
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+
+	call irqHandler
+
+	pop ebx
+	mov ds, bx
+	mov es, bx
+	mov fs, bx
+	mov gs, bx
+	popa
+	add esp, 8
+	sti
+	iret
+
 ; macro to define an isr that has no error code
 %macro ISR_NOERRCODE 1
   [GLOBAL isr%1]
@@ -39,6 +63,15 @@ isr_common:
     cli
     push byte %1
     jmp isr_common
+%endmacro
+
+%macro IRQ 2
+	[GLOBAL irq%1]
+	irq%1:
+	cli
+	push byte %1
+	push byte %2
+	jmp irq_common
 %endmacro
 
 ; defining all the ISRs
@@ -59,7 +92,7 @@ ISR_ERRCODE		13	; 13: General Protection Fault
 ISR_ERRCODE		14	; 14: Page Fault
 ISR_NOERRCODE	15	; 15: Reserved
 ISR_NOERRCODE	16	; 16: Floating Point Exception
-ISR_ERRCODE	17	; 17: Alignment Check
+ISR_ERRCODE		17	; 17: Alignment Check
 ISR_NOERRCODE	18	; 18: Machine Check
 ISR_NOERRCODE	19	; 19: SIMD Floating-Point Exception
 ISR_NOERRCODE	20	; 20: Virtualization Exception
@@ -74,3 +107,21 @@ ISR_NOERRCODE	28	; 28: Hypervisor Injection Exception
 ISR_ERRCODE		29	; 29: VMM Communication Exception
 ISR_ERRCODE		30	; 30: Security Exception
 ISR_NOERRCODE	31	; 31: Reserved
+
+; defining all the IRQs
+IRQ		0,		32	; 0:  System timer
+IRQ		1,		33	; 1:  Keyboard Controller
+IRQ		2,		34	; 2:  Receives signals from IRQs 8-15 (cascading)
+IRQ		3,		35	; 3:  ??
+IRQ		4,		36	; 4:  ??
+IRQ		5,		37	; 5:  ??
+IRQ		6,		38	; 6:  ??
+IRQ		7,		39	; 7:  ??
+IRQ		8,		40	; 8:  ??
+IRQ		9,		41	; 9:  ??
+IRQ		10,		42	; 10: ??
+IRQ		11,		43	; 11: ??
+IRQ		12,		44	; 12: ??
+IRQ		13,		45	; 13: ??
+IRQ		14,		46	; 14: ??
+IRQ		15,		47	; 15: ??
