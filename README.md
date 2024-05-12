@@ -13,4 +13,8 @@ http://www.osdever.net/tutorials/
 Search **'R'** and you'll find resources on the same topic of the code in that file.
 ## What I used for building the cross-compiler:
 https://wiki.osdev.org/Building_GCC    
-https://ayg0.github.io/gettoknow.github.io/posts/gcccrosscompiler/  
+https://ayg0.github.io/gettoknow.github.io/posts/gcccrosscompiler/
+## I want to play-test the OS:
+- well here you go my curios friend:  
+https://hub.docker.com/repository/docker/0rayne/i386.dev.env/general  
+- this image is equiped with all the tools you'll need to compile and build yona ready to Use.
