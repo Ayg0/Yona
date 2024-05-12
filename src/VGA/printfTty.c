@@ -17,7 +17,7 @@ static void	printString(char *s){
 }
 
 
-void	printNewArg(char identifier, VARG_PTR *ptr){
+void	printNewArg(char identifier, varg_ptr *ptr){
 	switch (identifier)
 	{
 		case 'c':	// print a character
@@ -40,10 +40,9 @@ void	printNewArg(char identifier, VARG_PTR *ptr){
 			ttyAddChar(identifier);
 	}
 }
-void fake_sleep(uint32_t iters) __attribute__((deprecated));
 // %s %c %d %x %u Implemented
 void	printfTty(const char *FmtS, ...){
-	VARG_PTR ptr;
+	varg_ptr ptr;
 	uint32_t i = 0;
 
 	VARG_INIT(ptr, FmtS);

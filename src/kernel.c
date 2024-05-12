@@ -4,6 +4,7 @@
 #include "serialPorts.h"
 #include "CPU/DiscriptorTables.h"
 #include "types.h"
+#include "kLibStd.h"
 
 _tty	mainTty;
 
@@ -50,6 +51,8 @@ void gdtTest() {
 
 void timerFunction(registers Rs){
 	static uint32_t ticks;
+
+	(void)Rs;
 	ticks++;
 	_pos pastPos =  mainTty.currentSession->cursor;
 	if (!(ticks % 5)){
@@ -73,5 +76,9 @@ void kernelInits(){
 
 void kmain(){
 	kernelInits();
-	printfTty("Hello my name is %s, nice to see all %u of You !%s\r\n", "Taha", 700, "!!");
+	// printfTty("Hello my name is %s, nice to see all %u of You !%s\r\n", "Taha", 700, "!!");
+	char s[100];
+	char *str = &s[0];
+	formatString("hello %s, there are %d issues HAHA", &str, "Taha", 0);
+	printfTty("s: %s\r\n", s);
 }
