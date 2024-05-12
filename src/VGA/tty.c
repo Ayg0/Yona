@@ -1,22 +1,12 @@
 #include "tty.h"
 #include "vga.h"
 #include "mem.h"
+#include "kLibStd.h"
+#include "timer.h"
+#include "serialPorts.h"
 
 extern _tty	mainTty;
-/*
-	- [X] init the Tty
-	- [X] init Session
-	- [X] Change Color
-	- [X] add a character to the Session
-	- [X] add a string to the Session
-	- [X] clear the Tty Screen
-	- [X] clear the StatusBar
-	- [X] print the StatusBar content
-	- [X] print the ScreenContent
-	- [X] update StatusBar
-	- [X] switch Session
-	- [X] Set Cursor
-*/
+
 // inits the mainTty
 void	initTty(){
 	mainTty.sessionsNb = 5;
@@ -145,14 +135,22 @@ void printTtyStatusBar(){
 		videoMemory[i] = sessionBuff[i];
 }
 void	updateStatusBar(){
-	char *s = "Selected Session: X";
+	static char s[80];
+	char *str = s;
 	uint16_t *statusBar = mainTty.statusBar.buff;
-	s[18] = mainTty.SelectedIndex + 48;
-
-	while (*s)
-	{
-		*statusBar = GET_CHAR(*s, GET_COLOR(VGA_WHITE, VGA_BLACK));
-		s++, statusBar++;
+	_time date = getDate();
+	formatString("Session: %u", &str, mainTty.SelectedIndex);
+	uint8_t i = 0;
+	while (s[i]){
+		statusBar[i] = GET_CHAR(s[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
+		i++;
+	}
+	formatString("%2u:%2u:%2u", &str, date.h, date.m, date.s);
+	statusBar += 72;
+	i = 0;
+	while (s[i]){
+		statusBar[i] = GET_CHAR(s[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
+		i++;
 	}
 	printTtyStatusBar();
 }

@@ -9,6 +9,7 @@
 		"serialports.h": "c",
 		"mem.h": "c",
 		"ports.h": "c",
-		"args.h": "c"
+		"args.h": "c",
+		"timer.h": "c"
 	}
 }
