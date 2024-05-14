@@ -2,26 +2,47 @@
 #include "timer.h"
 #include "CPU/DiscriptorTables.h"
 #include "serialPorts.h"
+#include "vga.h"
+
 uint32_t ticks = 0;
 static _time date;
+extern _tty mainTty;
+uint8_t direction;
 
 void	tick(registers Rs){
 	(void)Rs;
 	ticks++;
-	if (ticks < date.frequency)
+	if (ticks < date.frequency){
+		if (!(ticks % (date.frequency / 3))){
+			direction = !direction;
+			updateStatusBar();
+		}
 		return;
+	}
 	ticks = 0;
 	date.s++;
 	date.m += (date.s == 60) && !(date.s = 0);
 	date.h += (date.m == 60) && !(date.m = 0);
 	date.d += (date.h == 24) && !(date.h = 0);
 	date.mo += (date.d == 31) && !(date.d = 0);
-	date.year += (date.mo == 12) && !(date.mo = 0);
+	date.y += (date.mo == 12) && !(date.mo = 0);
 	updateStatusBar();
 }
 
 _time	getDate(){
 	return date;
+}
+
+void	setTime(uint8_t s, uint8_t m, uint8_t h){
+	date.s = s;
+	date.m = m;
+	date.h = h;
+}
+
+void	setDate(uint8_t d, uint8_t mo, uint32_t y){
+	date.d = d;
+	date.mo = mo;
+	date.y = y;
 }
 
 void	init_timer(uint32_t frequency){

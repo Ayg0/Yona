@@ -10,6 +10,7 @@
 		"mem.h": "c",
 		"ports.h": "c",
 		"args.h": "c",
-		"timer.h": "c"
+		"timer.h": "c",
+		"keyboard.h": "c"
 	}
 }

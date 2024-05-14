@@ -6,6 +6,7 @@
 #include "serialPorts.h"
 
 extern _tty	mainTty;
+extern uint8_t direction;
 
 // inits the mainTty
 void	initTty(){
@@ -139,17 +140,30 @@ void	updateStatusBar(){
 	char *str = s;
 	uint16_t *statusBar = mainTty.statusBar.buff;
 	_time date = getDate();
-	formatString("Session: %u", &str, mainTty.SelectedIndex);
+	formatString("Session: %u ", &str, mainTty.SelectedIndex + 1);
 	uint8_t i = 0;
 	while (s[i]){
 		statusBar[i] = GET_CHAR(s[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
 		i++;
 	}
-	formatString("%2u:%2u:%2u", &str, date.h, date.m, date.s);
-	statusBar += 72;
+	formatString("%2u/%2u/%4u %2u:%2u:%2u", &str, date.d, date.mo, date.y,\
+	 date.h, date.m, date.s);
+	statusBar += 61;
 	i = 0;
 	while (s[i]){
 		statusBar[i] = GET_CHAR(s[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
+		i++;
+	}
+
+	if (direction)
+		str = " <*_*>";
+	else
+		str = "<*_*> ";
+	i = 0;
+	statusBar = mainTty.statusBar.buff;
+	statusBar += 36;
+	while (str[i]){
+		statusBar[i] = GET_CHAR(str[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
 		i++;
 	}
 	printTtyStatusBar();
@@ -162,4 +176,5 @@ void switchSession(uint8_t sessionIndex){
 	mainTty.currentSession = &mainTty.Sessions[sessionIndex];
 	updateStatusBar();
 	printTtySession();
+	setTtyCursor(mainTty.currentSession->cursor.x, mainTty.currentSession->cursor.y);
 }

@@ -4,6 +4,7 @@
 #include "kLibStd.h"
 #include "serialPorts.h"
 #include "CPU/DiscriptorTables.h"
+#include "keyboard.h"
 
 _tty	mainTty;
 uint32_t ticks;
@@ -59,13 +60,15 @@ void kernelInits(){
 	serialPutStr("[INFO]: TTY INIT SUCCESS\r\n");
 	init_timer(50);	
 	serialPutStr("[INFO]: TIMER INIT SUCCESS\r\n");
+	setIRQHandler(1, keyboardHandler);
 }
 void kmain(){
 	kernelInits();
 	// printfTty("Hello my name is %s, nice to see all %u of You !%s\r\n", "Taha", 700, "!!");
 	char s[100];
 	char *str = &s[0];
+	setDate(13, 5, 2024);
 	// formatString("hello %s, there are %d issues HAHA", &str, "Taha", 0);
-	formatString("hello %s, there are %d issues HAHA", &str, "Taha", 0);
+	formatString("hello %s, there are %5d issues HAHA", &str, "Taha", 6);
 	printfTty("s: %s\r\n", s);
 }

@@ -42,9 +42,11 @@ typedef struct time
 	uint8_t		h;
 	uint8_t		d;
 	uint8_t		mo;
-	uint32_t	year;
+	uint32_t	y;
 	uint32_t	frequency;
 } _time;
 
-void	init_timer(uint32_t frequency);
 _time	getDate();
+void	init_timer(uint32_t frequency);
+void	setTime(uint8_t s, uint8_t m, uint8_t h);
+void	setDate(uint8_t d, uint8_t mo, uint32_t y);
