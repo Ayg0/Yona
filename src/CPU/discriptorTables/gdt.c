@@ -10,10 +10,10 @@ gdtPtr		gdtP;
 
 static void	setGdtEntry(uint32_t index, uint32_t limit, uint32_t base, uint8_t access_b, uint8_t flags){
 	// define the size of the segment:
-	gdtEntries[index].lowLimit = limit & 0xFFFF;
+	gdtEntries[index].lowLimit = L16(limit);
 	gdtEntries[index].flags_highLimit = (limit >> 16) & 0x0F;	// limit at the last for bits
 	// define the base address of the segment:
-	gdtEntries[index].lowBase	= base & 0xFFFF;
+	gdtEntries[index].lowBase	= L16(base);
 	gdtEntries[index].middleBase = (base >> 16) & 0xFF;
 	gdtEntries[index].highBase = (base >> 24) & 0xFF;
 	// define the access/flag bits:

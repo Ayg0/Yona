@@ -12,3 +12,13 @@
 # define true     1
 # define false    0
 # define NULL     0
+
+
+# define L8(VAL) (VAL & 0xFF)
+# define L16(VAL) (VAL & 0xFFFF)
+# define H8(VAL) ((VAL >> 8) & 0xFF)
+# define H16(VAL) ((VAL >> 16) & 0xFFFF)
+
+uint8_t	isAlpha(uint8_t c);
+uint8_t	isDigit(uint8_t c);
+uint8_t	isPrintable(uint8_t c);

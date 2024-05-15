@@ -17,17 +17,28 @@ enum MODIFIER_KEYS {
 	CAPS_MOD,
 	NUMLOCK_MOD,
 };
+struct keyboardViews
+{
+	uint8_t	*keys;
+	uint8_t	*shiftedKeys;
+};
 
-typedef struct keyboardFlags
+typedef union kbdLayout
+{
+	struct keyboardViews kbdV;
+	uint8_t *views[2];
+} _kbdLayout;
+
+
+typedef struct kbdFlags
 {
 	uint8_t	nl;
 	uint8_t	alt;
 	uint8_t	modifiers;
-} _keyboardFlags;
+} _kbdFlags;
 
 # define SET_BIT(FLAG, BIT) (FLAG = FLAG | 1 << BIT)
 # define RESET_BIT(FLAG, BIT) (FLAG = FLAG & ~(1 << BIT))
 # define IS_SET(FLAG, BIT) (FLAG & (1 << BIT))
-# define CAP_OPT(MODIFIERS) (MODIFIERS & (1 << SHIFT_MOD | 1 << CAPS_MOD))
 
 void	keyboardHandler(registers Rs);
