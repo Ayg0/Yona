@@ -5,6 +5,13 @@ YonaOs is a 32 bit hobby system made in C.
 - Interrupts are working, and I already implemented a basic driver to get time and date, and a basic keyboard driver (subject to big changes).
 - still working on the debugging system using Serial communication (Basics done).
 - u have multiple sessions to playtest and write, each one with it's own buffer (use ctrl+sessionIndex).
+- simple Shell:
+  - **say**: say whatever is afer say.
+  - **add**: tries to add two numbers.
+  - **draw**: draws a face.
+  - **exit**: exits ??.
+  - **clear**: clear Session.
+  - **hi**: say hi to 3amo.
 - It doesn't k-Boom if you devide by zero.
 # General Resources:
 https://littleosbook.github.io/#introduction  
