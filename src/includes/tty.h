@@ -1,5 +1,6 @@
 # pragma once
 # include "types.h"
+# include "keyboard.h"
 
 # define TTY_WIDTH	80
 # define TTY_HEIGHT	24	// -1 for the status bar;
@@ -14,6 +15,7 @@ typedef struct pos
 typedef struct ttySession
 {
 	uint16_t	buff[1920]; // 80 by 24
+	_kbdBuffer	kbdBuffer;
 	_pos		cursor;
 } _ttySession;
 

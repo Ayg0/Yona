@@ -11,6 +11,7 @@
 		"ports.h": "c",
 		"args.h": "c",
 		"timer.h": "c",
-		"keyboard.h": "c"
+		"keyboard.h": "c",
+		"klibstd.h": "c"
 	}
 }

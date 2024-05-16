@@ -1,7 +1,23 @@
 #include "keyboard.h"
 #include "serialPorts.h"
+#include "tty.h"
+#include "mem.h"
+
 _kbdFlags flags;
 extern _kbdLayout kbd_US_QWERTY;
+extern _tty	mainTty;
+volatile _kbdBuffer	*currentBuffer = NULL;
+
+
+void	backSpace(){
+	_pos currentCursor = mainTty.currentSession->cursor;
+	if (currentBuffer->position == 0)
+		return ;
+	currentBuffer->position--;
+	currentBuffer->buffer[currentBuffer->position] = 0;
+	setTtyCursor(currentCursor.x - 1, currentCursor.y);
+	ttyAddCharPos(' ', currentCursor.x - 1, currentCursor.y);
+}
 
 uint8_t	getFunctionLetters(uint8_t scancode){
 	switch (scancode)
@@ -12,7 +28,7 @@ uint8_t	getFunctionLetters(uint8_t scancode){
 		return 0;
 	case 0x0D: return '=';
 	case 0x0E:
-		// return back_space();
+		backSpace();
 		return 0;
 	case 0x2A:
 		SET_BIT(flags.modifiers, SHIFT_MOD);
@@ -42,7 +58,25 @@ uint8_t	getFunctionLetters(uint8_t scancode){
 	}
 }
 
-#include "tty.h"
+uint8_t	getLetter(uint8_t	scanCode){
+	uint8_t letter = 0;
+	letter = kbd_US_QWERTY.views[IS_SET(flags.modifiers, SHIFT_MOD)][scanCode];
+	if (isAlpha(letter) && IS_SET(flags.modifiers, CAPS_MOD))
+		letter -= 32 * ((letter >= 'a') + -1 * (letter < 'a'));
+	return letter;
+}
+
+uint8_t	appendLetter(uint8_t letter){
+
+	if (letter == '\n')
+			appendLetter('\r');
+	ttyAddChar(letter);
+	currentBuffer->buffer[currentBuffer->position] = letter;
+	currentBuffer->position += 1;
+
+	return letter;
+}
+
 void	keyboardHandler(registers Rs){
 	(void) Rs;
 	uint8_t	letter = 0;
@@ -51,25 +85,29 @@ void	keyboardHandler(registers Rs){
 	if (scanCode & 0x80)
 		goto HANDLE_SPECIAL_KEYS;
 
-	letter = kbd_US_QWERTY.views[IS_SET(flags.modifiers, SHIFT_MOD)][scanCode];
-	if (isAlpha(letter) && IS_SET(flags.modifiers, CAPS_MOD))
-		letter -= 32 * ((letter >= 'a') + -1 * (letter < 'a'));
+	letter = getLetter(scanCode);
 	if (IS_SET(flags.modifiers, CTRL_MOD) && letter >= '1' && letter <= '6')
-		switchSession(letter - 49);
-	else if (letter){
-		if (letter == '\n')
-			ttyAddChar('\r');
-		ttyAddChar(letter);
-	}
+		switchSession(letter - 49), initKeboard(letter - 49);
+	else if (letter)
+		appendLetter(letter);
 	else
 	HANDLE_SPECIAL_KEYS:
 		getFunctionLetters(scanCode);
 }
 
-void	initKeyboard(){
-
+void	initKeboard(uint8_t sessionIndex){
+	currentBuffer = &mainTty.Sessions[sessionIndex].kbdBuffer;
 }
 
-void	switchLayout(){	// didn't code it yet
+void	clearBuffer(){
+	bzero((void *)currentBuffer, sizeof(_kbdBuffer));
+}
 
+char	*input(char *declare){
+	if (declare)
+		printfTty(declare);
+	while (currentBuffer->buffer[currentBuffer->position - 1] != '\n')
+		    asm volatile("" : : : "memory"); // to provent compiler from optimizing and assuming the mem.
+	currentBuffer->buffer[currentBuffer->position - 2] = 0;
+	return (char *)currentBuffer->buffer;
 }

@@ -12,8 +12,8 @@ extern uint8_t direction;
 void	initTty(){
 	mainTty.sessionsNb = 5;
 	mainTty.SelectedIndex = 0;
-	mainTty.currentSession = &mainTty.Sessions[mainTty.SelectedIndex];
 	mainTty.color = GET_COLOR(VGA_WHITE, VGA_BLACK);
+	mainTty.currentSession = &mainTty.Sessions[mainTty.SelectedIndex];
 
 	for (uint8_t i = 0; i < mainTty.sessionsNb; i++)
 		initSession(mainTty.Sessions + i);
@@ -23,7 +23,7 @@ void	initTty(){
 // Inits the Session
 void	initSession(_ttySession *Session){
 	Session->cursor.x = 0;
-	Session->cursor.y = 0;
+	Session->cursor.y = 0;	
 }
 // change current Color, use -1 to keep the old value
 void	changeTtyColor(int8_t fgColor, int8_t bgColor){
@@ -112,6 +112,7 @@ void clearTtySession(){
 
 	CLEAR_MEM(uint16_t, sessionBuff, 1920);		// clear buffer
 	CLEAR_MEM(uint16_t, VIDEO_MEMORY, 1920);	// clear the screen
+	setTtyCursor(0, 0);
 }
 
 void clearTtyStatusBar(){
