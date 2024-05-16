@@ -68,6 +68,8 @@ uint8_t	getLetter(uint8_t	scanCode){
 
 uint8_t	appendLetter(uint8_t letter){
 
+	if (currentBuffer->position == 255)
+		return 0;
 	if (letter == '\n')
 			appendLetter('\r');
 	ttyAddChar(letter);

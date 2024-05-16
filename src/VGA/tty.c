@@ -37,8 +37,10 @@ void	changeTtyColor(int8_t fgColor, int8_t bgColor){
 void	scrollSession(){
 	uint16_t	*sessionBuff = mainTty.currentSession->buff;
 
-	for (uint16_t i = 0; i < 24; i++)
+	for (uint16_t i = 0; i < (TTY_HEIGHT - 1); i++)
 		memcpy(&sessionBuff[i * 80], &sessionBuff[(i + 1) * 80], 160);
+	CLEAR_MEM(uint16_t, mainTty.currentSession->buff + 1840, 80);
+	CLEAR_MEM(uint16_t, VIDEO_MEMORY + 1840, 80);
 	printTtySession();
 }
 
