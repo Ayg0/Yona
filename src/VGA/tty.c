@@ -5,18 +5,18 @@
 #include "timer.h"
 #include "serialPorts.h"
 
-extern _tty	mainTty;
+extern _tty	tty;
 extern uint8_t direction;
 
-// inits the mainTty
+// inits the tty
 void	initTty(){
-	mainTty.sessionsNb = 5;
-	mainTty.SelectedIndex = 0;
-	mainTty.color = GET_COLOR(VGA_WHITE, VGA_BLACK);
-	mainTty.currentSession = &mainTty.Sessions[mainTty.SelectedIndex];
+	tty.sessionsNb = 5;
+	tty.SelectedIndex = 0;
+	tty.color = GET_COLOR(VGA_WHITE, VGA_BLACK);
+	tty.currentSession = &tty.Sessions[tty.SelectedIndex];
 
-	for (uint8_t i = 0; i < mainTty.sessionsNb; i++)
-		initSession(mainTty.Sessions + i);
+	for (uint8_t i = 0; i < tty.sessionsNb; i++)
+		initSession(tty.Sessions + i);
 	updateStatusBar();
 	enable_cursor(0, 31);
 }
@@ -28,18 +28,18 @@ void	initSession(_ttySession *Session){
 // change current Color, use -1 to keep the old value
 void	changeTtyColor(int8_t fgColor, int8_t bgColor){
 	if (fgColor == -1)
-		fgColor = mainTty.color & 0x0f;
+		fgColor = tty.color & 0x0f;
 	else if (bgColor == -1)
-		bgColor = mainTty.color & 0xf0;
-	mainTty.color = GET_COLOR(fgColor, bgColor);
+		bgColor = tty.color & 0xf0;
+	tty.color = GET_COLOR(fgColor, bgColor);
 }
 
 void	scrollSession(){
-	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+	uint16_t	*sessionBuff = tty.currentSession->buff;
 
 	for (uint16_t i = 0; i < (TTY_HEIGHT - 1); i++)
 		memcpy(&sessionBuff[i * 80], &sessionBuff[(i + 1) * 80], 160);
-	CLEAR_MEM(uint16_t, mainTty.currentSession->buff + 1840, 80);
+	CLEAR_MEM(uint16_t, tty.currentSession->buff + 1840, 80);
 	CLEAR_MEM(uint16_t, VIDEO_MEMORY + 1840, 80);
 	printTtySession();
 }
@@ -51,8 +51,8 @@ void	setTtyCursor(int16_t x, int16_t y){
 		scrollSession();
 		y = TTY_HEIGHT - 1;
 	}
-	mainTty.currentSession->cursor.x = x;
-	mainTty.currentSession->cursor.y = y;
+	tty.currentSession->cursor.x = x;
+	tty.currentSession->cursor.y = y;
 	update_cursor(x, y); // updates the VGA curson and not just my imaginary one
 }
 // print the VGA cell to the VM
@@ -63,23 +63,23 @@ void	cellToVM(uint16_t cell, int16_t x, int16_t y){
 }
 
 void	ttyAddChar(uint8_t c){
-	uint16_t	*sessionBuff = mainTty.currentSession->buff;
-	_pos		cursor = mainTty.currentSession->cursor;
+	uint16_t	*sessionBuff = tty.currentSession->buff;
+	_pos		cursor = tty.currentSession->cursor;
 
 	if (c == '\r')
 		return setTtyCursor(0, cursor.y);
 	else if (c == '\n')
 		return setTtyCursor(cursor.x, cursor.y + 1);
-	sessionBuff[cursor.x + cursor.y * 80] = GET_CHAR(c, mainTty.color);
-	cellToVM(GET_CHAR(c, mainTty.color), cursor.x, cursor.y);
+	sessionBuff[cursor.x + cursor.y * 80] = GET_CHAR(c, tty.color);
+	cellToVM(GET_CHAR(c, tty.color), cursor.x, cursor.y);
 	setTtyCursor(cursor.x + 1, cursor.y);
 }
 // add char to Session (no Edit on Cursor nor preventing of errors)
 void	ttyAddCharPos(uint8_t c, int16_t x, int16_t y){
-	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+	uint16_t	*sessionBuff = tty.currentSession->buff;
 
-	sessionBuff[x + y * 80] = GET_CHAR(c, mainTty.color);
-	cellToVM(GET_CHAR(c, mainTty.color), x, y);
+	sessionBuff[x + y * 80] = GET_CHAR(c, tty.color);
+	cellToVM(GET_CHAR(c, tty.color), x, y);
 }
 
 void	ttyAddStr(char *s){
@@ -110,7 +110,7 @@ void	ttyAddNbr(uint32_t a, uint32_t len, char *base){
 }
 
 void clearTtySession(){
-	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+	uint16_t	*sessionBuff = tty.currentSession->buff;
 
 	CLEAR_MEM(uint16_t, sessionBuff, 1920);		// clear buffer
 	CLEAR_MEM(uint16_t, VIDEO_MEMORY, 1920);	// clear the screen
@@ -119,12 +119,12 @@ void clearTtySession(){
 
 void clearTtyStatusBar(){
 
-	CLEAR_MEM(uint16_t, mainTty.statusBar.buff, 80);
+	CLEAR_MEM(uint16_t, tty.statusBar.buff, 80);
 	CLEAR_MEM(uint16_t, VIDEO_MEMORY + 1920, 80);
 }
 
 void printTtySession(){
-	uint16_t	*sessionBuff = mainTty.currentSession->buff;
+	uint16_t	*sessionBuff = tty.currentSession->buff;
 	uint16_t	*videoMemory = (uint16_t *) VIDEO_MEMORY;
 
 	for (uint16_t i = 0; i < 1920; i++)
@@ -132,7 +132,7 @@ void printTtySession(){
 }
 
 void printTtyStatusBar(){
-	uint16_t	*sessionBuff = mainTty.statusBar.buff;
+	uint16_t	*sessionBuff = tty.statusBar.buff;
 	uint16_t	*videoMemory = (uint16_t *) VIDEO_MEMORY + 1920;
 
 	for (uint16_t i = 0; i < 80; i++)
@@ -141,9 +141,9 @@ void printTtyStatusBar(){
 void	updateStatusBar(){
 	static char s[80];
 	char *str = s;
-	uint16_t *statusBar = mainTty.statusBar.buff;
+	uint16_t *statusBar = tty.statusBar.buff;
 	_time date = getDate();
-	formatString("Session: %u ", &str, mainTty.SelectedIndex + 1);
+	formatString("Session: %u ", &str, tty.SelectedIndex + 1);
 	uint8_t i = 0;
 	while (s[i]){
 		statusBar[i] = GET_CHAR(s[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
@@ -163,7 +163,7 @@ void	updateStatusBar(){
 	else
 		str = "<*_*> ";
 	i = 0;
-	statusBar = mainTty.statusBar.buff;
+	statusBar = tty.statusBar.buff;
 	statusBar += 36;
 	while (str[i]){
 		statusBar[i] = GET_CHAR(str[i], GET_COLOR(VGA_WHITE, VGA_BLACK));
@@ -173,11 +173,11 @@ void	updateStatusBar(){
 }
 
 void switchSession(uint8_t sessionIndex){
-	if (sessionIndex >= mainTty.sessionsNb)
+	if (sessionIndex >= tty.sessionsNb)
 		return;
-	mainTty.SelectedIndex = sessionIndex;
-	mainTty.currentSession = &mainTty.Sessions[sessionIndex];
+	tty.SelectedIndex = sessionIndex;
+	tty.currentSession = &tty.Sessions[sessionIndex];
 	updateStatusBar();
 	printTtySession();
-	setTtyCursor(mainTty.currentSession->cursor.x, mainTty.currentSession->cursor.y);
+	setTtyCursor(tty.currentSession->cursor.x, tty.currentSession->cursor.y);
 }

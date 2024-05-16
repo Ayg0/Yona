@@ -5,12 +5,12 @@
 
 _kbdFlags flags;
 extern _kbdLayout kbd_US_QWERTY;
-extern _tty	mainTty;
+extern _tty	tty;
 volatile _kbdBuffer	*currentBuffer = NULL;
 
 
 void	backSpace(){
-	_pos currentCursor = mainTty.currentSession->cursor;
+	_pos currentCursor = tty.currentSession->cursor;
 	if (currentBuffer->position == 0)
 		return ;
 	currentBuffer->position--;
@@ -98,7 +98,7 @@ void	keyboardHandler(registers Rs){
 }
 
 void	initKeboard(uint8_t sessionIndex){
-	currentBuffer = &mainTty.Sessions[sessionIndex].kbdBuffer;
+	currentBuffer = &tty.Sessions[sessionIndex].kbdBuffer;
 }
 
 void	clearBuffer(){
@@ -106,8 +106,12 @@ void	clearBuffer(){
 }
 
 char	*input(char *declare){
-	if (declare)
+	if (declare){
+		uint8_t clr = tty.color;
+		changeTtyColor(VGA_YELLOW, -1);
 		printfTty(declare);
+		tty.color = clr;
+	}
 	while (currentBuffer->buffer[currentBuffer->position - 1] != '\n')
 		    asm volatile("" : : : "memory"); // to provent compiler from optimizing and assuming the mem.
 	currentBuffer->buffer[currentBuffer->position - 2] = 0;

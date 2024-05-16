@@ -1,4 +1,5 @@
 # pragma once
+#include "vga.h"
 # include "types.h"
 # include "keyboard.h"
 

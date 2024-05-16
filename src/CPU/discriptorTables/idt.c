@@ -1,6 +1,7 @@
 #include "CPU/DiscriptorTables.h"
 #include "serialPorts.h"
 #include "mem.h"
+#include "tty.h"
 /* R
 	https://web.archive.org/web/20021020082044/http://www.mega-tokyo.com/os/os-faq-pics.html
 	Read all 3 parts: http://www.osdever.net/tutorials/view/interrupts-exceptions-and-idts-part-1-interrupts-isrs-irqs-the-pic
@@ -40,11 +41,16 @@ void	initIdtEntry(uint8_t index, void *isr, uint8_t attr){
 
 void	isrHandler(registers Rs){
 	if (Rs.intNbr < 32){
+		changeTtyColor(VGA_RED, -1);
 		serialPutStr("[Fatal Error] Exception Raised => Nbr: ");
 		serialPutNbr(Rs.intNbr, 10, "0123456789");
 		serialPutStr(", ErrCode: ");
 		serialPutNbr(Rs.errCode, 10, "0123456789");
 		serialPutStr("\r\n");
+		ttyAddStr("\r\n[Fatal Error] Exception Raised => Nbr: ");
+		ttyAddNbr(Rs.intNbr, 10, "0123456789");
+		ttyAddStr(", ErrCode: ");
+		ttyAddNbr(Rs.errCode, 10, "0123456789");
 		__asm__ __volatile__ ("cli; hlt");
 	}
 }

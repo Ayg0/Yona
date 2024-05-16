@@ -6,7 +6,7 @@
 #include "CPU/DiscriptorTables.h"
 #include "keyboard.h"
 
-_tty	mainTty;
+_tty	tty;
 uint32_t ticks;
 
 extern gdtEntry	gdtEntries[GDT_ENTRIES];
@@ -23,23 +23,16 @@ void gdtTest() {
     char*		addr;
 	uint32_t	cr0;
 
-	serialPutStr("[DEBUG]: TESTING GDT\r\n");
     /* Test data segment */
     asm volatile("mov %%ds, %0" : "=r" (addr));
-    serialPutStr("Data Segment Base Address: ");
-	serialPutNbr((uint32_t) addr, 10, "0123456789");
-	serialPutStr("\r\n");
+	SERIAL_DEBUG("TESTING DGT\r\n data Segment Base Address: %x\r\n", addr);
 
     /* Test code segment */
     asm volatile("mov %%cs, %0" : "=r" (addr));
-    serialPutStr("Code Segment Base Address: ");
-	serialPutNbr((uint32_t) addr, 10, "0123456789");
-	serialPutStr("\r\n");
+    SERIAL_DEBUG("Code Segment Base Address: %x\r\n", addr);
     /* Test stack segment */
     asm volatile("mov %%ss, %0" : "=r" (addr));
-    serialPutStr("Stack Segment Base Address: ");
-	serialPutNbr((uint32_t) addr, 10, "0123456789");
-	serialPutStr("\r\n");
+    SERIAL_DEBUG("Stack Segment Base Address: %x\r\n", addr);
 	/*Testing if paging Enabled*/
 	asm volatile("mov %%cr0, %0" : "=r" (cr0));
 	serialPutStr("[INFO]: Paging is currently: ");
@@ -96,7 +89,7 @@ void	exit(){
 	printfTty("\r\nhaha d7akt 3lik you can't exit\r\n");
 }
 
-char *valid_cmds[] = {
+char *validCmds[] = {
 	"clear",
 	"add",
 	"draw",
@@ -117,8 +110,8 @@ void (*functions[])(char *buff) = {
 void	check_and_exec(char *buff){
 	uint32_t i;
 
-	for (i = 0; valid_cmds[i]; i++){
-		if (!strncmp(buff, valid_cmds[i], strlen(valid_cmds[i])))
+	for (i = 0; validCmds[i]; i++){
+		if (!strncmp(buff, validCmds[i], strlen(validCmds[i])))
 			return functions[i](buff);
 	}
 	printfTty("Command Not Found\r\n");
@@ -138,17 +131,19 @@ void kmain(){
 	kernelInits();
 	// printfTty("Hello my name is %s, nice to see all %u of You !%s\r\n", "Taha", 700, "!!");
 	char *s;
+	uint8_t clr = tty.color;
+	changeTtyColor(VGA_YELLOW, -1);
 	for (uint8_t i = 1; i < 5; i++)	// just to init the other Sessions as shells
 	{
 		switchSession(i);
 		ttyAddStr("$> ");
 	}
+	tty.color = clr;
 	switchSession(0);
 	setDate(16, 5, 2024);
 	while (1)
 	{
 		s = input("$> ");
-		// hanldeCommand(s);
 		check_and_exec(s);
 		clearBuffer();
 	}

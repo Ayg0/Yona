@@ -6,7 +6,7 @@
 
 uint32_t ticks = 0;
 static _time date;
-extern _tty mainTty;
+extern _tty tty;
 uint8_t direction;
 
 void	tick(registers Rs){

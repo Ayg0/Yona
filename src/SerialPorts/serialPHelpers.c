@@ -50,6 +50,8 @@ void	serialPutNbr(uint32_t a, uint32_t len, char *base)
 }
 
 void serialPutStr(char* str) {
+	if (!str)
+		return serialPutStr("(NULL)");
     for(size_t i = 0; str[i]; i++) {
         serialPutChar(str[i]);
     }

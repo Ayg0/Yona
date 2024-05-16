@@ -39,12 +39,14 @@ void update_cursor(int x, int y)
 {
 	uint16_t pos = y * VGA_WIDTH + x;
 	uint16_t *vidM = (uint16_t *)VIDEO_MEMORY;
+	uint8_t	cellColor = H8(vidM[pos]);
  
 	PbyteOut(VGA_CTRL, 0x0F);
 	PbyteOut(VGA_DATA, (uint8_t) (pos & 0xFF));
 	PbyteOut(VGA_CTRL, 0x0E);
 	PbyteOut(VGA_DATA, (uint8_t) ((pos >> 8) & 0xFF));
-	vidM[pos] = GET_CHAR(vidM[pos], GET_COLOR(VGA_WHITE, VGA_BLACK));	// make sure that the cursor is visible;
+	if (!cellColor)
+		vidM[pos] = GET_CHAR(vidM[pos], GET_COLOR(VGA_WHITE, VGA_BLACK));	// make sure that the cursor is visible;
 }
 
 uint16_t get_cursor_position(void)
