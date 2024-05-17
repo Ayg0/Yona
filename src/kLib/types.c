@@ -9,5 +9,5 @@ uint8_t	isPrintable(uint8_t c){
 }
 
 uint8_t	isDigit(uint8_t c){
-	return c >= '0' && c <= '9';
+	return (c >= '0') && (c <= '9');
 }

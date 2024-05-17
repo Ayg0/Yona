@@ -9,7 +9,20 @@
 _tty	tty;
 uint32_t ticks;
 
-extern gdtEntry	gdtEntries[GDT_ENTRIES];
+
+char *validCmds[] = {
+	"help",
+	"clear",
+	"add",
+	"draw",
+	"say",
+	"hi",
+	"exit",
+	"settime",
+	"setdate",
+	"ps", // <- printStack
+	NULL
+};
 
 // void fake_sleep(uint32_t iters) __attribute__((deprecated));
 
@@ -58,8 +71,13 @@ void kernelInits(){
 }
 
 void	addNms(char *buff){
-	(void)buff;
-	printfTty("ok let's start with 1 + 1\r\n1 + 1 = 3 ?\r\naaaa didn't learn addition yet !!\r\n");
+	int32_t	nb1, nb2;
+	uint32_t	index = 0;
+	buff += 3;
+	nb1 = atoiS(buff, &index);
+	buff += index;
+	nb2 = atoiS(buff, &index);
+	printfTty("%d + %d = %d\r\n", nb1, nb2, nb1 + nb2);
 }
 
 void	drawFace(){
@@ -89,23 +107,82 @@ void	exit(){
 	printfTty("\r\nhaha d7akt 3lik you can't exit\r\n");
 }
 
-char *validCmds[] = {
-	"clear",
-	"add",
-	"draw",
-	"say",
-	"hi",
-	"exit",
-	NULL
-};
+void parseDate(char *buff){
+	int16_t d, mo;
+	int32_t y;
+	uint32_t index = 0;
+
+	buff += 7;
+	d = atoiS(buff, &index);
+	buff += index;
+	if (index > 3 || index == 0 || d > 31 || d < 1)
+		goto MIS_USE;
+	mo = atoiS(buff, &index);
+	if (index > 3 || index == 0 || mo > 12 || mo < 1)
+		goto MIS_USE;
+	buff += index;
+	y = atoiS(buff, &index);
+	if (index > 5 || index == 0 || y < 0)
+		goto MIS_USE;
+	return (setDate(d, mo, y));
+
+	MIS_USE:
+	printfTty("MissUse: setdate day month year\r\n");
+}
+
+void parseTime(char *buff){
+	int16_t s, m, h;
+	uint32_t index = 0;
+
+	buff += 7;
+	h = atoiS(buff, &index);
+	if (index > 3 || h > 60 || h < 0)
+		goto MIS_USE;
+	buff += index;
+	m = atoiS(buff, &index);
+	if (index > 3 || m > 60 || m < 0)
+		goto MIS_USE;
+	buff += index;
+	s = atoiS(buff, &index);
+	if (index > 3 || s > 60 || s < 0)
+		goto MIS_USE;
+	return(setTime(s, m, h));
+	MIS_USE:
+	printfTty("MissUse: settime hour min sec\r\n");
+}
+
+void	help(){
+	printfTty("Welcome to YonaOs here is a list of all valid Commands: \r\n");
+	
+	for (uint32_t i = 0; validCmds[i]; i++)
+		printfTty("-> %s\r\n", validCmds[i]);
+}
+
+void	printStack(){
+	unsigned int esp;
+	uint8_t c = 'a'; (void) c;
+
+    asm volatile("mov %%esp, %0" : "=r" (esp));
+    unsigned int stackBottom = ((unsigned int)&c);
+
+    printfTty("Stack from top to bottom:\r\n");
+    for (unsigned int* i = (unsigned int*)esp; i <= (unsigned int*)stackBottom; i++)
+        printfTty("%x: %c\r\n", (void*)i, *i);
+}
+
 void (*functions[])(char *buff) = {
+	help,
 	clearTtySession,
 	addNms,
 	drawFace,
 	say,
 	hi,
 	exit,
+	parseTime,
+	parseDate,
+	printStack,
 };
+
 
 void	check_and_exec(char *buff){
 	uint32_t i;
@@ -115,16 +192,6 @@ void	check_and_exec(char *buff){
 			return functions[i](buff);
 	}
 	printfTty("Command Not Found\r\n");
-}
-
-
-void	hanldeCommand(char *s){
-	if (!strcmp(s, "hi"))
-		printfTty("Say hi to 3amo\r\n");
-	else if (!strncmp(s, "say ", 4))
-		printfTty("Yona: %s\r\n", s + 4);
-	else
-		printfTty("Command Not Found\r\n");
 }
 
 void kmain(){
@@ -147,5 +214,4 @@ void kmain(){
 		check_and_exec(s);
 		clearBuffer();
 	}
-	
 }
