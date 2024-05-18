@@ -6,12 +6,13 @@
 		"str.h": "c",
 		"types.h": "c",
 		"discriptortables.h": "c",
-		"serialports.h": "c",
+		"serialio.h": "c",
 		"mem.h": "c",
 		"ports.h": "c",
 		"args.h": "c",
 		"timer.h": "c",
 		"keyboard.h": "c",
-		"klibstd.h": "c"
+		"klibstd.h": "c",
+		"shell.h": "c"
 	}
 }

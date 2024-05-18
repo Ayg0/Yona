@@ -3,7 +3,7 @@
 #include "mem.h"
 #include "kLibStd.h"
 #include "timer.h"
-#include "serialPorts.h"
+#include "serialio.h"
 
 extern _tty	tty;
 extern uint8_t direction;

@@ -1,5 +1,5 @@
 #include "keyboard.h"
-#include "serialPorts.h"
+#include "serialio.h"
 #include "tty.h"
 #include "mem.h"
 

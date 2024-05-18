@@ -1,7 +1,7 @@
 #include "tty.h"
 #include "timer.h"
 #include "CPU/DiscriptorTables.h"
-#include "serialPorts.h"
+#include "serialio.h"
 #include "vga.h"
 
 uint32_t ticks = 0;

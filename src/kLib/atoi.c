@@ -1,6 +1,6 @@
 #include "types.h"
 #include "kLibStd.h"
-#include "serialPorts.h"
+#include "serialio.h"
 // safer atoi
 int32_t atoiS(char *s, uint32_t *index){
 	int32_t		nbr;
