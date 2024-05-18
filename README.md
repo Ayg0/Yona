@@ -6,12 +6,12 @@ YonaOs is a 32 bit hobby system made in C.
 - still working on the debugging system using Serial communication (Basics done).
 - u have multiple sessions to playtest and write, each one with it's own buffer (use ctrl+sessionIndex).
 - simple Shell:
-  - **say**: say whatever is afer say.
-  - **add**: tries to add two numbers.
-  - **draw**: draws a face.
-  - **exit**: exits ??.
-  - **clear**: clear Session.
-  - **hi**: say hi to 3amo.
+  - **say**: is basicly echo.
+  - **clear**: clears Session.
+  - **help**: use it to know all commands or to know what a command does.
+  - **settime**: sets the time for Yona.
+  - **setdate**: sets the date for Yona.
+  - **reboot**: reboots.
 - It doesn't k-Boom if you devide by zero.
 # General Resources:
 https://littleosbook.github.io/#introduction  
