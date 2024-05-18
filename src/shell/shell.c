@@ -56,11 +56,9 @@ void	help(char *buff){
 	printfTty("%s?? I have no clue either\r\n", buff);	
 }
 
-#include "serialio.h"
 void	checkAndExec(char *buff){
 	uint32_t i;
 
-	serialPutStr(buff);
 	for (i = 0; validCmds[i] != NULL; i++){
 		if (!strncmp(buff, validCmds[i], strlen(validCmds[i])))
 			return f[i](buff);

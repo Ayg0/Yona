@@ -3,6 +3,7 @@
 #include "shell.h"
 #include "timer.h"
 #include "kLibStd.h"
+#include "ports.h"
 
 void parseDate(char *buff){
 	int16_t d, mo;
@@ -50,11 +51,11 @@ void parseTime(char *buff){
 
 
 void reboot() {
-	#include "ports.h"
-    uint8_t good = 0x02;
-    while (good & 0x02)
-        good = PbyteIn(0x64);
-    PbyteOut(0x64, 0xFE);
+    uint8_t ready;
+	do{
+        ready = PbyteIn(0x64);
+	} while (ready & 0x02);	// wait until keyboard is ready to accept a command.
+    PbyteOut(0x64, 0xFE);	// send 0xFE command that causes the system to reboot.
     asm volatile ("hlt");
 }
 
