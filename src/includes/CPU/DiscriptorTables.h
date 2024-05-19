@@ -1,7 +1,7 @@
 #pragma once
 #include "types.h"
 
-# define GDT_ENTRIES 3
+# define GDT_ENTRIES 4
 
 /*--------------------------- GDT ---------------------------*/
 // each gdt_entry

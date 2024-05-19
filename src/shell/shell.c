@@ -3,6 +3,8 @@
 #include "shell.h"
 
 
+ void beep();
+
 char *validCmds[] = {
 	"help",
 	"clear",
@@ -11,6 +13,8 @@ char *validCmds[] = {
 	"setdate",
 	"printStack", // <- printStack
 	"reboot",
+	"hlt",
+	"beep",
 	NULL
 };
 
@@ -22,6 +26,8 @@ char *desciption[] = {
 	"sets the date wow",
 	"print Stack -- still figuring a better way --",
 	"self explanatory",
+	"zam takram ala mitaaasyon jmaad",
+	"beep boop",
 	NULL
 };
 
@@ -32,8 +38,15 @@ void (*f[])(char *buff) = {
 	parseTime,
 	parseDate,
 	printStack,
-	reboot
+	reboot,
+	hlt,
+	beep,
 };
+
+void hlt(){
+	printfTty("I ain't doing a thing until u reboot the pc !!");
+	__asm__ volatile("cli; hlt");
+}
 
 void	printOverView(){
 	printfTty("Welcome to YonaOs here is a list of all valid Commands: \r\n");
@@ -53,7 +66,7 @@ void	help(char *buff){
 		if (!strcmp(buff, validCmds[i]))
 			return printfTty("-> %s: %s\r\n", validCmds[i], desciption[i]);
 	}
-	printfTty("%s?? I have no clue either\r\n", buff);	
+	printfTty("`%s` ?? I have no clue either\r\n", buff);	
 }
 
 void	checkAndExec(char *buff){

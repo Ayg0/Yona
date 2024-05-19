@@ -20,8 +20,6 @@ void kputC(const char c, int *x, int *y, uint8_t color){
 
 void enable_cursor(uint8_t cursor_start, uint8_t cursor_end)
 {
-	(void) cursor_start;
-	(void) cursor_end;
 	PbyteOut(VGA_CTRL, 0x0A);
 	PbyteOut(VGA_DATA, (PbyteIn(VGA_DATA) & 0xC0) | cursor_start);
  

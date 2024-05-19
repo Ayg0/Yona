@@ -75,7 +75,42 @@ void	exit(){
 	fake_sleep(15000);
 	printfTty("\r\nhaha d7akt 3lik you can't exit\r\n");
 }
+ 
 
+void	sound(uint32_t fr, uint32_t delay){
+	play_sound(fr);
+ 	fake_sleep(delay);
+}
+ //Make a beep
+ void beep(char *buff) {
+	buff += 4;
+	int32_t f = atoi(buff);
+
+	if (f != 0){
+		printfTty("f = %d\r\n", f);
+		play_sound(f);
+ 		fake_sleep(10000);
+		nosound();
+		return ;
+	}
+	sound(800, 10000);
+	sound(700, 10000);
+	sound(600, 10000);
+
+	sound(800, 5000);
+	sound(700, 5000);
+	sound(600, 5000);
+
+	sound(800, 5000);
+	sound(700, 5000);
+	sound(600, 5000);
+
+	sound(800, 7000);
+	sound(700, 7000);
+
+ 	nosound();
+          //set_PIT_2(old_frequency);
+ }
 
 void kmain(){
 	kernelInits();

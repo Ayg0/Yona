@@ -49,7 +49,6 @@ void parseTime(char *buff){
 	printfTty("MissUse: settime hour min sec\r\n");
 }
 
-
 void reboot() {
     uint8_t ready;
 	do{

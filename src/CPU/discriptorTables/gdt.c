@@ -28,6 +28,7 @@ void	initGdt(){
 	setGdtEntry(0, 0, 0, 0, 0);						// NULL Segment
 	setGdtEntry(1, 0xFFFFFFFF, 0x0, 0x9A, 0xCF);	// Kernel Code Segment
 	setGdtEntry(2, 0xFFFFFFFF, 0x0, 0x92, 0xCF);	// Kernel Data Segment
+	setGdtEntry(3, 0x0, 0x0, 0x92, 0xCF);			// Kernel Stack Segment has no limit
 	
 	loadGdt((uint32_t)&gdtP);
 }

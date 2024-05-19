@@ -18,7 +18,7 @@ void	initTty(){
 	for (uint8_t i = 0; i < tty.sessionsNb; i++)
 		initSession(tty.Sessions + i);
 	updateStatusBar();
-	enable_cursor(0, 31);
+	enable_cursor(14, 15);
 }
 // Inits the Session
 void	initSession(_ttySession *Session){
