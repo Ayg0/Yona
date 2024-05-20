@@ -3,7 +3,7 @@
 #include "shell.h"
 
 
- void beep();
+void	beep();
 
 char *validCmds[] = {
 	"help",

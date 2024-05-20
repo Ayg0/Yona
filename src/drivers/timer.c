@@ -12,6 +12,7 @@ uint8_t direction;
 void	tick(registers Rs){
 	(void)Rs;
 	ticks++;
+	date.msFromPcStart++;
 	if (ticks < date.frequency){
 		if (!(ticks % (date.frequency / 3))){
 			direction = !direction;
@@ -27,6 +28,14 @@ void	tick(registers Rs){
 	date.mo += (date.d == 31) && !(date.d = 0);
 	date.y += (date.mo == 12) && !(date.mo = 0);
 	updateStatusBar();
+}
+
+
+void msleep(uint32_t mSeconds) {
+	volatile uint32_t next = date.msFromPcStart + mSeconds;
+
+	while (date.msFromPcStart < next){
+	}
 }
 
 _time	getDate(){

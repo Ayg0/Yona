@@ -51,7 +51,7 @@ void kernelInits(){
 	serialPutStr("[INFO]: DISCRIPTOR TABLES INIT SUCCESS\r\n");
 	initTty();
 	serialPutStr("[INFO]: TTY INIT SUCCESS\r\n");
-	init_timer(50);	
+	init_timer(1000);	
 	serialPutStr("[INFO]: TIMER INIT SUCCESS\r\n");
 	setIRQHandler(1, keyboardHandler);
 }
@@ -79,37 +79,56 @@ void	exit(){
 
 void	sound(uint32_t fr, uint32_t delay){
 	play_sound(fr);
- 	fake_sleep(delay);
+	msleep(delay);
+	nosound();
 }
+
  //Make a beep
  void beep(char *buff) {
 	buff += 4;
 	int32_t f = atoi(buff);
+    uint32_t piano_keys[15] = {262, 294, 330, 349, 392,
+							440, 494, 523, 587, 659, 
+							697, 784, 880, 988, 1047};
 
 	if (f != 0){
 		printfTty("f = %d\r\n", f);
-		play_sound(f);
- 		fake_sleep(10000);
-		nosound();
+ 		sound(f, 1000);
 		return ;
 	}
-	sound(800, 10000);
-	sound(700, 10000);
-	sound(600, 10000);
+	for (size_t i = 0; i < 15; i++)
+		sound(piano_keys[i], 500);
 
-	sound(800, 5000);
-	sound(700, 5000);
-	sound(600, 5000);
+	printfTty("---- and check this ----\r\n");
+	msleep(750);
+	sound(800, 900);
+	sound(700, 900);
+	sound(600, 900);
 
-	sound(800, 5000);
-	sound(700, 5000);
-	sound(600, 5000);
+	sound(800, 250);
+	sound(700, 250);
+	sound(600, 250);
 
-	sound(800, 7000);
-	sound(700, 7000);
+	sound(800, 250);
+	sound(700, 250);
+	sound(600, 250);
 
- 	nosound();
-          //set_PIT_2(old_frequency);
+	sound(800, 500);
+	sound(700, 500);
+
+	// sound(800, 250);
+	// msleep(50);
+	// sound(800, 250);
+	// msleep(50);
+	// sound(800, 250);
+	// msleep(80);
+	// sound(900, 250);
+	// msleep(50);
+	// sound(900, 250);
+	// msleep(50);
+	// sound(900, 250);
+	// msleep(50);
+
  }
 
 void kmain(){
