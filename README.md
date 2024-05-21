@@ -12,7 +12,8 @@ YonaOs is a 32 bit hobby system made in C.
   - **settime**: sets the time for Yona.
   - **setdate**: sets the date for Yona.
   - **reboot**: reboots.
-- It doesn't k-Boom if you devide by zero.
+  - **beep**: play a sound at a frequency for 1 sec, or play music with no argument.  
+- It doesn't k-Boom if you devide by zero (kinda).
 # General Resources:
 https://littleosbook.github.io/#introduction  
 http://www.osdever.net/bkerndev/Docs/intro.htm  
