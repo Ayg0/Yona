@@ -5,7 +5,7 @@
 #include "vga.h"
 
 uint32_t ticks = 0;
-static _time date;
+volatile _time date;
 extern _tty tty;
 uint8_t direction;
 
@@ -32,7 +32,7 @@ void	tick(registers Rs){
 
 
 void msleep(uint32_t mSeconds) {
-	volatile uint32_t next = date.msFromPcStart + mSeconds;
+	uint32_t next = date.msFromPcStart + mSeconds;
 
 	while (date.msFromPcStart < next){
 	}

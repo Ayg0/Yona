@@ -1,8 +1,8 @@
 #pragma once
 #include "types.h"
 
-# define GDT_ENTRIES 4
-
+# define GDT_ENTRIES 5
+# define GDT_BASEADDR 0x00000800
 /*--------------------------- GDT ---------------------------*/
 // each gdt_entry
 typedef	struct _gdtEntry{
@@ -15,12 +15,13 @@ typedef	struct _gdtEntry{
 		|P|DPL|S|E|DC|RW|A|
 		Access Byte: learn more https://wiki.osdev.org/Global_Descriptor_Table#Segment_Descriptor
 	*/
-	uint8_t	flags_highLimit;	// flags and the last 4 bits of the limit
+	uint8_t	flags:4;
 	/*
 		|3|2 |1|0       |
 		|G|DB|L|Reserved|
 		*G* -> when this set to 1 the limit got multiplayed by 0x1000 (to get 4Gb)
 	*/
+	uint8_t highLimit:4;
 	uint8_t	highBase;			// 24-31 bits of the base
 }__attribute__ ((packed)) gdtEntry; // __attribute__((packed)) provent any padding.
 // the GDT_descriptor

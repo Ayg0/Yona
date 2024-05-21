@@ -1,3 +1,12 @@
-[INFO]: SERIAL INIT SUCCESS
-exception nbr: 0
-0
+[SUCCESS]: SERIAL INIT SUCCESS
+[DEBUG]: GDT Base Address: 0x800
+[DEBUG]: GDT Limit: 0x27
+[INFO]: TESTING DGT
+[DEBUG]: data Segment Base Address: 0x10
+[DEBUG]: Code Segment Base Address: 0x8
+[DEBUG]: Stack Segment Base Address: 0x10
+[INFO]: Paging is currently: DISABLED
+[INFO]: END TESTING GDT
+[SUCCESS]: DISCRIPTOR TABLES INIT SUCCESS
+[SUCCESS]: TTY INIT SUCCESS
+[SUCCESS]: TIMER INIT SUCCESS

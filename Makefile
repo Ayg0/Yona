@@ -2,8 +2,8 @@
 CC=i386-elf-gcc
 AS=nasm
 LDSCRIPT=src/linker.ld
-# DO_I_SPEED=-O2
-DO_I_SPEED=
+DO_I_SPEED=-O2
+# DO_I_SPEED=
 CFLAGS=-std=gnu99 -ffreestanding ${DO_I_SPEED} -Wall -Wextra\
 		 -fno-builtin -nostdlib -nodefaultlibs -Isrc/includes
 ASFLAGS=-f elf32
@@ -32,7 +32,9 @@ $(ISO): $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJECTS)
 run:
-	qemu-system-i386 -cdrom yona.iso -serial file:serialLogs.txt
+	qemu-system-i386 -cdrom yona.iso\
+	 -audiodev pa,id=speaker -machine pcspk-audiodev=speaker\
+	 -serial file:serialLogs.txt
 
 # Rule to make the object files
 build/%.o: src/%.c

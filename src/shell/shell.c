@@ -27,7 +27,7 @@ char *desciption[] = {
 	"print Stack -- still figuring a better way --",
 	"self explanatory",
 	"zam takram ala mitaaasyon jmaad",
-	"beep boop",
+	"1sec of your favourite frequency, no params = music",
 	NULL
 };
 

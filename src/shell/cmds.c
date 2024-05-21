@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "kLibStd.h"
 #include "ports.h"
+#include "sound.h"
 
 void parseDate(char *buff){
 	int16_t d, mo;
@@ -70,10 +71,10 @@ void printStack() {
     unsigned int ebp;
 
     uint8_t k; (void) k;
-	uint8_t h[] = "Hello It's meee";
+	volatile char h[] = "Hello It's meee"; (void) k;
 	int	g;
 
-	char *b = &g;
+	char *b = (char *)&g;
 	b[0] = 'a';
 	b[1] = 'b';
 	b[2] = 'c';
@@ -94,4 +95,38 @@ void printStack() {
         }
         printfTty("\r\n");
     }
+}
+
+//Make a beep
+void beep(char *buff) {
+	buff += 4;
+	int32_t f = atoi(buff);
+    uint32_t piano_keys[15] = {262, 294, 330, 349, 392,
+							440, 494, 523, 587, 659, 
+							697, 784, 880, 988, 1047};
+
+	if (f != 0){
+		printfTty("f = %d\r\n", f);
+ 		playSound(f, 1000);
+		return ;
+	}
+	for (size_t i = 0; i < 15; i++)
+		playSound(piano_keys[i], 500);
+
+	printfTty("---- and check this ----\r\n");
+	msleep(750);
+	playSound(800, 900);
+	playSound(700, 900);
+	playSound(600, 900);
+
+	playSound(800, 250);
+	playSound(700, 250);
+	playSound(600, 250);
+
+	playSound(800, 250);
+	playSound(700, 250);
+	playSound(600, 250);
+
+	playSound(800, 500);
+	playSound(700, 500);
 }
