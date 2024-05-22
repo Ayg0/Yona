@@ -1,8 +1,9 @@
 [GLOBAL loadGdt]
 
 ; 0->7 null segment; 8->0xF code Segment and 0x10->0x17 data Segment
-DATA_S equ 0x10 ; where our data segment is located
-CODE_S equ 0x08 ; where our code segment is located
+CODE_S equ 0x08		; where our code segment is located
+DATA_S equ 0x10		; where our data segment is located
+STACK_S equ 0x18	; where our stack segment is located
 
 loadGdt:
 	mov	eax, [esp + 4]	; load eax with our gdt-Ptr
@@ -16,5 +17,6 @@ reloadCS:
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
+	mov ax, STACK_S
 	mov ss, ax
 	ret

@@ -22,18 +22,16 @@ static void	setGdtEntry(uint32_t index, uint32_t limit, uint32_t base, uint8_t a
 	gdtEntries[index].accessByte = access_b;
 }
 
-// init_gdt_desc(0x0, 0xFFFFF, 0xFF, 0x0D, &kgdt[4]);    /* ucode */
-// init_gdt_desc(0x0, 0xFFFFF, 0xF3, 0x0D, &kgdt[5]);    /* udata */
-// init_gdt_desc(0x0, 0x0,	0xF7,	0x0D, &kgdt[6]);        /* ustack */
-
 void	initGdt(){
 
 	setGdtEntry(0, 0, 0, 0, 0);						// NULL Segment
 	setGdtEntry(1, 0xFFFFF, 0x0, 0x9A, 0xC);		// Kernel Code Segment
 	setGdtEntry(2, 0xFFFFF, 0x0, 0x92, 0xC);		// Kernel Data Segment
+	setGdtEntry(3, 0xFFFFF, 0x0, 0x97, 0xC);		// Kernel Stack Segment
 
-	setGdtEntry(3, 0xFFFFF, 0x0, 0xFA, 0xC);		// User Code Segment
-	setGdtEntry(4, 0xFFFFF, 0x0, 0xF2, 0xC);		// User Data Segment
+	setGdtEntry(4, 0xFFFFF, 0x0, 0xFA, 0xC);		// User Code Segment
+	setGdtEntry(5, 0xFFFFF, 0x0, 0xF2, 0xC);		// User Data Segment
+	setGdtEntry(6, 0xFFFFF, 0x0, 0xF7, 0xC);		// User Stack Segment
 
 	memcpy(GDT_BASEADDR, gdtEntries, (GDT_ENTRIES * sizeof(gdtEntry)) - 1);
 	gdtP.base = GDT_BASEADDR;

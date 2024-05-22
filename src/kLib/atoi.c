@@ -2,7 +2,7 @@
 #include "kLibStd.h"
 #include "serialio.h"
 // safer atoi
-int32_t atoiS(char *s, uint32_t *index){
+int32_t atoiS(const char *s, uint32_t *index){
 	int32_t		nbr;
 	int8_t		sign = 1;
 
@@ -25,7 +25,7 @@ int32_t atoiS(char *s, uint32_t *index){
 	return nbr * sign;
 }
 // atoi
-int32_t atoi(char *s){
+int32_t atoi(const char *s){
 	int32_t		nbr;
 	uint32_t	index;
 	int8_t		sign = 1;
@@ -49,7 +49,7 @@ int32_t atoi(char *s){
 }
 
 // uinsigned atoi
-uint32_t	uatoiS(char *s, uint32_t *index){
+uint32_t	uatoiS(const char *s, uint32_t *index){
 	uint32_t	nbr;
 
 	*index = nbr = 0;

@@ -1,6 +1,10 @@
 #include "args.h"
 #include "serialio.h"
+#include "kLibStd.h"
 
+char	HEX_BASE[] = "0123456789ABCDEF";
+char	DEC_BASE[] = "0123456789";
+char	BINARY_BASE[] = "01";
 
 uint32_t appendLen = 0;
 
@@ -19,25 +23,29 @@ void	appendString(char **string, uint32_t *index, char *toAppend){
 	}
 }
 
-uint32_t	getNbrSize(uint32_t nbr){
-	uint32_t i = 0;
-
-	do{
-		nbr /= 10, i++;
-	}while (nbr);
-
-	return i;	
-}
-
 void	appendUnsignNbr(char **string, uint32_t *index, uint32_t nbr){
 	uint32_t i = 0;
-	uint32_t nbrSize = getNbrSize(nbr);
+	uint32_t nbrSize = getNbrSize(nbr, 10);
 
 	if (nbrSize < appendLen)
 		nbrSize += appendLen - nbrSize;
 	while (i < nbrSize){
-		(*string)[*index + nbrSize - i - 1] = (nbr % 10) + 48;
+		(*string)[*index + nbrSize - i - 1] = DEC_BASE[nbr % 10];
 		nbr /= 10, i++;
+	}
+	*index += i;
+}
+
+void	appendHex(char **string, uint32_t *index, uint32_t nbr){
+	uint32_t i = 0;
+	uint32_t nbrSize = getNbrSize(nbr, 16);
+
+	appendString(string, index, "0x");
+	if (nbrSize < appendLen)
+		nbrSize += appendLen - nbrSize;
+	while (i < nbrSize){
+		(*string)[*index + nbrSize - i - 1] = HEX_BASE[nbr % 16];
+		nbr /= 16, i++;
 	}
 	*index += i;
 }
@@ -65,21 +73,17 @@ switch (identifier)
 		case 'd':	// append an int
 			appendSignNbr(str, index, VARG_NEXT(*ptr, int));
 			break;
+		case 'x':	// append an int
+			appendHex(str, index, VARG_NEXT(*ptr, uint32_t));
+			break;
 		default:
 			appendChar(str, index, identifier);
 	}
 }
 uint32_t	increaseAppendLen(char *fmtS){
 	uint32_t	i = 0;
-	uint32_t	len = 0;
 
-	while (fmtS[i] >= '0' && fmtS[i] <= '9')
-	{
-		len *= 10;
-		len += (fmtS[i] - 48);
-		i++;
-	}
-	appendLen = len;
+	appendLen = atoiS(fmtS, &i);
 	return i;
 }
 

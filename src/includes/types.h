@@ -19,6 +19,11 @@
 # define H8(VAL) ((VAL >> 8) & 0xFF)
 # define H16(VAL) ((VAL >> 16) & 0xFFFF)
 
-uint8_t	isAlpha(uint8_t c);
-uint8_t	isDigit(uint8_t c);
-uint8_t	isPrintable(uint8_t c);
+extern char	HEX_BASE[];
+extern char	DEC_BASE[];
+extern char	BINARY_BASE[];
+
+uint8_t		isAlpha(uint8_t c);
+uint8_t		isDigit(uint8_t c);
+uint8_t		isPrintable(uint8_t c);
+uint32_t	getNbrSize(uint32_t nbr, uint8_t baseLen);

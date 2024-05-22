@@ -81,8 +81,8 @@ void	exit(){
 
 void kmain(){
 	kernelInits();
-	// printfTty("Hello my name is %s, nice to see all %u of You !%s\r\n", "Taha", 700, "!!");
-	char *s;
+	// char s[50] = "Heeeeelloo";
+	// char *str = s;
 	uint8_t clr = tty.color;
 	changeTtyColor(VGA_YELLOW, -1);
 	for (uint8_t i = 1; i < 5; i++)	// just to init the other Sessions as shells
@@ -93,5 +93,6 @@ void kmain(){
 	tty.color = clr;
 	switchSession(0);
 	setDate(1, 1, 2000);
+	// printfTty("%4x, %4d, %4u\r\n", 0xA5678, 5, 6);
 	shell();
 }
