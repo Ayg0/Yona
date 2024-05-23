@@ -10,18 +10,10 @@ void	shell();
 _tty	tty;
 uint32_t ticks;
 
-// void fake_sleep(uint32_t iters) __attribute__((deprecated));
-
-void fake_sleep(uint32_t iters){
-	for (size_t volatile i = 0; i < iters; i++)
-		for (size_t j = 0; j < iters; j++)
-			i = i;
-}
-
 void gdtTest() {
     char*		addr;
 	uint32_t	cr0;
-	gdtPtr		gdt;
+	gdtPtr		gdt = {.base = 0, .limit = 0};
 
 	/*gdt*/
 	asm volatile("sgdt %0" : : "m" (gdt));
@@ -58,31 +50,14 @@ void kernelInits(){
 	SERIAL_SUCC("%s INIT SUCCESS\r\n", "TIMER");
 	setIRQHandler(1, keyboardHandler);
 }
-
-void	drawFace(){
-	ttyAddStr("\r\n|-----|");	
-	ttyAddStr("\r\n| . . |");	
-	ttyAddStr("\r\n| ___ |");	
-	ttyAddStr("\r\n|-----|\r\n\n");	
-}
-
-void	hi(){
-	printfTty("say hi to 3amo\r\n");
-}
-void	exit(){
-	printfTty("exiting in 3 .. ");
-	fake_sleep(15000);
-	printfTty("2 .. ");
-	fake_sleep(15000);
-	printfTty("1");
-	fake_sleep(15000);
-	printfTty("\r\nhaha d7akt 3lik you can't exit\r\n");
-}
-
+extern uint32_t ebp;
 void kmain(){
 	kernelInits();
-	// char s[50] = "Heeeeelloo";
-	// char *str = s;
+    __asm__ __volatile__("mov %%esp, %0" : "=r" (ebp) : : "memory");
+	volatile char s[] = "Onga bonga ha ha ha";
+	char *str = (char *)s; (void)str;
+	uint32_t l = ebp;
+	printfTty("%x\r\n", l);
 	uint8_t clr = tty.color;
 	changeTtyColor(VGA_YELLOW, -1);
 	for (uint8_t i = 1; i < 5; i++)	// just to init the other Sessions as shells

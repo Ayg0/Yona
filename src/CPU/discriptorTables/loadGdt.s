@@ -8,10 +8,7 @@ STACK_S equ 0x18	; where our stack segment is located
 loadGdt:
 	mov	eax, [esp + 4]	; load eax with our gdt-Ptr
 	lgdt [eax]			; flush the gdt with new vals
-	
-	jmp CODE_S:reloadCS	; do a far jump to flush the instruction prefetch queue and set CS to the new code segment
 
-reloadCS:
 	mov ax, DATA_S				; set the segment registers with the new data segment addr
 	mov ds, ax
 	mov es, ax
@@ -19,4 +16,8 @@ reloadCS:
 	mov gs, ax
 	mov ax, STACK_S
 	mov ss, ax
+	
+	jmp CODE_S:reloadCS	; do a far jump to flush the instruction prefetch queue and set CS to the new code segment
+
+reloadCS:
 	ret

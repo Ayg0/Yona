@@ -2,16 +2,13 @@
 #include "str.h"
 #include "shell.h"
 
-
-void	beep();
-
 char *validCmds[] = {
 	"help",
 	"clear",
 	"say",
 	"settime",
 	"setdate",
-	"printStack", // <- printStack
+	"stack",
 	"reboot",
 	"hlt",
 	"beep",
@@ -24,12 +21,13 @@ char *desciption[] = {
 	"say is just echo",
 	"set time for Yona, no params = reset",
 	"sets the date wow",
-	"print Stack -- still figuring a better way --",
+	"print the stack from top to buttom",
 	"self explanatory",
 	"zam takram ala mitaaasyon jmaad",
 	"1sec of your favourite frequency, no params = music",
 	NULL
 };
+
 
 void (*f[])(char *buff) = {
 	help,

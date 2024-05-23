@@ -30,4 +30,6 @@ section .text
 section .bss
 	stackButtom:
     resb 16384     ; 16KB for stack
+    ; resb 8192      ; 8KB  for stack
+    ; resb 4096      ; 4KB  for stack
     stackTop:

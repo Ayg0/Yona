@@ -5,6 +5,9 @@
 #include "kLibStd.h"
 #include "ports.h"
 #include "sound.h"
+#include "mem.h"
+
+extern _tty tty;
 
 void parseDate(char *buff){
 	int16_t d, mo;
@@ -66,32 +69,48 @@ void	say(char *buff){
 	printfTty("Yona: %s\r\n", buff);
 }
 
+volatile uint32_t	ebp;
 void printStack() {
-    unsigned int esp;
-    unsigned int ebp;
+    uint32_t	esp;
+    uint8_t		i8[16] = {'a','b','c','d','e','f','g','h',
+						'i','j','k','l','m','n','o','p'};
+	volatile uint8_t	c = '~';
+	((char *)&c)[-1] = 0;
+	((char *)&c)[-2] = '~';
+	((char *)&c)[-3] = 0;
+	volatile uint16_t b = 'k'; (void)b;
+	volatile uint32_t f = 0xABCF; (void)f;
 
-    uint8_t k; (void) k;
-	volatile char h[] = "Hello It's meee"; (void) k;
-	int	g;
+    __asm__ __volatile__("mov %%esp, %0" : "=r" (esp));
+	uint8_t termColor = tty.color;
+	printfTty("          ------ ebp = %8x ; esp = %8x ------\r\n", ebp, esp);
+    for (unsigned int* i = (unsigned int*)esp; i <= (unsigned int*)ebp; i += 4) {
+        printfTty("%8x: ", i);
 
-	char *b = (char *)&g;
-	b[0] = 'a';
-	b[1] = 'b';
-	b[2] = 'c';
-	b[3] = 'd';
-	k = 'z';
-    asm volatile("mov %%esp, %0" : "=r" (esp));
-    asm volatile("mov %%ebp, %0" : "=r" (ebp));
-    printfTty("Stack: Top To Bottom:\r\n");
-    for (unsigned int* i = (unsigned int*)esp; i <= (unsigned int*)ebp; i++) {
-        unsigned char *bytes = (unsigned char*)i;
-        printfTty("%x  ", i);
-        for (int j = 0; j < 4; j++) {
-            unsigned char c = bytes[j];
-            if (c >= 32 && c < 127)
-                printfTty("'%c' ", c);
-            else
-                printfTty("'.' ");
+		memmove(i8, (uint8_t *)i, 16);
+		for (int j = 0; j < 16; j++) {
+			if (isPrintable(i8[j]))
+                changeTtyColor(VGA_GREEN, -1);
+			else if (i8[j] != 0)
+                changeTtyColor(VGA_RED, -1);
+            printfTty("%2p", i8[j]);
+			if (j % 2)
+				printfTty(" ");
+			tty.color = termColor;
+        }
+
+        for (int j = 0; j < 16; j++) {
+            if (isPrintable(i8[j])){
+                changeTtyColor(VGA_GREEN, -1);
+				printfTty("%c", i8[j]);
+			}
+            else if (i8[j] == 0)
+                printfTty(".");
+			else{
+                changeTtyColor(VGA_RED, -1);
+				printfTty(".");
+			}
+			tty.color = termColor;
         }
         printfTty("\r\n");
     }

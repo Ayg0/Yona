@@ -53,6 +53,9 @@ void	printNewArg(char identifier, varg_ptr *ptr){
 			ttyAddStr("0x");
 			printNbrAppend(VARG_NEXT(*ptr, uint32_t), HEX_BASE, 16);
 			break;
+		case 'p':	// print unsigned int in Hex
+			printNbrAppend(VARG_NEXT(*ptr, uint32_t), HEX_BASE, 16);
+			break;
 		default:
 			ttyAddChar(identifier);
 	}
@@ -64,7 +67,7 @@ uint32_t increaseLen(const char *appendingFmt){
 	appendLen = atoiS(appendingFmt, &i);
 	return i;
 }
-// %s %c %d %x %u Implemented, %4x => append the number until 4 digits
+// %s %c %d %x %u %p Implemented, %4x => append the number until 4 digits
 void	printfTty(const char *FmtS, ...){
 	varg_ptr ptr;
 	uint32_t i = 0;

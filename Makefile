@@ -4,7 +4,7 @@ AS=nasm
 LDSCRIPT=src/linker.ld
 # DO_I_SPEED=-O2
 DO_I_SPEED=
-CFLAGS=-std=gnu99 -ffreestanding ${DO_I_SPEED} -Wall -Wextra\
+CFLAGS=-std=gnu99 -ffreestanding ${DO_I_SPEED} -Wall -Wextra -Werror\
 		 -fno-builtin -nostdlib -nodefaultlibs -Isrc/includes
 ASFLAGS=-f elf32
 LDFLAGS=-T $(LDSCRIPT) -ffreestanding ${DO_I_SPEED} -nostdlib -lgcc
