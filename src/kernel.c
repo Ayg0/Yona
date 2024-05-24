@@ -56,8 +56,7 @@ void kmain(){
     __asm__ __volatile__("mov %%esp, %0" : "=r" (ebp) : : "memory");
 	volatile char s[] = "Onga bonga ha ha ha";
 	char *str = (char *)s; (void)str;
-	uint32_t l = ebp;
-	printfTty("%x\r\n", l);
+
 	uint8_t clr = tty.color;
 	changeTtyColor(VGA_YELLOW, -1);
 	for (uint8_t i = 1; i < 5; i++)	// just to init the other Sessions as shells
@@ -68,6 +67,5 @@ void kmain(){
 	tty.color = clr;
 	switchSession(0);
 	setDate(1, 1, 2000);
-	// printfTty("%4x, %4d, %4u\r\n", 0xA5678, 5, 6);
 	shell();
 }

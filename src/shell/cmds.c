@@ -74,12 +74,12 @@ void printStack() {
     uint32_t	esp;
     uint8_t		i8[16] = {'a','b','c','d','e','f','g','h',
 						'i','j','k','l','m','n','o','p'};
-	volatile uint8_t	c = '~';
+	uint8_t	c = '~';
 	((char *)&c)[-1] = 0;
 	((char *)&c)[-2] = '~';
 	((char *)&c)[-3] = 0;
-	volatile uint16_t b = 'k'; (void)b;
-	volatile uint32_t f = 0xABCF; (void)f;
+	uint16_t b = 'k'; (void)b;
+	uint32_t f = 0xABCF; (void)f;
 
     __asm__ __volatile__("mov %%esp, %0" : "=r" (esp));
 	uint8_t termColor = tty.color;
@@ -87,7 +87,7 @@ void printStack() {
     for (unsigned int* i = (unsigned int*)esp; i <= (unsigned int*)ebp; i += 4) {
         printfTty("%8x: ", i);
 
-		memmove(i8, (uint8_t *)i, 16);
+		memmove((char *)i8, (uint8_t *)i, 16);
 		for (int j = 0; j < 16; j++) {
 			if (isPrintable(i8[j]))
                 changeTtyColor(VGA_GREEN, -1);
@@ -148,4 +148,28 @@ void beep(char *buff) {
 
 	playSound(800, 500);
 	playSound(700, 500);
+}
+
+
+
+void	peek(char *buff){
+	uint32_t addr;
+	buff += 4;
+
+	addr = atoHexS(buff, NULL);
+	printfTty("%8x: HEX [%2x] DEC [%d] ASCII [%c] \r\n", addr, *((char *) addr), *((char *) addr), *((char *) addr));
+
+}
+
+void	poke(char *buff){
+	uint32_t	addr;
+	uint8_t		byte;
+	uint32_t	index;
+	buff += 4;
+
+	addr = atoHexS(buff, &index);
+	buff += index;
+	byte = uatoiS(buff, &index);
+
+	(*(char *)addr) = byte;
 }

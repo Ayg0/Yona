@@ -12,6 +12,8 @@ char *validCmds[] = {
 	"reboot",
 	"hlt",
 	"beep",
+	"peek",
+	"poke",
 	NULL
 };
 
@@ -25,6 +27,8 @@ char *desciption[] = {
 	"self explanatory",
 	"zam takram ala mitaaasyon jmaad",
 	"1sec of your favourite frequency, no params = music",
+	"peek addr -> read a byte from addr",
+	"poke addr byte -> write the byte to addr",
 	NULL
 };
 
@@ -39,6 +43,8 @@ void (*f[])(char *buff) = {
 	reboot,
 	hlt,
 	beep,
+	peek,
+	poke,
 };
 
 void hlt(){

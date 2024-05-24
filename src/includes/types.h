@@ -26,4 +26,6 @@ extern char	BINARY_BASE[];
 uint8_t		isAlpha(uint8_t c);
 uint8_t		isDigit(uint8_t c);
 uint8_t		isPrintable(uint8_t c);
+uint8_t		isLowerCase(uint8_t c);
+uint8_t		isUpperCase(uint8_t c);
 uint32_t	getNbrSize(uint32_t nbr, uint8_t baseLen);

@@ -36,6 +36,18 @@ size_t	strlcat(char *dest, const char *src, size_t size){
 
     return destLen + srcLen;
 }
+
+//  strchr ret index
+int32_t strchrInd(const char *s, int c){
+	int32_t i = 0;
+    while (s[i]){
+        if (s[i] == (char)c)
+            return i;
+		i++;
+	}
+    return -1;
+}
+
 //  strchr
 char *strchr(const char *s, int c){
     while (*s++)

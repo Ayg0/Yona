@@ -33,9 +33,9 @@ void	initGdt(){
 	setGdtEntry(5, 0xFFFFF, 0x0, 0xF2, 0x0C);		// User Data Segment
 	setGdtEntry(6, 0xFFFFF, 0x0, 0xF2, 0x0C);		// User Stack Segment
 
-	// memcpy(GDT_BASEADDR, gdtEntries, (GDT_ENTRIES * sizeof(gdtEntry)) - 1);
-	// gdtP.base = GDT_BASEADDR;
-	gdtP.base = (uint32_t)&gdtEntries;
+	memcpy((void *)GDT_BASEADDR, gdtEntries, (GDT_ENTRIES * sizeof(gdtEntry)) - 1);
+	gdtP.base = GDT_BASEADDR;
+	// gdtP.base = (uint32_t)&gdtEntries;
 	gdtP.limit = (GDT_ENTRIES * sizeof(gdtEntry)) - 1;
 	loadGdt((uint32_t)&gdtP);
 }

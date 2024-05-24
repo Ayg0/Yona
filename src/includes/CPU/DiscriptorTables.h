@@ -2,7 +2,7 @@
 #include "types.h"
 
 # define GDT_ENTRIES 7
-# define GDT_BASEADDR ((void *)0x00000800)
+# define GDT_BASEADDR 0x00000800
 /*--------------------------- GDT ---------------------------*/
 // each gdt_entry
 typedef	struct _gdtEntry{
