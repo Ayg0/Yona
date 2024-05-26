@@ -69,24 +69,27 @@ void	say(char *buff){
 	printfTty("Yona: %s\r\n", buff);
 }
 
-volatile uint32_t	ebp;
+uint32_t	mainEBP;
 void printStack() {
     uint32_t	esp;
-    uint8_t		i8[16] = {'a','b','c','d','e','f','g','h',
-						'i','j','k','l','m','n','o','p'};
 	uint8_t	c = '~';
-	((char *)&c)[-1] = 0;
+	((char *)&c)[-1] = '~';
 	((char *)&c)[-2] = '~';
-	((char *)&c)[-3] = 0;
+	((char *)&c)[-3] = '~';
 	uint16_t b = 'k'; (void)b;
 	uint32_t f = 0xABCF; (void)f;
 
     __asm__ __volatile__("mov %%esp, %0" : "=r" (esp));
-	uint8_t termColor = tty.color;
-	printfTty("          ------ ebp = %8x ; esp = %8x ------\r\n", ebp, esp);
-    for (unsigned int* i = (unsigned int*)esp; i <= (unsigned int*)ebp; i += 4) {
-        printfTty("%8x: ", i);
+	printfTty("          ------ ebp = %8x ; esp = %8x ------\r\n", mainEBP, esp);
+	dumpMemory(esp, mainEBP - esp);
+}
 
+void	dumpMemory(uint32_t start, uint32_t size){
+	uint8_t	termColor = tty.color;
+	uint8_t		i8[16] = {0};
+
+    for (unsigned int* i = (unsigned int*)start; i <= (unsigned int*)(start+size); i += 4) {
+		printfTty("%8x: ", i);
 		memmove((char *)i8, (uint8_t *)i, 16);
 		for (int j = 0; j < 16; j++) {
 			if (isPrintable(i8[j]))
@@ -114,6 +117,18 @@ void printStack() {
         }
         printfTty("\r\n");
     }
+}
+
+void	shellDump(char *buff){
+	uint32_t	addr;
+	uint32_t	size;
+	uint32_t	index;
+	buff += 4;
+
+	addr = atoHexS(buff, &index);
+	buff += index;
+	size = uatoiS(buff, &index);
+	dumpMemory(addr, size);
 }
 
 //Make a beep

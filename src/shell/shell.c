@@ -14,6 +14,7 @@ char *validCmds[] = {
 	"beep",
 	"peek",
 	"poke",
+	"dump",
 	NULL
 };
 
@@ -29,6 +30,7 @@ char *desciption[] = {
 	"1sec of your favourite frequency, no params = music",
 	"peek addr -> read a byte from addr",
 	"poke addr byte -> write the byte to addr",
+	"dump start size -> dump memory from start to start + size",
 	NULL
 };
 
@@ -45,6 +47,7 @@ void (*f[])(char *buff) = {
 	beep,
 	peek,
 	poke,
+	shellDump,
 };
 
 void hlt(){

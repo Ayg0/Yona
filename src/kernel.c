@@ -50,10 +50,10 @@ void kernelInits(){
 	SERIAL_SUCC("%s INIT SUCCESS\r\n", "TIMER");
 	setIRQHandler(1, keyboardHandler);
 }
-extern uint32_t ebp;
+extern uint32_t mainEBP;
 void kmain(){
 	kernelInits();
-    __asm__ __volatile__("mov %%esp, %0" : "=r" (ebp) : : "memory");
+    __asm__ __volatile__("mov %%ebp, %0" : "=r" (mainEBP) : : "memory");
 	volatile char s[] = "Onga bonga ha ha ha";
 	char *str = (char *)s; (void)str;
 

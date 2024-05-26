@@ -13,3 +13,7 @@ void	poke(char *buff);
 void	beep(char *buff);
 void	parseDate(char *buff);
 void	parseTime(char *buff);
+void	shellDump(char *buff);
+
+
+void	dumpMemory(uint32_t start, uint32_t size);
