@@ -15,14 +15,20 @@ void parseDate(char *buff){
 	uint32_t index = 0;
 
 	buff += 7;
+
+	// parse date:
 	d = atoiS(buff, &index);
 	buff += index;
 	if (index > 3 || index == 0 || d > 31 || d < 1)
 		goto MIS_USE;
+
+	// parse month:
 	mo = atoiS(buff, &index);
 	if (index > 3 || index == 0 || mo > 12 || mo < 1)
 		goto MIS_USE;
 	buff += index;
+
+	// parse year:
 	y = atoiS(buff, &index);
 	if (index > 5 || index == 0 || y < 0)
 		goto MIS_USE;
@@ -37,13 +43,18 @@ void parseTime(char *buff){
 	uint32_t index = 0;
 
 	buff += 7;
+	// parse hour:
 	h = atoiS(buff, &index);
-	if (index > 3 || h > 60 || h < 0)
+	if (index > 3 || h > 24 || h < 0)
 		goto MIS_USE;
+	
+	// parse minute:
 	buff += index;
 	m = atoiS(buff, &index);
 	if (index > 3 || m > 60 || m < 0)
 		goto MIS_USE;
+	
+	// parse second:
 	buff += index;
 	s = atoiS(buff, &index);
 	if (index > 3 || s > 60 || s < 0)
@@ -72,12 +83,6 @@ void	say(char *buff){
 uint32_t	mainEBP;
 void printStack() {
     uint32_t	esp;
-	uint8_t	c = '~';
-	((char *)&c)[-1] = '~';
-	((char *)&c)[-2] = '~';
-	((char *)&c)[-3] = '~';
-	uint16_t b = 'k'; (void)b;
-	uint32_t f = 0xABCF; (void)f;
 
     __asm__ __volatile__("mov %%esp, %0" : "=r" (esp));
 	printfTty("          ------ ebp = %8x ; esp = %8x ------\r\n", mainEBP, esp);
@@ -134,7 +139,7 @@ void	shellDump(char *buff){
 //Make a beep
 void beep(char *buff) {
 	buff += 4;
-	int32_t f = atoi(buff);
+	int32_t f = atoiS(buff, NULL);
     uint32_t piano_keys[15] = {262, 294, 330, 349, 392,
 							440, 494, 523, 587, 659, 
 							697, 784, 880, 988, 1047};

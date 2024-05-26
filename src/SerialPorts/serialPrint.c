@@ -41,9 +41,8 @@ void	serialPrint(const char *FmtS, char *mode, ...){
 	VARG_INIT(ptr, mode);
 	serialPutStr(mode);
 	while(FmtS[i]){
-		if (FmtS[i] == '%'){
+		if (FmtS[i] == '%')
 			i++, printNewArg(FmtS[i], &ptr);
-		}
 		else
 			serialPutChar(FmtS[i]);
 		i++;

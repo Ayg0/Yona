@@ -2,6 +2,7 @@
 #include "serialio.h"
 #include "tty.h"
 #include "mem.h"
+#include "shell.h"
 
 _kbdFlags flags;
 extern _kbdLayout kbd_US_QWERTY;
@@ -19,43 +20,51 @@ void	backSpace(){
 	ttyAddCharPos(' ', currentCursor.x - 1, currentCursor.y);
 }
 
-uint8_t	getFunctionLetters(uint8_t scancode){
+void handleCtrl(uint8_t scanCode, uint8_t letter){
+	(void) scanCode;
+	if (letter >= '1' && letter <= '6')
+		switchSession(letter - 49), initKeboard(letter - 49);
+	else if ((letter == 'R' || letter == 'r') && IS_SET(flags.modifiers, SHIFT_MOD))
+		reboot();
+}
+
+void	getFunctionLetters(uint8_t scancode, uint32_t letter){
 	switch (scancode)
 	{
 	case 0x1C:
 		flags.nl = 1;
-		// new_line();
-		return 0;
-	case 0x0D: return '=';
+		break;
 	case 0x0E:
 		backSpace();
-		return 0;
+		break;
 	case 0x2A:
 		SET_BIT(flags.modifiers, SHIFT_MOD);
-		return 0;
+		break;
 	case 0x36:
 		SET_BIT(flags.modifiers, SHIFT_MOD);
-		return 0;
+		break;
 	case 0x3A:
 		if (IS_SET(flags.modifiers, CAPS_MOD))
 			RESET_BIT(flags.modifiers, CAPS_MOD);
 		else
 			SET_BIT(flags.modifiers, CAPS_MOD);
-		return 0;
+		break;
 	case 0xAA:
 		RESET_BIT(flags.modifiers, SHIFT_MOD);
-		return 0;
+		break;
 	case 0xB6:
 		RESET_BIT(flags.modifiers, SHIFT_MOD);
-		return 0;
+		break;
 	case 0x1D:
 		SET_BIT(flags.modifiers, CTRL_MOD);
-		return 0;
+		break;
 	case 0x9D:
 		RESET_BIT(flags.modifiers, CTRL_MOD);
-		return 0;
-	default: return 0;
+		break;
+	default: break;
 	}
+	handleCtrl(scancode, letter);
+
 }
 
 uint8_t	getLetter(uint8_t	scanCode){
@@ -88,13 +97,13 @@ void	keyboardHandler(registers Rs){
 		goto HANDLE_SPECIAL_KEYS;
 
 	letter = getLetter(scanCode);
-	if (IS_SET(flags.modifiers, CTRL_MOD) && letter >= '1' && letter <= '6')
-		switchSession(letter - 49), initKeboard(letter - 49);
+	if (IS_SET(flags.modifiers, CTRL_MOD))
+		goto HANDLE_SPECIAL_KEYS;
 	else if (letter)
 		appendLetter(letter);
 	else
 	HANDLE_SPECIAL_KEYS:
-		getFunctionLetters(scanCode);
+		getFunctionLetters(scanCode, letter);
 }
 
 void	initKeboard(uint8_t sessionIndex){
