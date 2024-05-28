@@ -3,7 +3,7 @@ YonaOs is a 32 bit hobby system made in C.
 # Features:
 - Has a printf-ish and sprint-ish clone for you to have fun in the tty.
 - Interrupts are working, and I already implemented a basic driver to get time and date, and a basic keyboard driver (subject to big changes).
-- still working on the debugging system using Serial communication.
+- debugging system using Serial communication.
 - u have multiple sessions to playtest and write, each one with it's own buffer (use ctrl+sessionIndex).
 - simple Shell:
   - **say**: is basicly echo.
