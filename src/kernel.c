@@ -15,6 +15,7 @@ void gdtTest() {
 	uint32_t	cr0;
 	gdtPtr		gdt = {.base = 0, .limit = 0};
 
+	SERIAL_INFO("TESTING DGT\r\n", NULL);
 	/*gdt*/
 	asm volatile("sgdt %0" : : "m" (gdt));
 	SERIAL_DEBUG("GDT Base Address: %x\r\n", gdt.base);
@@ -22,7 +23,6 @@ void gdtTest() {
 
     /* Test data segment */
     asm volatile("mov %%ds, %0" : "=r" (addr));
-	SERIAL_INFO("TESTING DGT\r\n", NULL);
 	SERIAL_DEBUG("data Segment Base Address: %x\r\n", addr);
 
     /* Test code segment */
@@ -54,14 +54,16 @@ extern uint32_t mainEBP;
 void kmain(){
 	kernelInits();
     __asm__ __volatile__("mov %%ebp, %0" : "=r" (mainEBP) : : "memory");
-	volatile char s[] = "Onga bonga ha ha ha";
+	volatile char s[] = "Hello this is the Main Function";
 	char *str = (char *)s; (void)str;
-
+	
 	uint8_t clr = tty.color;
 	changeTtyColor(VGA_YELLOW, -1);
+	SERIAL_SUCC("Session %d INIT\r\n", 1);
 	for (uint8_t i = 1; i < 5; i++)	// just to init the other Sessions as shells
 	{
 		switchSession(i);
+		SERIAL_SUCC("Session %d INIT\r\n", i + 1);
 		ttyAddStr("$> ");
 	}
 	tty.color = clr;

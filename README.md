@@ -13,9 +13,10 @@ YonaOs is a 32 bit hobby system made in C.
   - **setdate**: sets the date for Yona.
   - **reboot**: reboots.
   - **beep**: play a sound at a frequency for 1 sec, or play music with no argument.
-  - **stack**: show stack values
-  - **peek**: get the value in the address u specify
-  - **poke**: changes the value in the address u specify
+  - **stack**: show stack values.
+  - **peek**: get the value in the address u specify.
+  - **poke**: changes the value in the address u specify.
+  - **dump**: show you what's inside of your Memory.
 - It doesn't k-Boom if you devide by zero (kinda).
 # General Resources:
 https://littleosbook.github.io/#introduction  

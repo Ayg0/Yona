@@ -93,7 +93,7 @@ void	dumpMemory(uint32_t start, uint32_t size){
 	uint8_t	termColor = tty.color;
 	uint8_t		i8[16] = {0};
 
-    for (unsigned int* i = (unsigned int*)start; i <= (unsigned int*)(start+size); i += 4) {
+    for (unsigned int* i = (unsigned int*)start; i < (unsigned int*)(start+size); i += 4) {
 		printfTty("%8x: ", i);
 		memmove((char *)i8, (uint8_t *)i, 16);
 		for (int j = 0; j < 16; j++) {
@@ -133,6 +133,8 @@ void	shellDump(char *buff){
 	addr = atoHexS(buff, &index);
 	buff += index;
 	size = uatoiS(buff, &index);
+	if (size == 0)
+		printfTty("MissUse: dump addr size\r\n");
 	dumpMemory(addr, size);
 }
 

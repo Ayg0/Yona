@@ -22,11 +22,11 @@ void	tick(registers Rs){
 	}
 	ticks = 0;
 	date.s++;
-	date.m += (date.s == 60) && !(date.s = 0);
-	date.h += (date.m == 60) && !(date.m = 0);
-	date.d += (date.h == 24) && !(date.h = 0);
+	date.m  += (date.s == 60) && !(date.s = 0);
+	date.h  += (date.m == 60) && !(date.m = 0);
+	date.d  += (date.h == 24) && !(date.h = 0);
 	date.mo += (date.d == 31) && !(date.d = 0);
-	date.y += (date.mo == 12) && !(date.mo = 0);
+	date.y  += (date.mo == 12) && !(date.mo = 0);
 	updateStatusBar();
 }
 

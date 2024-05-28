@@ -31,9 +31,6 @@ void handleCtrl(uint8_t scanCode, uint8_t letter){
 void	getFunctionLetters(uint8_t scancode, uint32_t letter){
 	switch (scancode)
 	{
-	case 0x1C:
-		flags.nl = 1;
-		break;
 	case 0x0E:
 		backSpace();
 		break;
@@ -64,7 +61,6 @@ void	getFunctionLetters(uint8_t scancode, uint32_t letter){
 	default: break;
 	}
 	handleCtrl(scancode, letter);
-
 }
 
 uint8_t	getLetter(uint8_t	scanCode){
