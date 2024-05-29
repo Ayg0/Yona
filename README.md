@@ -1,5 +1,5 @@
 # Yona
-YonaOs is a 32 bit hobby system made in C.
+YonaOs is a 32 bit hobby system made in C, this is my 3rd attempt at building Yona, less mistakes and new design decisions.
 # Features:
 - Has a printf-ish and sprint-ish clone for you to have fun in the tty.
 - Interrupts are working, and I already implemented a basic driver to get time and date, and a basic keyboard driver (subject to big changes).
