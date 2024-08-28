@@ -1,0 +1,5 @@
+- [ ] [MBR(Master Boot Record)](https://thestarman.pcministry.com/asm/mbr/)
+- [ ] [Disk Drive Terminologyd](https://thestarman.pcministry.com/asm/mbr/DiskTerms.htm)
+- [X] [Troubleshooting](https://wiki.osdev.org/Troubleshooting)
+- [X] [Code Management](https://wiki.osdev.org/Code_Management)
+- [X] [Portability](https://wiki.osdev.org/Portability)

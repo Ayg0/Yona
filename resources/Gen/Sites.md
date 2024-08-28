@@ -1,0 +1,10 @@
+- [X] [Bran's Kernel Development](http://www.osdever.net/bkerndev/Docs/intro.htm)  
+- [ ] [Little OS book](https://littleosbook.github.io/)  
+- [ ] [JamesM's kernel development](https://archive.is/dWJGu)  
+    - if Using JamesM's kernel Tutorials please see this:  
+    [James_Molloy's_Tutorial_Known_Bugs](http://wiki.osdev.org/James_Molloy's_Tutorial_Known_Bugs)  
+
+- [ ] [The Art of Unix Programming](http://www.catb.org/~esr/writings/taoup/html/)  
+- [ ] [POSIX Standard](https://pubs.opengroup.org/onlinepubs/9699919799/)
+- [ ] [Linux FileSystem Hierarchy](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html)
+- [X] [ANSI Escape Sequences cheatsheet](https://gist.github.com/ConnerWill/d4b6c776b509add763e17f9f113fd25b)

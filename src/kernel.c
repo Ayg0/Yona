@@ -8,7 +8,6 @@
 void	shell();
 
 _tty	tty;
-uint32_t ticks;
 
 void gdtTest() {
     char*		addr;
