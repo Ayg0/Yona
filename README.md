@@ -30,5 +30,6 @@ Search **'R'** and you'll find resources on the same topic of the code in that f
 https://wiki.osdev.org/Building_GCC    
 https://ayg0.github.io/gettoknow.github.io/posts/gcccrosscompiler/
 ## I want to play-test the OS:
-- well here you go my curios friend: https://hub.docker.com/repository/docker/0rayne/i386.dev.env/general   
-this image is equiped with all the tools you'll need to compile and build yona ready to Use.
+- well here you go my curios friend:  
+```$> docker pull 0rayne/i386.env:v1.0```
+ - this image is equiped with all the tools you'll need to compile and build yona ready to Use.
