@@ -1,3 +1,4 @@
+- [ ] [RTFM](https://software.intel.com/content/www/us/en/develop/download/intel-64-and-ia-32-architectures-sdm-combined-volumes-3a-3b-3c-and-3d-system-programming-guide.html)
 - [X] [Bran's Kernel Development](http://www.osdever.net/bkerndev/Docs/intro.htm)  
 - [ ] [Little OS book](https://littleosbook.github.io/)  
 - [ ] [JamesM's kernel development](https://archive.is/dWJGu)  
@@ -8,3 +9,4 @@
 - [ ] [POSIX Standard](https://pubs.opengroup.org/onlinepubs/9699919799/)
 - [ ] [Linux FileSystem Hierarchy](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html)
 - [X] [ANSI Escape Sequences cheatsheet](https://gist.github.com/ConnerWill/d4b6c776b509add763e17f9f113fd25b)
+- [ ] [samypesse's Book](https://samypesse.gitbook.io/how-to-create-an-operating-system)
