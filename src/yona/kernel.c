@@ -19,7 +19,7 @@ void kmain(void)
 {
 	initTty();
 
-	kPutS("\033[1mHello World !!\033[16m");
-	kPutS("\033[13mHello World !!\033[16m");
-	kPutS("Hello World !!");
+	kPutS("\033[1mHello World !!\033[16m\r\n");
+	kPutS("\033[13mHello World !!\033[16m\r\n");
+	kPutS("Hello\rWorld !!");
 }

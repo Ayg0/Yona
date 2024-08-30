@@ -14,10 +14,29 @@ void parseAnsiSequence(char *ansiBuff, uint8_t *ansiBuffSize){
         default:
             break;
     }
-    if (tty.currentColor == 16)
+    if (tty.currentColor >= 16)
         tty.currentColor = tty.defClr;
     memset(ansiBuff, 0, *ansiBuffSize);
     *ansiBuffSize = 0;
+}
+
+uint8_t handleSpecialChars(char c, char *ansiBuff, uint8_t *ansiBuffSize){
+    
+    switch (c)
+    {
+    case '\033':
+        ansiBuff[*ansiBuffSize] = c, (*ansiBuffSize)++;
+        return 1;
+    case '\r':
+        moveCursor(0, tty.cursor.y);
+        return 1;
+    case '\n':
+        moveCursor(tty.cursor.x, tty.cursor.y + 1);
+        return 1;
+    default:
+        break;
+    }
+    return 0;
 }
 
 uint8_t kPutPosC(char c, int8_t x, int8_t y){
@@ -25,12 +44,15 @@ uint8_t kPutPosC(char c, int8_t x, int8_t y){
     static char     ansiBuff[20];
     static uint8_t  ansiBuffSize;
 
-    if (c == '\033' || ansiBuffSize){
+    if (ansiBuffSize){
         ansiBuff[ansiBuffSize] = c, ansiBuffSize++;
         if (c == 'm' || c == 'H')
             parseAnsiSequence(ansiBuff, &ansiBuffSize);
         return 0;
     }
+    if (handleSpecialChars(c, ansiBuff, &ansiBuffSize))
+        return 0;
+
     tty.screenBuff[pos].c = c;
     tty.screenBuff[pos].color.clr = tty.currentColor;
 
