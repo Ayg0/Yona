@@ -28,6 +28,7 @@ typedef struct cursor
 typedef struct ttySession
 {
     _vgaCell screenBuff[VGA_WIDTH * VGA_HEIGHT];
+    uint8_t currentColor;
     uint8_t defClr;
     _cursor cursor;
 } _ttySession;

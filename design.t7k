@@ -12,7 +12,8 @@ Yona OS:
 	- structs usually made with typedef.
 	- all typedefs should start with '_'.
  - For Source Tree consistency:
-	- still figuring it out.
+	- all includes should be under the include folder.
+	- targeted code will reside under arch/<target-architecture>/.
  - Portability:
 	- separate the targeted code from the generic code.
 	   *Targeted:

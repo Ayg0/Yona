@@ -11,22 +11,15 @@ void initTty(){
 		tty.screenBuff[i].c = 0;
 		tty.screenBuff[i].color.clr = 0;
 	}
+	tty.currentColor = VGA_WHITE;
 	tty.defClr = VGA_WHITE;
 }
 
 void kmain(void) 
 {
 	initTty();
-	tty.defClr = VGA_GREEN;
-	char c = 'A';
-	tty.cursor.y = 20;
-	while (1){
-		kPutC(c);
-		c++;
-		if (c > 'Z') c = 'A';
-		for (size_t i = 0; i < 7000; i++){
-			for (size_t j = 0; j < 7000; j++){}
-		}
-		
-	}
+
+	kPutS("\033[1mHello World !!\033[16m");
+	kPutS("\033[13mHello World !!\033[16m");
+	kPutS("Hello World !!");
 }
