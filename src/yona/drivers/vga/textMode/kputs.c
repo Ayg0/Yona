@@ -4,17 +4,46 @@
 #include "klibc/strings.h"
 extern _ttySession tty;
 
+uint8_t ansitoVgaColors[] = {
+	30, // VGA_BLACK
+	34, // VGA_BLUE
+	32, // VGA_GREEN
+	36, // VGA_CYAN
+	31, // VGA_RED
+	35, // VGA_MAGENTA
+	33, // VGA_BROWN
+	37, // VGA_LIGHT_GREY
+	90, // VGA_DARK_GREY
+	94, // VGA_LIGHT_BLUE
+	92, // VGA_LIGHT_GREEN
+	96, // VGA_LIGHT_CYAN
+	91, // VGA_LIGHT_RED
+	95, // VGA_LIGHT_MAGENTA
+	93, // VGA_YELLOW
+	97  // VGA_WHITE	
+};
+
+uint8_t getVgaColor(uint8_t color){
+    int16_t i = 0;
+    while (i < 16){
+        if (ansitoVgaColors[i] == color)
+            break;
+        i++;
+    }
+    return i;
+}
+
 void parseAnsiSequence(char *ansiBuff, uint8_t *ansiBuffSize){
     switch (ansiBuff[*ansiBuffSize - 1]){
         case 'm':
-            tty.currentColor = atoiS(strrchr(ansiBuff, '['), NULL);
+            tty.currentColor = getVgaColor(atoiS(strrchr(ansiBuff, '['), NULL));
             break;
         case 'H':
             break;
         default:
             break;
     }
-    if (tty.currentColor >= 16) // just in case someone doesn't read the docs
+    if (tty.currentColor == 16) // just in case it's a bad color
         tty.currentColor = tty.defClr;
     memset(ansiBuff, 0, *ansiBuffSize);
     *ansiBuffSize = 0;

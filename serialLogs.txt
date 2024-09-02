@@ -1,2 +1,15 @@
-[1mHello World !![16m
-Hiiii;97;(NULL);-5;F
+[34mHello World !![39m
+[31mHello World !![39m
+[32mHello World !![39m
+[33mHello World !![39m
+[35mHello World !![39m
+[36mHello World !![39m
+[37mHello World !![39m
+[90mHello World !![39m
+[91mHello World !![39m
+[92mHello World !![39m
+[93mHello World !![39m
+[94mHello World !![39m
+[95mHello World !![39m
+[96mHello World !![39m
+[97mHello World !![39m

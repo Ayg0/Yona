@@ -16,6 +16,7 @@
 		"shell.h": "c",
 		"compare": "cpp",
 		"print.h": "c",
-		"vargs.h": "c"
+		"vargs.h": "c",
+		"vgatextmode.h": "c"
 	}
 }

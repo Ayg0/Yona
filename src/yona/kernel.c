@@ -19,7 +19,37 @@ void initTty(){
 void kmain(void) 
 {
 	initTty();
-	K_PRINT("\r\n%d\r\n", K_PRINT("\033[1mHello World !!\033[16m\r\n%s;%u;%s;%d;%x", "Hiiii", 97, NULL, -5, 0xf));
-	S_PRINT("\033[1mHello World !!\033[16m\r\n%s;%u;%s;%d;%x", "Hiiii", 97, NULL, -5, 0xf);
+	K_PRINT("\033[34mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[31mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[32mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[33mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[35mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[36mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[37mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[90mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[91mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[92mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[93mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[94mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[95mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[96mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("\033[97mHello World !!\033[39m\r\n", NULL);
+
+	S_PRINT("\033[34mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[31mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[32mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[33mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[35mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[36mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[37mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[90mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[91mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[92mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[93mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[94mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[95mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[96mHello World !!\033[39m\r\n", NULL);
+	S_PRINT("\033[97mHello World !!\033[39m\r\n", NULL);
+
 	// K_PRINT("\r\n%d\r\n", K_PRINT("Hello !", NULL));
 }
