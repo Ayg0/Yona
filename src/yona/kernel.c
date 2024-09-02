@@ -19,37 +19,11 @@ void initTty(){
 void kmain(void) 
 {
 	initTty();
-	K_PRINT("\033[34mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[31mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[32mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[33mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[35mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[36mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[37mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[90mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[91mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[92mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[93mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[94mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[95mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[96mHello World !!\033[39m\r\n", NULL);
-	K_PRINT("\033[97mHello World !!\033[39m\r\n", NULL);
 
-	S_PRINT("\033[34mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[31mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[32mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[33mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[35mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[36mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[37mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[90mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[91mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[92mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[93mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[94mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[95mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[96mHello World !!\033[39m\r\n", NULL);
-	S_PRINT("\033[97mHello World !!\033[39m\r\n", NULL);
+	K_PRINT("Hi %s\r\n", "Taha");
 
-	// K_PRINT("\r\n%d\r\n", K_PRINT("Hello !", NULL));
+	S_DEBUG("THIS IS A DEBUG MSG\r\n", NULL);
+	S_INFO("THIS IS AN INFO MSG\r\n", NULL);
+	S_SUCC("THIS IS A SUCC MSG\r\n", NULL);
+	S_ERR("THIS IS AN ERR MSG\r\n", NULL);
 }
