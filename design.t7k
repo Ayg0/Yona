@@ -13,7 +13,8 @@ Yona OS:
 	- all typedefs should start with '_'.
  - For Source Tree consistency:
 	- all includes should be under the include folder.
-	- targeted code will reside under arch/<target-architecture>/.
+	- targeted code will reside under 'arch/<target-architecture>/'.
+	- the targeted code's include will reside under 'include/arch/<the-component>.h'.
  - Portability:
 	- separate the targeted code from the generic code.
 	   *Targeted:

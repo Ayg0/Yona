@@ -10,3 +10,7 @@
 - [ ] [Text Mode Cursor](https://wiki.osdev.org/Text_Mode_Cursor)
 - [ ] [Text UI](https://wiki.osdev.org/Text_UI)
 - [ ] [VGA Resources](https://wiki.osdev.org/VGA_Resources)
+- [ ] [Serial Ports](https://wiki.osdev.org/Serial_Ports)
+- [ ] [Serial UART](https://www.lammertbies.nl/comm/info/serial-uart)
+- [ ] [Serial Communication](https://www.youtube.com/watch?v=IyGwvGzrqp8)
+- [ ] [What's Baud Rate](https://www.wevolver.com/article/baud-rates)

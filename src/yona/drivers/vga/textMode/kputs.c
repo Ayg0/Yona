@@ -14,7 +14,7 @@ void parseAnsiSequence(char *ansiBuff, uint8_t *ansiBuffSize){
         default:
             break;
     }
-    if (tty.currentColor >= 16)
+    if (tty.currentColor >= 16) // just in case someone doesn't read the docs
         tty.currentColor = tty.defClr;
     memset(ansiBuff, 0, *ansiBuffSize);
     *ansiBuffSize = 0;
@@ -61,9 +61,10 @@ uint8_t kPutPosC(char c, int8_t x, int8_t y){
 }
 
 uint8_t kPutC(char c){
-    if (kPutPosC(c, tty.cursor.x, tty.cursor.y))
-        moveCursor(tty.cursor.x + 1, tty.cursor.y);
-    return 0;
+    if (!kPutPosC(c, tty.cursor.x, tty.cursor.y))
+    	return 0;
+    moveCursor(tty.cursor.x + 1, tty.cursor.y);
+	return 1;
 }
 
 uint8_t kPutPosS(char *s, int8_t x, int8_t y){

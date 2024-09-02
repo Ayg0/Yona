@@ -1,4 +1,5 @@
 #include "drivers/vga/textMode/vgaTextMode.h"
+#include "klibc/print.h"
 
 _ttySession tty;
 
@@ -18,8 +19,7 @@ void initTty(){
 void kmain(void) 
 {
 	initTty();
-
-	kPutS("\033[1mHello World !!\033[16m\r\n");
-	kPutS("\033[13mHello World !!\033[16m\r\n");
-	kPutS("Hello\rWorld !!");
+	K_PRINT("\r\n%d\r\n", K_PRINT("\033[1mHello World !!\033[16m\r\n%s;%u;%s;%d;%x", "Hiiii", 97, NULL, -5, 0xf));
+	S_PRINT("\033[1mHello World !!\033[16m\r\n%s;%u;%s;%d;%x", "Hiiii", 97, NULL, -5, 0xf);
+	// K_PRINT("\r\n%d\r\n", K_PRINT("Hello !", NULL));
 }

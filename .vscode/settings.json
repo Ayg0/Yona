@@ -13,6 +13,9 @@
 		"timer.h": "c",
 		"keyboard.h": "c",
 		"klibstd.h": "c",
-		"shell.h": "c"
+		"shell.h": "c",
+		"compare": "cpp",
+		"print.h": "c",
+		"vargs.h": "c"
 	}
 }

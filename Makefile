@@ -22,6 +22,7 @@ ISO=yona.iso
 
 # Default target
 all: $(ISO)
+	make clean
 
 # Rule to make the iso
 $(ISO): $(TARGET)
