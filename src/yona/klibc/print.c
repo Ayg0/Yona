@@ -77,6 +77,9 @@ int	handleFormatModifiers(varg_ptr *vptr, char *fmtString, int *i, putCharFnc pu
 	case 's':
 		printedSize = putS(VARG_NEXT(*vptr, char *), putChar);
 		break;
+	case 'c':
+		printedSize = putChar(VARG_NEXT(*vptr, int32_t));
+		break;
 	case 'u':
 		printedSize = uAppendPutNbr(VARG_NEXT(*vptr, uint32_t), DEC_BASE, 10, putChar);
 		break;
@@ -106,7 +109,7 @@ int16_t	getApendingNbr(char *fmtString, int *i){
 	return nbr;
 }
 
-// implemented %s, %u, %d, %x
+// implemented %c, %s, %u, %d, %x, %p
 int	print(putCharFnc putChar, char *fmtString, ...){
 	varg_ptr	vptr;
 	int			i, printedSize;

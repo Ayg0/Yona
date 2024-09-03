@@ -2,6 +2,8 @@
 #include "klibc/memory.h"
 #include "klibc/converts.h"
 #include "klibc/strings.h"
+#include "klibc/print.h"
+
 extern _ttySession tty;
 
 uint8_t ansitoVgaColors[] = {
@@ -72,6 +74,7 @@ uint8_t kPutPosC(char c, int8_t x, int8_t y){
     int16_t pos = x + (y * VGA_WIDTH);
     static char     ansiBuff[20];
     static uint8_t  ansiBuffSize;
+    int8_t          color;
 
     if (ansiBuffSize){
         ansiBuff[ansiBuffSize] = c, ansiBuffSize++;
@@ -82,10 +85,14 @@ uint8_t kPutPosC(char c, int8_t x, int8_t y){
     if (handleSpecialChars(c, ansiBuff, &ansiBuffSize))
         return 0;
 
-    tty.screenBuff[pos].c = c;
-    tty.screenBuff[pos].color.clr = tty.currentColor;
-
-    ((short*)VIDEO_MEMORY)[pos] = tty.screenBuff[pos].color.clr << 8 | c;
+    if (y != VGA_HEIGHT){
+        tty.screenBuff[pos].c = c;
+        tty.screenBuff[pos].color.clr = tty.currentColor;
+        color = tty.currentColor;
+    }
+    else
+        color = tty.defClr;
+    ((short*)VIDEO_MEMORY)[pos] = (color << 8) | c;
     return 1;
 }
 
@@ -97,16 +104,18 @@ uint8_t kPutC(char c){
 }
 
 uint8_t kPutPosS(char *s, int8_t x, int8_t y){
-    while (*s)
+    bool isForStatus = (y == VGA_HEIGHT) ? 1 : 0;
+    S_INFO("s = %s\r\n", s);
+    int i = 0;
+    while (s[i])
     {
-        kPutPosC(*s, x, y);
+        kPutPosC(s[i], x, y);
         x++;
         if (x == VGA_WIDTH)
             x = 0, y++;
-        if (y == VGA_HEIGHT){
+        if ((y == VGA_HEIGHT) && !isForStatus)
             scroll(), y--;
-        }
-        s++;
+        i++;
     }
     return 0;
 }

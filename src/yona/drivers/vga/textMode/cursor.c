@@ -39,7 +39,6 @@ uint8_t moveCursor(int8_t x, int8_t y){
         scroll(), y--;
     tty.cursor.x = x;
     tty.cursor.y = y;
-    S_DEBUG("x:%d, y:%d\r\n", x, y);
     updateCursor(x, y);
     return 0;
 }
