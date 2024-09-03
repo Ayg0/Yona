@@ -20,10 +20,14 @@ void kmain(void)
 {
 	initTty();
 
-	K_PRINT("Hi %s\r\n", "Taha");
+	// test appendingWidth %d %x %u %p
+	K_PRINT("test %5d\r\n", -53);
+	K_PRINT("test %5x\r\n", 0x53);
+	K_PRINT("test %5u\r\n", 53);
+	K_PRINT("test %5p\r\n", 0x53);
 
-	S_DEBUG("THIS IS A DEBUG MSG\r\n", NULL);
-	S_INFO("THIS IS AN INFO MSG\r\n", NULL);
-	S_SUCC("THIS IS A SUCC MSG\r\n", NULL);
-	S_ERR("THIS IS AN ERR MSG\r\n", NULL);
+	S_DEBUG("This is a debug message 0x%x\r\n", 0xFFA7);
+	S_INFO("This is an info message 0x%x\r\n", 0xFFFF);
+	S_SUCC("This is a success message 0x%x\r\n", 0xAB30);
+	S_ERR("This is an error message 0x%x\r\n", 0x0);
 }
