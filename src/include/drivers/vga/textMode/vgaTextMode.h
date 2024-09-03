@@ -4,8 +4,17 @@
 
 # define VIDEO_MEMORY   0xB8000
 # define VGA_WIDTH      80
-# define VGA_HEIGHT     24 // status bar 
+# define VGA_HEIGHT     24 // -1 for the status bar 
 # define VGA_CELLS_COUNT (VGA_WIDTH * VGA_HEIGHT)
+
+// DEVICE I/O ports
+# define VGA_CTRL 0x3D4
+/*
+	this is one of the most used indexed registers.
+	The index byte is written to the port given, then the data byte
+	can be read/written from/to port+1 (0x3D5)
+*/
+# define VGA_DATA 0x3D5
 
 typedef union cellColor
 {
@@ -52,12 +61,16 @@ enum vgaColors{
     VGA_WHITE
 };
 
+// basic prints
 uint8_t kPutPosC(char c, int8_t x, int8_t y);
 uint8_t kPutPosS(char *s, int8_t x, int8_t y);
 uint8_t kPutC(char c);
 uint8_t kPutS(char *s);
 
-uint8_t moveCursor(int8_t x, int8_t y);
+// cursor
 uint8_t scroll();
+uint8_t moveCursor(int8_t x, int8_t y);
+void    enableCursor(uint8_t cursor_start, uint8_t cursor_end);
 
+// output the screen-buff
 uint8_t screenBuffOut();

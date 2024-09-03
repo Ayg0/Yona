@@ -1,3 +1,4 @@
+```
 src
 ├── arch
 │   └── i386
@@ -6,7 +7,7 @@ src
 │       ├── linker.ld
 │       └── serialPorts
 │           ├── serialCOM1.c
-│           └── serialIOs.c
+│           └── serialIO.c
 ├── include
 │   ├── arch
 │   │   └── serial.h
@@ -36,3 +37,4 @@ src
         └── types.c
 
 15 directories, 21 files
+```

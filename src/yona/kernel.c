@@ -14,20 +14,22 @@ void initTty(){
 	}
 	tty.currentColor = VGA_WHITE;
 	tty.defClr = VGA_WHITE;
+	enableCursor(14, 15);
 }
 
 void kmain(void) 
 {
 	initTty();
 
-	// test appendingWidth %d %x %u %p
-	K_PRINT("test %5d\r\n", -53);
-	K_PRINT("test %5x\r\n", 0x53);
-	K_PRINT("test %5u\r\n", 53);
-	K_PRINT("test %5p\r\n", 0x53);
-
-	S_DEBUG("This is a debug message 0x%x\r\n", 0xFFA7);
-	S_INFO("This is an info message 0x%x\r\n", 0xFFFF);
-	S_SUCC("This is a success message 0x%x\r\n", 0xAB30);
-	S_ERR("This is an error message 0x%x\r\n", 0x0);
+	char c = 'A';
+	moveCursor(VGA_WIDTH - 5, VGA_HEIGHT - 1);
+	K_PRINT("%s", "\033[34m");
+	while (1)
+	{
+		for (size_t i = 0; i < 9000; i++)
+			for (size_t j = 0; j < 9000; j++) {}
+		kPutC(c);
+		c = c == 'Z' ? 'A' : (c + 1);
+	}
+	
 }

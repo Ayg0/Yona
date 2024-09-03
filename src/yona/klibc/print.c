@@ -3,12 +3,6 @@
 #include "klibc/print.h"
 #include "klibc/converts.h"
 
-/* printf-ish Clone that takes in:
-	- the function that print a character.
-	- the format string.
-	- and the vars.
-*/
-
 int16_t appendingWidth = 0;
 
 uint16_t appendBeforeNbr(size_t nbr, size_t baseLen, putCharFnc putChar){
@@ -63,7 +57,7 @@ static int putNbr(int32_t nbr, putCharFnc putChar){
 	return (printedSize);
 }
 
-static int appendPutPtr(size_t ptr, char *base, size_t baseLen, putCharFnc putChar){
+static int appendPutPtr(physAddr ptr, char *base, size_t baseLen, putCharFnc putChar){
 	int printedSize = 0;
 
 	appendingWidth -= 2;
@@ -76,7 +70,6 @@ static int appendPutPtr(size_t ptr, char *base, size_t baseLen, putCharFnc putCh
 
 int	handleFormatModifiers(varg_ptr *vptr, char *fmtString, int *i, putCharFnc putChar){
 	int printedSize = 0;
-	(void)vptr;
 
 	switch (fmtString[*i])
 	{
@@ -93,7 +86,7 @@ int	handleFormatModifiers(varg_ptr *vptr, char *fmtString, int *i, putCharFnc pu
 		printedSize = uAppendPutNbr(VARG_NEXT(*vptr, uint32_t), HEX_BASE, 16, putChar);
 		break;
 	case 'p':
-		printedSize = appendPutPtr(VARG_NEXT(*vptr, size_t), HEX_BASE, 16, putChar);
+		printedSize = appendPutPtr(VARG_NEXT(*vptr, physAddr), HEX_BASE, 16, putChar);
 		break;
 	default:
 		printedSize = putChar(fmtString[*i]);
