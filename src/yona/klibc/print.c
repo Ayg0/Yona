@@ -4,6 +4,7 @@
 #include "klibc/converts.h"
 
 int16_t appendingWidth = 0;
+_buff	sprintBuff;
 
 uint16_t appendBeforeNbr(size_t nbr, size_t baseLen, putCharFnc putChar){
 	if (appendingWidth > 0){
@@ -126,3 +127,20 @@ int	print(putCharFnc putChar, char *fmtString, ...){
 	}
 	return printedSize;
 }
+
+uint8_t appendsprintBuff(char c){
+	if (!sprintBuff.buff)
+		S_ERR("sprintBuff is not set properly !!\r\n", NULL);
+	sprintBuff.buff[sprintBuff.index] = c;
+	sprintBuff.index++;
+	return 1;
+}
+
+// used to set/reset the sprintBuff:
+void setSprintBuff(char *buff){
+	if (sprintBuff.buff)
+		sprintBuff.buff[sprintBuff.index] = 0;
+	sprintBuff.buff = buff;
+	sprintBuff.index = 0;
+}
+

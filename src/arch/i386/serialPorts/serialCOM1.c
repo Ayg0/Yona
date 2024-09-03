@@ -1,7 +1,5 @@
 #include "arch/serial.h"
 
-#define COM1 0x3f8   /* COM1 */
-
 // init the serial communication to use the UART Protocol
 int initSerial() {
 	// Disable all interrupts (SERIAL Interupts), making it so you need  to check if there is an input

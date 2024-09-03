@@ -1,22 +1,21 @@
 - [X] Remake the work env using docker
 - [X] Install grub in a vitual image ??
-- [ ] Multiboot header
-- [ ] Makefile to compile everything (don't forget the flags)
-- [ ] Helperfunctions.
-- [ ] Basic screendriver:
-	- [ ] Scrolling support;
-	- [ ] Basic ansi sequence for color support;
-	- [ ] Printk;
+- [X] Multiboot header
+- [X] Makefile to compile everything (don't forget the flags)
+- [X] Helperfunctions.
+- [X] Basic screendriver:
+	- [X] Scrolling support;
+	- [X] Basic ansi sequence for color support;
+	- [X] Printk;
 - [ ] Keyboard entries.
 - [ ] Create the gdt.
 - [ ] Making a minimalistic shell
-- [ ] Use serial communication to debug your kernel.
-
+- [X] Use serial communication to debug your kernel.
 
 ---- Required knowledge:
 	- [X] Booting Sequence.
 	- [ ] Linker.
-	- [ ] Video Memory Layout.
+	- [X] Video Memory Layout.
 	- [ ] Ports.
 	- [ ] Irqs and Interrupts.
 	- [ ] Gdt and Idt.
