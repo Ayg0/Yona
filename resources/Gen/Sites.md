@@ -10,3 +10,4 @@
 - [ ] [Linux FileSystem Hierarchy](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html)
 - [X] [ANSI Escape Sequences cheatsheet](https://gist.github.com/ConnerWill/d4b6c776b509add763e17f9f113fd25b)
 - [ ] [samypesse's Book](https://samypesse.gitbook.io/how-to-create-an-operating-system)
+- [ ] [oskit](https://www-old.cs.utah.edu/flux/oskit/html/oskit-wwwch1.html#x4-30001)

@@ -2,7 +2,10 @@
 - [X] Install grub in a vitual image ??
 - [X] Multiboot header
 - [X] Makefile to compile everything (don't forget the flags)
-- [X] Helperfunctions.
+- [X] Helperfunctions:
+	- [X] memory manipulation;
+	- [X] string manipulation;
+	- [X] sprintf-clone;
 - [X] Basic screendriver:
 	- [X] Scrolling support;
 	- [X] Basic ansi sequence for color support;
@@ -16,6 +19,6 @@
 	- [X] Booting Sequence.
 	- [ ] Linker.
 	- [X] Video Memory Layout.
-	- [ ] Ports.
+	- [X] Ports.
 	- [ ] Irqs and Interrupts.
 	- [ ] Gdt and Idt.

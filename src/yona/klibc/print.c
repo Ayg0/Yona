@@ -146,4 +146,3 @@ void setSprintBuff(char *buff){
 	sprintBuff.buff = buff;
 	sprintBuff.index = 0;
 }
-

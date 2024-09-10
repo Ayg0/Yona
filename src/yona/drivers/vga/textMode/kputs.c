@@ -82,16 +82,15 @@ uint8_t kPutPosC(char c, int8_t x, int8_t y){
             parseAnsiSequence(ansiBuff, &ansiBuffSize);
         return 0;
     }
+
     if (handleSpecialChars(c, ansiBuff, &ansiBuffSize))
         return 0;
 
     if (y != VGA_HEIGHT){
         tty.screenBuff[pos].c = c;
         tty.screenBuff[pos].color.clr = tty.currentColor;
-        color = tty.currentColor;
     }
-    else
-        color = tty.defClr;
+    color = tty.currentColor;
     ((short*)VIDEO_MEMORY)[pos] = (color << 8) | c;
     return 1;
 }
@@ -105,17 +104,14 @@ uint8_t kPutC(char c){
 
 uint8_t kPutPosS(char *s, int8_t x, int8_t y){
     bool isForStatus = (y == VGA_HEIGHT) ? 1 : 0;
-    S_INFO("s = %s\r\n", s);
-    int i = 0;
-    while (s[i])
-    {
-        kPutPosC(s[i], x, y);
+    for (int i = 0; s[i]; i++){
+        if(!kPutPosC(s[i], x, y))
+            continue;
         x++;
         if (x == VGA_WIDTH)
             x = 0, y++;
         if ((y == VGA_HEIGHT) && !isForStatus)
             scroll(), y--;
-        i++;
     }
     return 0;
 }
@@ -137,5 +133,10 @@ uint8_t screenBuffOut(){
         int copyStartIndex = i * VGA_WIDTH;
         memmove(&vgaMem[copyStartIndex], &tty.screenBuff[copyStartIndex], copyLen);
     }
+    return 0;
+}
+
+uint8_t updateStatusBar(char *content){
+	kPutPosS(content, 0, VGA_HEIGHT);
     return 0;
 }

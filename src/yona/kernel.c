@@ -15,13 +15,10 @@ void initTty(){
 	tty.currentColor = VGA_WHITE;
 	tty.defClr = VGA_WHITE;
 	enableCursor(14, 15);
+	updateStatusBar("Stat: \033[91mUnknown\033[0m | Battery: \033[91mUnknown\033[0m | Stability: \033[93mReally Nigga ?\033[0m | OSVersion: \033[36m0.1.2\033[0m");
 }
 
 void kmain(void) 
 {
 	initTty();
-	
-	char s[20] = {0};
-	SPRINTF(s, "Hello %d;%s;%p\r\n", 77, "Taha", 0x445);
-	kPutPosS(s, 0, VGA_HEIGHT);
 }
