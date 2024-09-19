@@ -7,9 +7,12 @@ LDSCRIPT=$(SRC_DIR)/$(ARCH)/linker.ld
 # DO_I_SPEED=-O2
 DO_I_SPEED=
 CFLAGS=-std=gnu99 -ffreestanding ${DO_I_SPEED} -Wall -Wextra -Werror\
-		 -fno-builtin -nostdlib -nodefaultlibs -Isrc/include
+		 -fno-builtin -nodefaultlibs -Isrc/include\
+		 -mno-red-zone -mno-80387 -mno-mmx -mno-3dnow -mno-sse -mno-sse2\
+		 -fno-stack-protector -fno-omit-frame-pointer
+
 ASFLAGS=-f elf32
-LDFLAGS=-T $(LDSCRIPT) -ffreestanding ${DO_I_SPEED} -nostdlib -lgcc
+LDFLAGS=-T $(LDSCRIPT) -ffreestanding -nostdlib -lgcc
 
 CSRCS=$(shell find $(SRC_DIR) -type f -name "*.c")
 SSRCS=$(shell find $(SRC_DIR) -type f -name "*.s")
@@ -36,7 +39,7 @@ $(TARGET): $(OBJECTS)
 run:
 	qemu-system-i386 -cdrom yona.iso\
 	 -audiodev pa,id=speaker -machine pcspk-audiodev=speaker\
-	 -serial file:serialLogs.txt
+	 -serial file:serialLogs.txt -no-reboot -no-shutdown
 
 # Rule to make the object files
 build/%.o: $(SRC_DIR)/%.c

@@ -4,7 +4,6 @@ Yona OS:
 	- 32 bit.
 	- written in C and Assembly.
 	- Debugging options: serial ports and (gdb or lldb).
-	- testing using unit testing (jtest).
 	- uses elf executables.
  - For Codebase Consistency:
 	- functions and variables uses snakeCase naming cinvention.

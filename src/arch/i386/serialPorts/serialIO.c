@@ -4,7 +4,7 @@
 
 // Read a Byte from Port_number
 uint8_t pByteIn(uint16_t port_number){
-	uint8_t result;
+	uint8_t result = 0;
 	/*
 		reading from a port in assembly will be:
 			mov dx, 0x03C4    ; set DX to the port number
@@ -18,7 +18,7 @@ uint8_t pByteIn(uint16_t port_number){
 
 // Read a Word from Port_number
 uint16_t pWordIn(uint16_t port_number){
-	uint16_t result;
+	uint16_t result = 0;
 	__asm__ __volatile__ ("in %%dx, %%ax" : "=a"(result) : "d"(port_number));
 	return result ;
 }

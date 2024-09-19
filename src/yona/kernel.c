@@ -18,7 +18,11 @@ void initTty(){
 	updateStatusBar("Stat: \033[91mUnknown\033[0m | Battery: \033[91mUnknown\033[0m | Stability: \033[93mReally Nigga ?\033[0m | OSVersion: \033[36m0.1.2\033[0m");
 }
 
-void kmain(void) 
-{
+void kmain(void) {
 	initTty();
+	// initGdt();
+	// initIdt();
+	// initKeyboard();
+	// initShell();
+	// newShell();
 }
