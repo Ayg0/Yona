@@ -49,3 +49,9 @@ To clean the binaries, run:
 ```sh
 make fclean
 ```
+
+To run the OS in QEMU, run:
+```sh
+make run
+```
+NOTE: of course, you need to have QEMU installed.
