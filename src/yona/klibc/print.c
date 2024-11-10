@@ -4,13 +4,14 @@
 #include "klibc/converts.h"
 
 int16_t appendingWidth = 0;
+char	appendingChar = ' ';
 _buff	sprintBuff;
 
 uint16_t appendBeforeNbr(size_t nbr, size_t baseLen, putCharFnc putChar){
 	if (appendingWidth > 0){
 		appendingWidth -= getNbrSize(nbr, baseLen);
 		for (int16_t i = 0; i < appendingWidth; i++)
-			putChar(' ');
+			putChar(appendingChar);
 	}
 	return appendingWidth;
 }
@@ -61,10 +62,11 @@ static int putNbr(int32_t nbr, putCharFnc putChar){
 static int appendPutPtr(physAddr ptr, char *base, size_t baseLen, putCharFnc putChar){
 	int printedSize = 0;
 
-	appendingWidth -= 2;
-	printedSize += appendBeforeNbr(ptr, baseLen, putChar);
+	// appendingWidth -= 2;
+	appendingChar = '0';
 	printedSize += putChar('0');
 	printedSize += putChar('x');
+	printedSize += appendBeforeNbr(ptr, baseLen, putChar);
 	printedSize += uPutNbr(ptr, base, baseLen, putChar);
 	return printedSize;
 }
@@ -123,6 +125,7 @@ int	print(putCharFnc putChar, char *fmtString, ...){
 			if (isDigit(fmtString[i]))
 				appendingWidth = getApendingNbr(fmtString, &i);
 			printedSize += handleFormatModifiers(&vptr, fmtString, &i, putChar);
+			appendingChar = ' ';
 		}
 		else
 			printedSize += putChar(fmtString[i]);

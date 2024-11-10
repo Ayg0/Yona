@@ -18,6 +18,8 @@
 		"print.h": "c",
 		"vargs.h": "c",
 		"vgatextmode.h": "c",
-		"serial.h": "c"
+		"serial.h": "c",
+		"idts.h": "c",
+		"memory.h": "c"
 	}
 }

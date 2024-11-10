@@ -1,4 +1,5 @@
 #include "drivers/vga/textMode/vgaTextMode.h"
+#include "arch/i386/idts.h"
 #include "klibc/print.h"
 
 _ttySession tty;
@@ -18,11 +19,45 @@ void initTty(){
 	updateStatusBar("Stat: \033[91mUnknown\033[0m | Battery: \033[91mUnknown\033[0m | Stability: \033[93mReally Nigga ?\033[0m | OSVersion: \033[36m0.1.2\033[0m");
 }
 
-void kmain(void) {
+void gdtTest() {
+    char*		addr;
+	uint32_t	cr0;
+	_gdtPtr		gdt = {.base = 0, .limit = 0};
+
+	S_INFO("TESTING DGT\r\n", NULL);
+	/*gdt*/
+	asm volatile("sgdt %0" : : "m" (gdt));
+	S_DEBUG("GDT Base Address: %8p\r\n", gdt.base);
+	S_DEBUG("GDT Limit: %8p\r\n", gdt.limit);
+
+    /* Test code segment */
+    asm volatile("mov %%cs, %0" : "=r" (addr));
+    S_DEBUG("Code Segment Base Address: %8p\r\n", addr);
+
+    /* Test data segment */
+    asm volatile("mov %%ds, %0" : "=r" (addr));
+	S_DEBUG("data Segment Base Address: %8p\r\n", addr);
+
+    /* Test stack segment */
+    asm volatile("mov %%ss, %0" : "=r" (addr));
+    S_DEBUG("Stack Segment Base Address: %8p\r\n", addr);
+	/*Testing if paging Enabled*/
+	asm volatile("mov %%cr0, %0" : "=r" (cr0));
+	S_DEBUG("Paging is currently: %s\r\n", (cr0 & 0x80000000) ? "ENABLED": "DISABLED");
+	S_INFO("END TESTING GDT\r\n", NULL);
+}
+
+void	kInits(){
+	gdtTest();
+	initGdt();
+	gdtTest();
+	// initIdt();qq
 	initTty();
-	// initGdt();
-	// initIdt();
 	// initKeyboard();
 	// initShell();
+}
+
+void kmain(void) {
+	kInits();
 	// newShell();
 }
