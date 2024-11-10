@@ -27,7 +27,9 @@ ISO=yona.iso
 all: $(ISO)
 
 # Rule to make the iso
-$(ISO): $(TARGET)
+$(ISO): 
+	docker-compose up
+iso: $(TARGET)
 	mkdir -p isodir/boot/grub
 	cp $(TARGET) isodir/boot/$(TARGET)
 	cp $(SRC_DIR)/$(ARCH)/grub.cfg isodir/boot/grub/grub.cfg
@@ -36,10 +38,11 @@ $(ISO): $(TARGET)
 # Rule to make the binary
 $(TARGET): $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJECTS)
+
 run:
 	qemu-system-i386 -cdrom yona.iso\
 	 -audiodev pa,id=speaker -machine pcspk-audiodev=speaker\
-	 -serial file:serialLogs.txt -no-reboot -no-shutdown
+	 -serial stdio -no-reboot -no-shutdown
 
 # Rule to make the object files
 build/%.o: $(SRC_DIR)/%.c
@@ -52,11 +55,14 @@ build/%.o: $(SRC_DIR)/%.s
 
 # Clean rule
 clean:
-	rm -rf $(OBJECTS) $(TARGET) isodir
+	rm -rf $(OBJECTS) $(TARGET) isodir/*
 
 # re rule
-re: clean all
+re: fclean all
 
 # fclean rule
-fclean: clean
+fclean:
+	docker-compose run --rm clean-env
 	rm -rf $(ISO)
+
+.PHONY: all clean re fclean run iso

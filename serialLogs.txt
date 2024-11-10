@@ -1,4 +1,0 @@
-[93mDEBUG[0m [kmain] THIS IS A TEST - Hi - 
-[34mINFO[0m [kmain] THIS IS A TEST - Hi - 
-[31mERR[0m [kmain] THIS IS A TEST - Hi - 
-[92mSUCC[0m [kmain] THIS IS A TEST - Hi - 

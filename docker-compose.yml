@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  build-env:
+    image: 0rayne/i386.env:v1.0
+    volumes:
+      - .:/root/env
+    working_dir: /root/env
+    entrypoint: ["/bin/bash", "-c", "export PATH=$PATH:/root/opt/cross/bin/ && make iso"]
+
+  clean-env:
+    image: 0rayne/i386.env:v1.0
+    volumes:
+      - .:/root/env
+    working_dir: /root/env
+    entrypoint: ["/bin/bash", "-c", "export PATH=$PATH:/root/opt/cross/bin/ && make clean"]
