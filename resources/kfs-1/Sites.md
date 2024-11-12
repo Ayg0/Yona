@@ -17,3 +17,4 @@
 - [ ] [Serial Communication](https://www.youtube.com/watch?v=IyGwvGzrqp8)
 - [ ] [What's Baud Rate](https://www.wevolver.com/article/baud-rates)
 - [ ] [Multiboot2 Specification](https://www.gnu.org/software/grub/manual/multiboot2/multiboot.html)
+- [X] [x86Registers](https://www.eecg.utoronto.ca/~amza/www.mindsec.com/files/x86regs.html)

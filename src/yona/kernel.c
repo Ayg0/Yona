@@ -46,18 +46,37 @@ void gdtTest() {
 	S_DEBUG("Paging is currently: %s\r\n", (cr0 & 0x80000000) ? "ENABLED": "DISABLED");
 	S_INFO("END TESTING GDT\r\n", NULL);
 }
+void	initIdt();
 
 void	kInits(){
 	gdtTest();
 	initGdt();
 	gdtTest();
-	// initIdt();qq
+	initIdt();
 	initTty();
 	// initKeyboard();
 	// initShell();
 }
 
+void	keyboardHandler(_registers Rs){
+	(void) Rs;
+	uint8_t	letter = 0;
+    uint8_t scanCode =  pByteIn(0x60); // where PIC leave the scancode
+
+	if (scanCode < 0x80)
+	{
+		letter = scanCode;
+		kPutC(letter);
+	}
+}
+
+void	doNothing(_registers Rs){
+	(void) Rs;
+}
+
 void kmain(void) {
 	kInits();
-	// newShell();
+	setIRQHandler(0, doNothing);
+	setIRQHandler(1, keyboardHandler);
+	while (1);
 }

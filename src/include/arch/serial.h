@@ -1,13 +1,8 @@
 #pragma once
 #include "types.h"
+#include "arch/ports.h"
 
 #define COM1 0x3F8
-
-void		ioWait(void);
-uint8_t		pByteIn(uint16_t port_number);
-uint16_t	pWordIn(uint16_t port_number);
-void		pByteOut(uint16_t port_number, uint8_t value);
-void		pWordOut(uint16_t port_number, uint16_t value);
 
 int			initSerial();
 int			isTransmitEmpty();

@@ -5,11 +5,11 @@ services:
     volumes:
       - .:/root/env
     working_dir: /root/env
-    entrypoint: ["/bin/bash", "-c", "export PATH=$PATH:/root/opt/cross/bin/ && make iso"]
+    entrypoint: ["/bin/bash", "-c", "export PATH=$PATH:/root/opt/cross/bin/ && make dockerISO"]
 
   clean-env:
     image: 0rayne/i386.env:v1.0
     volumes:
       - .:/root/env
     working_dir: /root/env
-    entrypoint: ["/bin/bash", "-c", "export PATH=$PATH:/root/opt/cross/bin/ && make clean"]
+    entrypoint: ["/bin/bash", "-c", "export PATH=$PATH:/root/opt/cross/bin/ && make dockerClean"]

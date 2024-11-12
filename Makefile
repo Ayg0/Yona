@@ -24,12 +24,11 @@ TARGET=yona.bin
 ISO=yona.iso
 
 # Default target
-all: $(ISO)
+all:
+	docker-compose run --rm build-env
 
 # Rule to make the iso
-$(ISO): 
-	docker-compose up
-iso: $(TARGET)
+dockerISO: $(TARGET)
 	mkdir -p isodir/boot/grub
 	cp $(TARGET) isodir/boot/$(TARGET)
 	cp $(SRC_DIR)/$(ARCH)/grub.cfg isodir/boot/grub/grub.cfg
@@ -54,7 +53,7 @@ build/%.o: $(SRC_DIR)/%.s
 			$(AS) $(ASFLAGS) $< -o $@
 
 # Clean rule
-clean:
+dockerClean:
 	rm -rf $(OBJECTS) $(TARGET) isodir/*
 
 # re rule
@@ -65,4 +64,4 @@ fclean:
 	docker-compose run --rm clean-env
 	rm -rf $(ISO)
 
-.PHONY: all clean re fclean run iso
+.PHONY: all re fclean run dockerClean dockerISO
