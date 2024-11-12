@@ -20,6 +20,7 @@
 		"vgatextmode.h": "c",
 		"serial.h": "c",
 		"idts.h": "c",
-		"memory.h": "c"
+		"memory.h": "c",
+		"time.h": "c"
 	}
 }

@@ -11,7 +11,7 @@
 	- [X] Basic ansi sequence for color support;
 	- [X] Printk;
 - [ ] Keyboard entries.
-- [/] Create the gdt & idt.
+- [X] Create the gdt & idt.
 - [ ] Making a minimalistic shell.
 - [X] Use serial communication to debug your kernel.
 

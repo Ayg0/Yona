@@ -1,8 +1,32 @@
-#include "drivers/vga/textMode/vgaTextMode.h"
-#include "arch/i386/idts.h"
 #include "klibc/print.h"
+#include "drivers/time.h"
+#include "arch/i386/idts.h"
+#include "drivers/vga/textMode/vgaTextMode.h"
 
 _ttySession tty;
+
+extern _sysClock date;
+
+void makeStatusBar(){
+	char statusBar[80] = {0};
+
+	// status bar will have OS version, time, date, and OS state;
+
+	SPRINTF(statusBar, "| OSVersion:%s | STATE:%s |", "0.1.2", "UNSTABLE");
+	SPRINTF((statusBar + 53), "| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
+													date.h, date.m, date.s);
+	PRINT_K("| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
+													date.h, date.m, date.s);
+	PRINT_K("| %2d/%2d/%4d %2d:%2d:%2d |\r\n", date.d, date.mo, date.y, 
+													date.h, date.m, date.s);												
+	for (uint8_t i = 0; i < 79; i++)
+	{
+		if (statusBar[i] == 0)
+			statusBar[i] = ' ';
+	}
+	statusBar[79] = 0;
+	updateStatusBar(statusBar);
+}
 
 void initTty(){
 	tty.cursor.x = 0;
@@ -16,7 +40,7 @@ void initTty(){
 	tty.currentColor = VGA_WHITE;
 	tty.defClr = VGA_WHITE;
 	enableCursor(14, 15);
-	updateStatusBar("Stat: \033[91mUnknown\033[0m | Battery: \033[91mUnknown\033[0m | Stability: \033[93mReally Nigga ?\033[0m | OSVersion: \033[36m0.1.2\033[0m");
+	makeStatusBar();
 }
 
 void gdtTest() {
@@ -54,6 +78,7 @@ void	kInits(){
 	gdtTest();
 	initIdt();
 	initTty();
+	initTimer(1000);
 	// initKeyboard();
 	// initShell();
 }
@@ -63,20 +88,14 @@ void	keyboardHandler(_registers Rs){
 	uint8_t	letter = 0;
     uint8_t scanCode =  pByteIn(0x60); // where PIC leave the scancode
 
-	if (scanCode < 0x80)
-	{
+	if (scanCode < 0x80){
 		letter = scanCode;
 		kPutC(letter);
 	}
 }
 
-void	doNothing(_registers Rs){
-	(void) Rs;
-}
-
 void kmain(void) {
 	kInits();
-	setIRQHandler(0, doNothing);
 	setIRQHandler(1, keyboardHandler);
 	while (1);
 }

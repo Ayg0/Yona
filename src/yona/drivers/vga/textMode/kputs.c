@@ -1,8 +1,8 @@
-#include "drivers/vga/textMode/vgaTextMode.h"
-#include "klibc/memory.h"
-#include "klibc/converts.h"
-#include "klibc/strings.h"
 #include "klibc/print.h"
+#include "klibc/memory.h"
+#include "klibc/strings.h"
+#include "klibc/converts.h"
+#include "drivers/vga/textMode/vgaTextMode.h"
 
 extern _ttySession tty;
 

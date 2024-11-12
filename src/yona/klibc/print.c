@@ -51,9 +51,9 @@ static int putNbr(int32_t nbr, putCharFnc putChar){
 	if (nbr < 0){
 		nbr = -nbr;
 		appendingWidth--;
-		printedSize += appendBeforeNbr(nbr, 10, putChar);
 		printedSize += putChar('-');
 	}
+	printedSize += appendBeforeNbr(nbr, 10, putChar);
 	printedSize += uPutNbr(nbr, DEC_BASE, 10, putChar);
 
 	return (printedSize);
@@ -120,8 +120,12 @@ int	print(putCharFnc putChar, char *fmtString, ...){
 	i = 0;
 	while (fmtString[i]) {
 		appendingWidth = 0;
+		appendingChar = ' ';
 		if (fmtString[i] == '%'){
 			i++;
+			if (fmtString[i] == '0')
+				appendingChar = '0', i++;
+
 			if (isDigit(fmtString[i]))
 				appendingWidth = getApendingNbr(fmtString, &i);
 			printedSize += handleFormatModifiers(&vptr, fmtString, &i, putChar);
