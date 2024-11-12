@@ -74,5 +74,3 @@ void    enableCursor(uint8_t cursor_start, uint8_t cursor_end);
 
 // output the screen-buff
 uint8_t screenBuffOut();
-// update the status bar
-uint8_t updateStatusBar(char *content);

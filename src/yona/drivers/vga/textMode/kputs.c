@@ -135,8 +135,3 @@ uint8_t screenBuffOut(){
     }
     return 0;
 }
-
-uint8_t updateStatusBar(char *content){
-	kPutPosS(content, 0, VGA_HEIGHT);
-    return 0;
-}

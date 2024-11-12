@@ -3,7 +3,7 @@
 #include "klibc/print.h"
 
 _sysClock date;
-void makeStatusBar();
+void	updateStatusBar();
 
 void	tick(_registers r){
     static uint32_t ticks = 0;
@@ -21,7 +21,7 @@ void	tick(_registers r){
 	date.d  += (date.h == 24) && !(date.h = 0);
 	date.mo += (date.d == 31) && !(date.d = 0);
 	date.y  += (date.mo == 12) && !(date.mo = 0);
-	makeStatusBar();
+	updateStatusBar();
 }
 
 
@@ -36,4 +36,16 @@ void	initTimer(uint32_t frequency){
 	pByteOut(C0_DATA, divisor & 0xff);
 	pByteOut(C0_DATA, (divisor >> 8) & 0xff);
 	setIRQHandler(0, tick);
+}
+
+void setDate(uint8_t day, uint8_t month, uint32_t year){
+	date.d = day;
+	date.mo = month;
+	date.y = year;
+}
+
+void setTime(uint8_t hour, uint8_t min, uint32_t sec){
+	date.h = hour;
+	date.m = min;
+	date.s = sec;
 }

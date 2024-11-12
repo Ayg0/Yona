@@ -49,3 +49,6 @@ typedef struct sysClock
 } _sysClock;
 
 void	initTimer(uint32_t frequency);
+
+void	setTime(uint8_t hour, uint8_t min, uint32_t sec);
+void	setDate(uint8_t day, uint8_t month, uint32_t year);

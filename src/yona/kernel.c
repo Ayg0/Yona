@@ -7,40 +7,29 @@ _ttySession tty;
 
 extern _sysClock date;
 
-void makeStatusBar(){
-	char statusBar[80] = {0};
+void updateStatusBar(){
+	char content[80] = {0};
 
-	// status bar will have OS version, time, date, and OS state;
-
-	SPRINTF(statusBar, "| OSVersion:%s | STATE:%s |", "0.1.2", "UNSTABLE");
-	SPRINTF((statusBar + 53), "| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
+	SPRINTF(content, "| OSVersion: \033[96m%s\033[39m | STATE: \033[31m%s\033[39m |", "0.1.2", "UNSTABLE");
+	kPutPosS(content, 0, VGA_HEIGHT);
+	SPRINTF(content, "| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
 													date.h, date.m, date.s);
-	PRINT_K("| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
-													date.h, date.m, date.s);
-	PRINT_K("| %2d/%2d/%4d %2d:%2d:%2d |\r\n", date.d, date.mo, date.y, 
-													date.h, date.m, date.s);												
-	for (uint8_t i = 0; i < 79; i++)
-	{
-		if (statusBar[i] == 0)
-			statusBar[i] = ' ';
-	}
-	statusBar[79] = 0;
-	updateStatusBar(statusBar);
+	kPutPosS(content, 54, VGA_HEIGHT);
 }
 
 void initTty(){
 	tty.cursor.x = 0;
 	tty.cursor.y = 0;
 
-	for (size_t i = 0, cellsCount = VGA_WIDTH * VGA_HEIGHT; i < cellsCount; i++)
-	{
+	for (size_t i = 0, cellsCount = VGA_WIDTH * VGA_HEIGHT; i < cellsCount; i++) {
 		tty.screenBuff[i].c = 0;
 		tty.screenBuff[i].color.clr = 0;
 	}
 	tty.currentColor = VGA_WHITE;
 	tty.defClr = VGA_WHITE;
 	enableCursor(14, 15);
-	makeStatusBar();
+	setDate(12, 11, 2024);
+	updateStatusBar();
 }
 
 void gdtTest() {

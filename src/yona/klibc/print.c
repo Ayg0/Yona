@@ -119,17 +119,20 @@ int	print(putCharFnc putChar, char *fmtString, ...){
 	VARG_INIT(vptr, fmtString);
 	i = 0;
 	while (fmtString[i]) {
+		// reseting the printing modifiers;
 		appendingWidth = 0;
 		appendingChar = ' ';
+		// looking for the next printing specifier;
 		if (fmtString[i] == '%'){
 			i++;
+			// example: %03d => so we append with Zeros instead of spaces;
 			if (fmtString[i] == '0')
 				appendingChar = '0', i++;
-
+			// getting the appending value if there is any
 			if (isDigit(fmtString[i]))
 				appendingWidth = getApendingNbr(fmtString, &i);
+			// printing the variable;
 			printedSize += handleFormatModifiers(&vptr, fmtString, &i, putChar);
-			appendingChar = ' ';
 		}
 		else
 			printedSize += putChar(fmtString[i]);
