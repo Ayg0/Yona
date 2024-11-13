@@ -1,4 +1,4 @@
-#include "types.h"
+#include "klibc/types.h"
 
 uint8_t	isAlpha(uint8_t c){
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));

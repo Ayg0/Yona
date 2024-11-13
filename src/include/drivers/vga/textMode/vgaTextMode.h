@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "klibc/types.h"
 
 # define VIDEO_MEMORY   0xB8000
 # define VGA_WIDTH      80
@@ -74,3 +74,4 @@ void    enableCursor(uint8_t cursor_start, uint8_t cursor_end);
 
 // output the screen-buff
 uint8_t screenBuffOut();
+void    clearStatusBar();

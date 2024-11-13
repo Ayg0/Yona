@@ -1,20 +1,45 @@
+#include "yonaData.h"
 #include "klibc/print.h"
 #include "drivers/time.h"
-#include "drivers/keyboard.h"
 #include "arch/i386/idts.h"
+#include "drivers/keyboard.h"
 #include "drivers/vga/textMode/vgaTextMode.h"
 
 _ttySession tty;
+_yonaData	yona = {
+	.OSVersion = "0.7.1",
+	.status = YONA_STATUS_STABLE,
+	.isPaginated = false
+};
 extern _sysClock date;
+
+char *yonaStateToString(enum yonaStatus state){
+	switch (state) {
+		case YONA_STATUS_STABLE: return "\033[32mSTABLE\033[39m";
+		case YONA_STATUS_ERROR: return "\033[93mERROR\033[39m";
+		default: return "\033[31mUNKNOWN\033[39m";
+	}
+}
+
+void sleep(uint32_t ms){
+	uint32_t start = date.msElapsedFromBoot;
+	while (date.msElapsedFromBoot - start < ms);
+}
 
 void updateStatusBar(){
 	char content[80] = {0};
 
-	SPRINTF(content, "| OSVersion: \033[96m%s\033[39m | STATE: \033[31m%s\033[39m |", "0.7.1", "UNSTABLE");
+	clearStatusBar();
+	SPRINTF(content, "| OSVersion: "COLOR_LIGHT_CYAN"%s"COLOR_DEFAULT" | STATE: %s |", yona.OSVersion, yonaStateToString(yona.status));
 	kPutPosS(content, 0, VGA_HEIGHT);
 	SPRINTF(content, "| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
 													date.h, date.m, date.s);
-	kPutPosS(content, 54, VGA_HEIGHT);
+	kPutPosS(content, 57, VGA_HEIGHT);
+}
+
+void setYonaStatus(enum yonaStatus status){
+	yona.status = status;
+	updateStatusBar();
 }
 
 void initTty(){
@@ -80,6 +105,8 @@ void kmain(void) {
 	while (1){
 		prompt("Yona", buffer);
 		PRINT_K("\n\r%s\n\r", buffer);
-		S_DEBUG("Buffer: %s\r\n", buffer);
+		S_ERR("Command not found\n\r", NULL);
+		sleep(1000);
+		S_SUCC("Resuming...\n\r", NULL);
 	}
 }

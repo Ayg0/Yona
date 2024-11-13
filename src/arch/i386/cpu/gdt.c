@@ -1,4 +1,4 @@
-#include "types.h"
+#include "klibc/types.h"
 #include "klibc/memory.h"
 #include "arch/i386/idts.h"
 

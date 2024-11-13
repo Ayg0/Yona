@@ -1,4 +1,4 @@
-#include "types.h"
+#include "klibc/types.h"
 #include "drivers/keyboard.h"
 
 // this array map was provided thanks to: https://stackoverflow.com/questions/61124564/convert-scancodes-to-ascii

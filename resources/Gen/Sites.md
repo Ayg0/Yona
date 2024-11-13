@@ -14,3 +14,4 @@
 - [_] [0xaxLinuxInsides](https://0xax.gitbooks.io/linux-insides/content/Booting/linux-bootstrap-1.html)
 
 - [ ] [nah](http://www.tcpipguide.com/free/t_toc.htm)
+- [ ] [InlineAssembly](https://wiki.osdev.org/Inline_Assembly/Examples#I.2FO_access)

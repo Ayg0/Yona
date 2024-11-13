@@ -17,7 +17,6 @@ uint8_t    getLetterFromScanCode(uint8_t scanCode){
     // get letter from the keyboard layout
     letter = kbdData.layout.views[selectedLayout][scanCode];
 
-    S_DEBUG("layout %d, letter %c\n", selectedLayout, letter);
     // if caps lock is on, invert letter case
 	if (isAlpha(letter) && BIT_IS_SET(kbdData.kbdFlags, CAPS_MODIFIER))
 		letter -= 32 * ((letter >= 'a') + -1 * (letter < 'a'));
@@ -27,7 +26,6 @@ uint8_t    getLetterFromScanCode(uint8_t scanCode){
 void    handleKey(uint8_t letter){
     if (letter == '\n'){
         BIT_SET(kbdData.kbdFlags, NEWLINE);
-        S_INFO("NEWLINE FLAG %d\n", BIT_IS_SET(kbdData.kbdFlags, NEWLINE));
         return ;
     }
 
@@ -131,7 +129,7 @@ void	clearKeyboardBuffer(){
 
 char	*prompt(char *declare, char *buffer){
 	if (declare)
-        PRINT_K("\033[34m%s>\033[39m ", declare);
+        PRINT_K(COLOR_LIGHT_BLUE"%s>"COLOR_DEFAULT" ", declare);
     while (!BIT_IS_SET(kbdData.kbdFlags, NEWLINE))
         asm volatile("" : : : "memory");
 

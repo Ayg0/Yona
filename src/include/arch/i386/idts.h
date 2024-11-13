@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "klibc/types.h"
 
 /*--------------------------- GDT ---------------------------*/
 # define GDT_ENTRIES 7

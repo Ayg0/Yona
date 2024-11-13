@@ -141,3 +141,9 @@ uint8_t screenBuffOut(){
     }
     return 0;
 }
+
+void clearStatusBar(){
+    char *vgaMem = (char *)VIDEO_MEMORY;
+
+    memset(&vgaMem[VGA_WIDTH * VGA_HEIGHT * 2], 0, VGA_WIDTH * 2);
+}
