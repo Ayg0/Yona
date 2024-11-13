@@ -24,7 +24,6 @@ void	tick(_registers r){
 	updateStatusBar();
 }
 
-
 void	initTimer(uint32_t frequency){
 	uint16_t	divisor;
 

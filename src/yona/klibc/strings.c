@@ -9,8 +9,7 @@ size_t strlen(const char *str){
 }
 //  strlcpy
 size_t	strlcpy(char *dest, const char *src, size_t size){
-    while (size > 0 && *src)
-    {
+    while (size > 0 && *src) {
         *dest = *src;
         dest++, src++;
         size--;
@@ -55,41 +54,43 @@ char *strchr(const char *s, int c){
             break;
     return (char *)s;
 }
+
 //  strrchr
 char *strrchr(const char *s, int c){
     size_t sLen = strlen(s);
     if ((char) c == '\0')
 		return (char *)(s + sLen);
-    while (sLen > 0)
-    {
+    while (sLen > 0) {
         if (s[sLen - 1] == (char)c)
             return (char *)(s + sLen);
         sLen--;
     }
     return NULL;
 }
+
 //  strncmp
 int strncmp(const char *s1, const char *s2, size_t n){
     while (--n && *s1 && *s2 && (*s1 == *s2))
         s1++, s2++;
     return *s1 - *s2;
 }
+
 //  strcmp
 int strcmp(const char *s1, const char *s2){
     while (*s1 && *s2 && (*s1 == *s2))
         s1++, s2++;
     return *s1 - *s2;
 }
+
 //  strnstr
-char *strnstr(const char *big, const char *little, size_t len){
-    if (!*little)
-        return (char *)big;
-    size_t littleLen = strlen(little);
+char *strnstr(const char *haystack, const char *needle, size_t len){
+    if (!*needle)
+        return (char *)haystack;
+    size_t needleLen = strlen(needle);
     size_t i = 0;
-    while (big[i] && i < len)
-    {
-        if (!strncmp(big + i, little, littleLen))
-            return (char *)big + i;
+    while (haystack[i] && i < len) {
+        if (!strncmp(haystack + i, needle, needleLen))
+            return (char *)haystack + i;
         i++;
     }
     return NULL;

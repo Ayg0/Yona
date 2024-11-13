@@ -1,16 +1,16 @@
 #include "klibc/print.h"
 #include "drivers/time.h"
+#include "drivers/keyboard.h"
 #include "arch/i386/idts.h"
 #include "drivers/vga/textMode/vgaTextMode.h"
 
 _ttySession tty;
-
 extern _sysClock date;
 
 void updateStatusBar(){
 	char content[80] = {0};
 
-	SPRINTF(content, "| OSVersion: \033[96m%s\033[39m | STATE: \033[31m%s\033[39m |", "0.1.2", "UNSTABLE");
+	SPRINTF(content, "| OSVersion: \033[96m%s\033[39m | STATE: \033[31m%s\033[39m |", "0.7.1", "UNSTABLE");
 	kPutPosS(content, 0, VGA_HEIGHT);
 	SPRINTF(content, "| %02d/%02d/%04d %02d:%02d:%02d |", date.d, date.mo, date.y, 
 													date.h, date.m, date.s);
@@ -28,6 +28,7 @@ void initTty(){
 	tty.currentColor = VGA_WHITE;
 	tty.defClr = VGA_WHITE;
 	enableCursor(14, 15);
+
 	setDate(12, 11, 2024);
 	updateStatusBar();
 }
@@ -68,23 +69,17 @@ void	kInits(){
 	initIdt();
 	initTty();
 	initTimer(1000);
-	// initKeyboard();
+	initKeyboard();
 	// initShell();
-}
-
-void	keyboardHandler(_registers Rs){
-	(void) Rs;
-	uint8_t	letter = 0;
-    uint8_t scanCode =  pByteIn(0x60); // where PIC leave the scancode
-
-	if (scanCode < 0x80){
-		letter = scanCode;
-		kPutC(letter);
-	}
 }
 
 void kmain(void) {
 	kInits();
-	setIRQHandler(1, keyboardHandler);
-	while (1);
+	char buffer[256] = {0};
+
+	while (1){
+		prompt("Yona", buffer);
+		PRINT_K("\n\r%s\n\r", buffer);
+		S_DEBUG("Buffer: %s\r\n", buffer);
+	}
 }

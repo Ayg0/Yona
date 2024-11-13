@@ -3,6 +3,12 @@ src
 ├── arch
 │   └── i386
 │       ├── boot.s
+│       ├── cpu
+│       │   ├── gdt.c
+│       │   ├── gdtLoader.s
+│       │   ├── idt.c
+│       │   ├── irqs.c
+│       │   └── ISRs.s
 │       ├── grub.cfg
 │       ├── linker.ld
 │       └── serialPorts
@@ -10,8 +16,13 @@ src
 │           └── serialIO.c
 ├── include
 │   ├── arch
+│   │   ├── i386
+│   │   │   └── idts.h
+│   │   ├── ports.h
 │   │   └── serial.h
 │   ├── drivers
+│   │   ├── keyboard.h
+│   │   ├── time.h
 │   │   └── vga
 │   │       └── textMode
 │   │           └── vgaTextMode.h
@@ -24,6 +35,13 @@ src
 │   └── types.h
 └── yona
     ├── drivers
+    │   ├── keyboard
+    │   │   ├── keyboardDriver.c
+    │   │   ├── layouts
+    │   │   │   └── kbd_US.c
+    │   │   └── project-tree.md
+    │   ├── timer
+    │   │   └── timerDriver.c
     │   └── vga
     │       └── textMode
     │           ├── cursor.c
@@ -36,5 +54,5 @@ src
         ├── strings.c
         └── types.c
 
-15 directories, 21 files
+20 directories, 34 files
 ```

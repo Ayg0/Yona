@@ -10,10 +10,11 @@
 	- [X] Scrolling support;
 	- [X] Basic ansi sequence for color support;
 	- [X] Printk;
-- [ ] Keyboard entries.
+- [X] Keyboard entries.
 - [X] Create the gdt & idt.
 - [ ] Making a minimalistic shell.
 - [X] Use serial communication to debug your kernel.
+- [X] Implement a timer.
 
 ---- Required knowledge:
 	- [X] Booting Sequence.

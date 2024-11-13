@@ -64,6 +64,12 @@ uint8_t handleSpecialChars(char c, char *ansiBuff, uint8_t *ansiBuffSize){
     case '\n':
         moveCursor(tty.cursor.x, tty.cursor.y + 1);
         return 1;
+    case '\b':
+        S_DEBUG("TTY.x: %d, TTY.y: %d\n", tty.cursor.x, tty.cursor.y);
+        if (tty.cursor.x > 0)
+            moveCursor(tty.cursor.x - 1, tty.cursor.y);
+        kPutPosC(' ', tty.cursor.x, tty.cursor.y);
+        return 1;
     default:
         break;
     }
