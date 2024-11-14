@@ -1,8 +1,10 @@
 #include "yonaData.h"
 #include "klibc/print.h"
 #include "drivers/time.h"
+#include "klibc/strings.h"
 #include "arch/i386/idts.h"
 #include "drivers/keyboard.h"
+#include "yonaShell/yonaShell.h"
 #include "drivers/vga/textMode/vgaTextMode.h"
 
 _ttySession tty;
@@ -19,11 +21,6 @@ char *yonaStateToString(enum yonaStatus state){
 		case YONA_STATUS_ERROR: return "\033[93mERROR\033[39m";
 		default: return "\033[31mUNKNOWN\033[39m";
 	}
-}
-
-void sleep(uint32_t ms){
-	uint32_t start = date.msElapsedFromBoot;
-	while (date.msElapsedFromBoot - start < ms);
 }
 
 void updateStatusBar(){
@@ -54,7 +51,7 @@ void initTty(){
 	tty.defClr = VGA_WHITE;
 	enableCursor(14, 15);
 
-	setDate(12, 11, 2024);
+	setDate(14, 11, 2024);
 	updateStatusBar();
 }
 
@@ -95,18 +92,9 @@ void	kInits(){
 	initTty();
 	initTimer(1000);
 	initKeyboard();
-	// initShell();
+	initShell();
 }
 
 void kmain(void) {
 	kInits();
-	char buffer[256] = {0};
-
-	while (1){
-		prompt("Yona", buffer);
-		PRINT_K("\n\r%s\n\r", buffer);
-		S_ERR("Command not found\n\r", NULL);
-		sleep(1000);
-		S_SUCC("Resuming...\n\r", NULL);
-	}
 }

@@ -1,5 +1,7 @@
 #include "klibc/types.h"
 #include "klibc/memory.h"
+#include "klibc/print.h"
+
 size_t strlen(const char *str){
     size_t i = 0;
 
@@ -7,6 +9,7 @@ size_t strlen(const char *str){
         i++;
     return i;
 }
+
 //  strlcpy
 size_t	strlcpy(char *dest, const char *src, size_t size){
     while (size > 0 && *src) {
@@ -17,6 +20,7 @@ size_t	strlcpy(char *dest, const char *src, size_t size){
     *dest = 0;
     return strlen(src);
 }
+
 //  strlcat
 size_t	strlcat(char *dest, const char *src, size_t size){
     size_t destLen = strlen(dest);
@@ -82,6 +86,18 @@ int strcmp(const char *s1, const char *s2){
     return *s1 - *s2;
 }
 
+char *strstr(const char *haystack, const char *needle){
+    if (!*needle)
+        return (char *)haystack;
+    size_t needleLen = strlen(needle);
+    while (*haystack) {
+        if (!strncmp(haystack, needle, needleLen))
+            return (char *)haystack;
+        haystack++;
+    }
+    return NULL;
+}
+
 //  strnstr
 char *strnstr(const char *haystack, const char *needle, size_t len){
     if (!*needle)
@@ -94,4 +110,22 @@ char *strnstr(const char *haystack, const char *needle, size_t len){
         i++;
     }
     return NULL;
+}
+
+// strtok
+char *strtok(char *str, const char *delim){
+    static char *last = NULL;
+
+    if (!str)
+        str = last;
+    if (!str && !last)
+        return NULL;
+
+    char *delimFound = strstr(str, delim);
+    if (!delimFound)
+        last = NULL;
+    else
+        *delimFound = 0, last = delimFound + strlen(delim);
+
+    return str;
 }

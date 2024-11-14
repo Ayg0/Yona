@@ -41,7 +41,8 @@ $(TARGET): $(OBJECTS)
 run:
 	qemu-system-i386 -cdrom yona.iso\
 	 -audiodev pa,id=speaker -machine pcspk-audiodev=speaker\
-	 -serial stdio -no-reboot -no-shutdown
+	 -serial stdio 
+# -no-reboot -no-shutdown
 
 # Rule to make the object files
 build/%.o: $(SRC_DIR)/%.c

@@ -24,6 +24,13 @@ void	tick(_registers r){
 	updateStatusBar();
 }
 
+
+void msSleep(uint32_t ms){
+	uint32_t start = date.msElapsedFromBoot;
+	while (date.msElapsedFromBoot - start < ms);
+}
+
+
 void	initTimer(uint32_t frequency){
 	uint16_t	divisor;
 

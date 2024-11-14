@@ -142,6 +142,14 @@ uint8_t screenBuffOut(){
     return 0;
 }
 
+void clearScreenBuffer(){
+    moveCursor(0, 0);
+    // clear tty buffer
+    for (int16_t i = 0; i < VGA_CELLS_COUNT; i++)
+        tty.screenBuff[i].c = 0, tty.screenBuff[i].color.clr = 0;
+    screenBuffOut();
+}
+
 void clearStatusBar(){
     char *vgaMem = (char *)VIDEO_MEMORY;
 

@@ -54,7 +54,7 @@ uint32_t	uatoiS(const char *s, uint32_t *index){
 	return nbr;
 }
 
-uint32_t	atoHexS(const char *s, uint32_t *index){
+uint32_t	aHextoiS(const char *s, uint32_t *index){
 	uint32_t	nbr = 0;
 	uint32_t	fakeIndex;
 	int			i;

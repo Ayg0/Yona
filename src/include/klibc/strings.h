@@ -11,3 +11,4 @@ char    *strrchr(const char *s, int c);
 int     strncmp(const char *s1, const char *s2, size_t n);
 int     strcmp(const char *s1, const char *s2);
 char    *strnstr(const char *big, const char *little, size_t len);
+char    *strtok(char *str, const char *delim);
