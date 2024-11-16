@@ -111,6 +111,7 @@ int16_t	getApendingNbr(char *fmtString, int *i){
 	return nbr;
 }
 
+
 // implemented %c, %s, %u, %d, %x, %p
 int	print(putCharFnc putChar, char *fmtString, ...){
 	varg_ptr	vptr;

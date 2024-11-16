@@ -6,7 +6,7 @@ Yona OS:
 	- Debugging options: serial ports and (gdb or lldb).
 	- uses elf executables.
  - For Codebase Consistency:
-	- functions and variables uses snakeCase naming cinvention.
+	- functions and variables uses camelCase naming cinvention.
 	- macros always uppercase and if it's more than one word they're separated by '_'.
 	- structs usually made with typedef.
 	- all typedefs should start with '_'.

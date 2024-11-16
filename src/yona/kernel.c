@@ -11,7 +11,8 @@ _ttySession tty;
 _yonaData	yona = {
 	.OSVersion = "0.7.1",
 	.status = YONA_STATUS_STABLE,
-	.isPaginated = false
+	.isPaginated = false,
+	.mainEBP = 0
 };
 extern _sysClock date;
 
@@ -51,7 +52,8 @@ void initTty(){
 	tty.defClr = VGA_WHITE;
 	enableCursor(14, 15);
 
-	setDate(14, 11, 2024);
+	setDate(16, 11, 2024);
+	setTime(7, 7, 7);
 	updateStatusBar();
 }
 
@@ -85,6 +87,9 @@ void gdtTest() {
 void	initIdt();
 
 void	kInits(){
+	volatile char *s = "Hello, World! MAIN";
+	(void)s;
+	// PRINT_K("%s\n", s);
 	gdtTest();
 	initGdt();
 	gdtTest();
@@ -96,5 +101,6 @@ void	kInits(){
 }
 
 void kmain(void) {
+	asm volatile("mov %%ebp, %0" : "=r" (yona.mainEBP));
 	kInits();
 }

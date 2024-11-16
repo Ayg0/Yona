@@ -12,7 +12,7 @@
 	- [X] Printk;
 - [X] Keyboard entries.
 - [X] Create the gdt & idt.
-- [ ] Making a minimalistic shell.
+- [X] Making a minimalistic shell.
 - [X] Use serial communication to debug your kernel.
 - [X] Implement a timer.
 

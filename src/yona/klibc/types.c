@@ -16,6 +16,14 @@ uint8_t	isUpperCase(uint8_t c){
 	return (c >= 'A' && c <= 'Z');
 }
 
+uint8_t	toUpperCase(uint8_t c){
+	return (c - (isLowerCase(c) * 32));
+}
+
+uint8_t	toLowerCase(uint8_t c){
+	return (c + (isUpperCase(c) * 32));
+}
+
 uint8_t	isDigit(uint8_t c){
 	return (c >= '0') && (c <= '9');
 }

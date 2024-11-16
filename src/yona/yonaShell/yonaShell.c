@@ -2,6 +2,7 @@
 # include "klibc/types.h"
 # include "klibc/strings.h"
 # include "drivers/keyboard.h"
+# include "drivers/time.h"
 # include "yonaShell/yonaShell.h"
 # include "drivers/vga/textMode/vgaTextMode.h"
 
@@ -22,16 +23,28 @@ void initCommand(char *name, commandFunc func){
     index++;
 }
 
+void listCommands(char *args){
+    (void)args;
+    PRINT_K("Available commands:\n\r", NULL);
+    for (uint8_t i = 0; commands[i].func; i++){
+        if (commands[i].name && commands[i].func != listCommands){
+            PRINT_K("->%s: ", commands[i].name);
+            commands[i].func("--help");
+        }
+        // msSleep(250);
+    }
+}
+
 void initCommands(){
-    initCommand("clear", clearScreenBuffer);
+    initCommand("clear", clearTty);
     initCommand("echo", echo);
     initCommand("peek", peek);
     initCommand("poke", poke);
     initCommand("dump", dumpCmd);
     initCommand("reboot", reboot);
     initCommand("hlt", hltCmd);
-    initCommand("stack", NULL);
-    initCommand("help", NULL);
+    initCommand("stack", printStack);
+    initCommand("help", listCommands);
 }
 
 uint8_t execCommand(char *command){
@@ -58,7 +71,7 @@ void initShell(){
 	setCtrlFunction(getScanCodeFromLetter('c'), handleCtrlC);
     initCommands();
 	while (1){
-		prompt("Yona", buffer);
+		prompt("$", buffer);
         if (!(*buffer))
             continue;
 		execCommand(buffer);
