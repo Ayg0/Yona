@@ -16,8 +16,10 @@ void handleCtrlC(){
 
 void initCommand(char *name, commandFunc func){
     static uint8_t index = 0;
-    if (index >= MAX_COMMANDS)
+    if (index >= MAX_COMMANDS) {
+        S_ERR("Increase MAX_COMMANDS maybe ???", NULL);
         return;
+    }
     commands[index].name = name;
     commands[index].func = func;
     index++;
@@ -31,25 +33,25 @@ void listCommands(char *args){
             PRINT_K("->%s: ", commands[i].name);
             commands[i].func("--help");
         }
-        // msSleep(250);
+        msSleep(100);
     }
 }
 
 void initCommands(){
-    initCommand("clear", clearTty);
     initCommand("echo", echo);
     initCommand("peek", peek);
     initCommand("poke", poke);
+    initCommand("hlt", hltCmd);
     initCommand("dump", dumpCmd);
     initCommand("reboot", reboot);
-    initCommand("hlt", hltCmd);
+    initCommand("clear", clearTty);
     initCommand("stack", printStack);
     initCommand("help", listCommands);
 }
 
 uint8_t execCommand(char *command){
     char *name = strtok(command, " ");
-    char *args = name + strlen(name) + 1;
+    char *args = strtok(NULL, " ");
 
     for (uint8_t i = 0; i < MAX_COMMANDS; i++){
         if (!strcmp(commands[i].name, name)){

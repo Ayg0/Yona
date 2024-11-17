@@ -112,7 +112,7 @@ int16_t	getApendingNbr(char *fmtString, int *i){
 }
 
 
-// implemented %c, %s, %u, %d, %x, %p
+// implemented %c, %s, %u, %d, %x, %p, appending with ' ' and 0
 int	print(putCharFnc putChar, char *fmtString, ...){
 	varg_ptr	vptr;
 	int			i, printedSize;

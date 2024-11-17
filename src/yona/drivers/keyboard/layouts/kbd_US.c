@@ -3,7 +3,7 @@
 
 // this array map was provided thanks to: https://stackoverflow.com/questions/61124564/convert-scancodes-to-ascii
 
-uint8_t kbd_US[128] =
+uint8_t KeyboardUS[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
 	0,	/* <-- back space */   
@@ -39,7 +39,7 @@ uint8_t kbd_US[128] =
     0,  /* All other keys are undefined */
 };
 
-uint8_t Skbd_US[128] =
+uint8_t SKeyboardUS[128] =
 {
     0,  27, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
 	0,	/* <-- back space */   
@@ -75,4 +75,4 @@ uint8_t Skbd_US[128] =
     0,  /* All other keys are undefined */
 };
 
-_kbdLayout kbd_US_QWERTY = {.kbdV.keys = kbd_US, .kbdV.shiftedKeys = Skbd_US};
+_kbdLayout kbd_US_QWERTY = {.kbdV.keys = KeyboardUS, .kbdV.shiftedKeys = SKeyboardUS};

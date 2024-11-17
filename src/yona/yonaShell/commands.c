@@ -8,13 +8,12 @@
 extern _yonaData yona;
 
 void    echo(char *args){
-    if (!strcmp(args, "--help")){
+    if (!strcmp(args, "--help")) {
         PRINT_K("Usage: echo <string>\n\r", NULL);
         return;
     }
 
-    while (*args)
-    {
+    while (*args) {
         PRINT_K("%c", *args);
         msSleep(50);
         args++;
@@ -137,18 +136,16 @@ void    clearTty(char *args){
 
 void    printStack(char *args){
     (void)args;
-    if (!strcmp(args, "--help")){
+    size_t esp;
+    
+    if (!strcmp(args, "--help")) {
         PRINT_K("Usage: print the current stack\n\r", NULL);
         return;
     }
-    size_t ebp;
-    size_t esp;
-
-    ebp = yona.mainEBP;
-    asm volatile("mov %%esp, %0" : "=r" (esp));
+    __asm__ __volatile__("mov %%esp, %0" : "=r" (esp));
 
     PRINT_K("Stack:\n\r", NULL);
-    S_DEBUG("EBP: %8p\n", ebp);
+    S_DEBUG("EBP: %8p\n", yona.mainEBP);
     S_DEBUG("ESP: %8p\n", esp);
-    dumpMemory(esp, ebp - esp);
+    dumpMemory(esp, yona.mainEBP - esp);
 }

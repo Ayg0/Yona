@@ -12,7 +12,7 @@ _yonaData	yona = {
 	.OSVersion = "0.7.1",
 	.status = YONA_STATUS_STABLE,
 	.isPaginated = false,
-	.mainEBP = 0
+	.mainEBP = 0,
 };
 extern _sysClock date;
 
@@ -87,9 +87,6 @@ void gdtTest() {
 void	initIdt();
 
 void	kInits(){
-	volatile char *s = "Hello, World! MAIN";
-	(void)s;
-	// PRINT_K("%s\n", s);
 	gdtTest();
 	initGdt();
 	gdtTest();
@@ -101,6 +98,10 @@ void	kInits(){
 }
 
 void kmain(void) {
-	asm volatile("mov %%ebp, %0" : "=r" (yona.mainEBP));
+	__asm__ __volatile__("mov %%ebp, %0" : "=r" (yona.mainEBP) : : "memory");
+	S_DEBUG("ebp %p\n", yona.mainEBP);
 	kInits();
+	volatile char s[] = "Hello this is the Main Function";
+	volatile char *str = (char *)s; (void)str;
+
 }
