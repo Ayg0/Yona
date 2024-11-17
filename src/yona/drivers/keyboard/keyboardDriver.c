@@ -174,22 +174,40 @@ void    keyboardHandler(_registers r){
     // check for key release
 
     if (scanCode & 0x80)
-        return handleKeyRelease(scanCode);
+        return kbdData.keyReleaseHandler(scanCode);
     letter = getLetterFromScanCode(scanCode);
 
     // handle ctrl+key
     if (BIT_IS_SET(kbdData.kbdFlags, CTRL_MODIFIER))
         return handleCtrl(scanCode);
     else if (letter) // handle letter
-        handleKey(letter);
+        kbdData.keyPressHandler(letter);
     else // handle special keys (shift, caps lock, backspace, etc.)
         handleSpecialKeys(scanCode);
+}
+
+// null restores the default handler
+void    setKeyPressHandler(onKeyPressHanlder handler){
+    if (handler)
+        kbdData.keyPressHandler = handler;
+    else
+        kbdData.keyPressHandler = handleKey;
+}
+
+// null restores the default handler
+void    setKeyReleaseHandler(onKeyReleaseHandler handler){
+    if (handler)
+        kbdData.keyReleaseHandler = handler;
+    else
+        kbdData.keyReleaseHandler = handleKeyRelease;
 }
 
 void initKeyboard(){
     kbdData.layout = kbd_US_QWERTY;
     kbdData.kbdFlags = 0;
     kbdData.buffer.index = 0;
+    kbdData.keyPressHandler = handleKey;
+    kbdData.keyReleaseHandler = handleKeyRelease;
     setIRQHandler(1, keyboardHandler);
 }
 

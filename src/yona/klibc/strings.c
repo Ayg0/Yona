@@ -1,6 +1,19 @@
 #include "klibc/types.h"
 #include "klibc/memory.h"
+#include "klibc/strings.h"
 #include "klibc/print.h"
+
+
+size_t strlenIgnoreAnsii(const char *str){
+    size_t i = 0;
+    while (str[i]){
+        if (str[i] == '\033')
+            str += strchr(str, 'm') - str;
+        else
+            i++;
+    }
+    return i;
+}
 
 size_t strlen(const char *str){
     size_t i = 0;

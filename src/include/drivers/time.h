@@ -54,3 +54,5 @@ void	msSleep(uint32_t ms);
 
 void	setTime(uint8_t hour, uint8_t min, uint32_t sec);
 void	setDate(uint8_t day, uint8_t month, uint32_t year);
+
+uint32_t getMsElapsed();

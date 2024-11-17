@@ -12,7 +12,7 @@ typedef struct command
     commandFunc	func;
 } _command;
 
-// commands
+// commands:
 void    poke(char *args);
 void    echo(char *args);
 void    peek(char *args);
@@ -21,3 +21,6 @@ void    hltCmd(char *args);
 void    dumpCmd(char *args);
 void    clearTty(char *args);
 void    printStack(char *args);
+
+// games:
+void    snakeGame(char *args);

@@ -24,6 +24,10 @@ void	tick(_registers r){
 	updateStatusBar();
 }
 
+uint32_t getMsElapsed(){
+	return date.msElapsedFromBoot;
+}
+
 
 void msSleep(uint32_t ms){
 	uint32_t start = date.msElapsedFromBoot;

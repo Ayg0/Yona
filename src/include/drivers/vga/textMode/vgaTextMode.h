@@ -71,6 +71,7 @@ uint8_t kPutS(char *s);
 uint8_t scroll();
 uint8_t moveCursor(int8_t x, int8_t y);
 void    enableCursor(uint8_t cursor_start, uint8_t cursor_end);
+void    disableCursor();
 
 // output the screen-buff
 uint8_t screenBuffOut();

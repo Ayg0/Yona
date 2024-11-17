@@ -11,7 +11,7 @@ enum yonaStatus {
 typedef struct yonaData {
     char        OSVersion[100];
     enum yonaStatus  status;
-    bool        isPaginated;
+    bool    isPaginated;
     size_t      mainEBP;
 } _yonaData;
 

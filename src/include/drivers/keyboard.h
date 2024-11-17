@@ -11,6 +11,8 @@
 # define KBD_HISTORY_SIZE 128
 
 typedef void (*ctrlKeyFunc)(void);
+typedef void (*onKeyPressHanlder)(uint8_t);
+typedef void (*onKeyReleaseHandler)(uint8_t);
 
 // keyboard flags
 # define SHIFT_MODIFIER     0
@@ -41,11 +43,14 @@ typedef struct kbdBuffer
 
 typedef struct keyboardData
 {
-    _kbdLayout	layout;
-    _kbdBuffer  buffer;
-    _kbdBuffer  historyBuffer[128];
-    uint8_t     historyIndex;
-    uint8_t     kbdFlags;
+    _kbdLayout	        layout;
+    _kbdBuffer          buffer;
+    _kbdBuffer          historyBuffer[128];
+    uint8_t             historyIndex;
+    uint8_t             kbdFlags;
+    onKeyPressHanlder   keyPressHandler;
+    onKeyReleaseHandler keyReleaseHandler;
+    
 } _keyboardData;
 
 
@@ -59,7 +64,10 @@ void    clearKeyboardBuffer();
 void handleCtrl(uint8_t scanCode);
 void setCtrlFunction(uint8_t scanCode, ctrlKeyFunc func);
 // keyboard handler related:
-void inturruptPrompting();
+void    inturruptPrompting();
+void    setKeyPressHandler(onKeyPressHanlder handler);
+void    setKeyReleaseHandler(onKeyReleaseHandler handler);
+
 // scanCode related:
 uint8_t getLetterFromScanCode(uint8_t scanCode);
 uint8_t getScanCodeFromLetter(uint8_t letter);

@@ -47,6 +47,7 @@ void initCommands(){
     initCommand("clear", clearTty);
     initCommand("stack", printStack);
     initCommand("help", listCommands);
+    initCommand("snake", snakeGame);
 }
 
 uint8_t execCommand(char *command){

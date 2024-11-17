@@ -22,6 +22,7 @@
 		"idts.h": "c",
 		"memory.h": "c",
 		"time.h": "c",
-		"yonashell.h": "c"
+		"yonashell.h": "c",
+		"converts.h": "c"
 	}
 }
