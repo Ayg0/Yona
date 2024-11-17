@@ -51,7 +51,7 @@ void initCommands(){
 
 uint8_t execCommand(char *command){
     char *name = strtok(command, " ");
-    char *args = strtok(NULL, " ");
+    char *args = strtok(NULL, NULL);
 
     for (uint8_t i = 0; i < MAX_COMMANDS; i++){
         if (!strcmp(commands[i].name, name)){

@@ -138,6 +138,9 @@ void    printStack(char *args){
     (void)args;
     size_t esp;
     
+	volatile char s[] = "Hii I'm in the printStack Function";
+    (void)s;
+
     if (!strcmp(args, "--help")) {
         PRINT_K("Usage: print the current stack\n\r", NULL);
         return;

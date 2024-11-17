@@ -98,10 +98,12 @@ void	kInits(){
 }
 
 void kmain(void) {
-	__asm__ __volatile__("mov %%ebp, %0" : "=r" (yona.mainEBP) : : "memory");
-	S_DEBUG("ebp %p\n", yona.mainEBP);
-	kInits();
-	volatile char s[] = "Hello this is the Main Function";
-	volatile char *str = (char *)s; (void)str;
+	volatile char s[] = "Hii I'm in the main Function";
+	(void)s;
 
+	__asm__ __volatile__("mov %%ebp, %0" : "=r" (yona.mainEBP));
+
+	S_DEBUG("ebp %p\n", yona.mainEBP);
+
+	kInits();
 }
