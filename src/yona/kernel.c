@@ -9,7 +9,7 @@
 
 _ttySession tty;
 _yonaData	yona = {
-	.OSVersion = "0.7.1",
+	.OSVersion = "0.7.7",
 	.status = YONA_STATUS_STABLE,
 	.isPaginated = false,
 	.mainEBP = 0,
