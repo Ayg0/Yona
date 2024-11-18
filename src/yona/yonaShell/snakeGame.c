@@ -9,6 +9,7 @@
 # define GRID_W 78
 # define GRID_H 22
 # define MAX_FOOD_COUNT 5
+# define MAX_FOOD_BAR 15
 
 typedef enum {
     HEAD = '$',
@@ -50,6 +51,7 @@ typedef struct gameData {
     uint32_t    foodCount;
     uint32_t    gameSpeed;
     uint8_t     difficulty;
+    uint8_t     foodBar;
 } _gameData;
 
 _gameData gd;
@@ -98,12 +100,26 @@ void    initPositions(void){
 void    displayGameInfo(void){
     char   info[50] = {0};
 
-    SPRINTF(info, COLOR_GREEN"Score: %d"COLOR_DEFAULT"| "COLOR_YELLOW"Difficulty: %d"COLOR_DEFAULT, gd.score, gd.difficulty);
-    moveCursor((GRID_W - strlenIgnoreAnsii(info)) / 2, 0);
+    SPRINTF(info, COLOR_GREEN"Score: %d"COLOR_DEFAULT, gd.score);
+    moveCursor(1, 23);
+    PRINT_K("%s", info);
+
+    if (gd.foodBar){
+        moveCursor((VGA_WIDTH - MAX_FOOD_BAR) / 2, 23);
+        for (uint8_t i = 0; i < gd.foodBar; i++)
+            PRINT_K(COLOR_RED"|"COLOR_DEFAULT, 0);
+    }
+
+    SPRINTF(info, COLOR_YELLOW"Difficulty: %d"COLOR_DEFAULT, gd.difficulty + 1);
+    moveCursor(VGA_WIDTH - strlenIgnoreAnsii(info), 23);
     PRINT_K("%s", info);
 }
 
+extern _ttySession tty;
+
 void    displayGame(void){
+    S_INFO("speed: %d\n", gd.gameSpeed);
+    S_INFO("Snake size: %d\n", gd.snakeSize);
     clearScreenBuffer();
     displayGameInfo();
     moveCursor(0, 1);
@@ -113,7 +129,14 @@ void    displayGame(void){
 }
 
 void    setHeadDirection(direction dr){
-    gd.snakeBody[0].dir = dr;
+    bool    dontInverse;
+    
+    
+    dontInverse = (gd.snakeBody[0].dir == UP && dr == DOWN) || (gd.snakeBody[0].dir == DOWN && dr == UP) ||
+                (gd.snakeBody[0].dir == LEFT && dr == RIGHT) || (gd.snakeBody[0].dir == RIGHT && dr == LEFT);
+
+    if (!dontInverse)
+        gd.snakeBody[0].dir = dr;
 }
 
 _pos    getNextPos(_bodyPart part){
@@ -147,6 +170,7 @@ void    setBodyPart(uint8_t x, uint8_t y, uint8_t isHead, direction dir){
     gd.snakeBody[gd.snakeSize].dir = dir;
     gd.grid[y][x] = isHead ? HEAD : BODY;
     gd.snakeSize++;
+    S_DEBUG("Snake size: %d\n", gd.snakeSize);
 }
 
 void    addBodyPart(){
@@ -174,6 +198,8 @@ void    addBodyPart(){
 
 
 void    handleFood(snakeGameElement element){
+    uint32_t    toSub;
+
     switch (element)
     {
     case ALPHA:
@@ -190,8 +216,12 @@ void    handleFood(snakeGameElement element){
     }
     gd.foodCount--;
     if (gd.snakeSize % 5 == 0){
-        gd.difficulty++;
-        gd.gameSpeed -= 10 * gd.difficulty;
+        toSub = gd.difficulty > 7 ? 15 : 30;
+        if (gd.gameSpeed > toSub){
+            gd.gameSpeed -= toSub;
+            gd.difficulty++;
+        }
+        displayGame();
     }
 }
 
@@ -212,9 +242,13 @@ void    moveSnake(){
     if (getMsElapsed() - lastUpdate < gd.gameSpeed)
         return ;
 
+    if (!gd.foodBar)
+        gd.foodBar = MAX_FOOD_BAR;
+    else
+        gd.foodBar--;
     lastUpdate = getMsElapsed(); // Update lastUpdate after the time check
     // move the snake
-    for (uint32_t i = 0; i < gd.snakeSize ; i++)
+    for (uint32_t i = 0; i < gd.snakeSize; i++)
     {
         if (gd.snakeBody[i].dir == NUN)
             gd.snakeBody[i].dir = gd.snakeBody[i - 1].dir;
@@ -262,6 +296,8 @@ void    initGameData(){
     gd.isRunning = 1;
     gd.foodCount = 0;
     gd.gameSpeed = 250;
+    gd.difficulty = 1;
+    gd.foodBar = 0;
     setBodyPart(10, 10, 1, NUN);
     gd.grid[gd.snakeBody[0].pos.y][gd.snakeBody[0].pos.x] = HEAD;
 }
@@ -274,12 +310,10 @@ void    snakeGame(char *args){
     displayGame();
     setKeyPressHandler(inputFunc);
     disableCursor();
-    int i = 0;
     while (gd.isRunning != 0){
         msSleep(50);
         displayGame();
         moveSnake();
-        i++;
         if (gd.foodCount < MAX_FOOD_COUNT){
             _pos pos = generateFood();
             S_DEBUG("Food at %d, %d\n", pos.x, pos.y);
@@ -288,7 +322,7 @@ void    snakeGame(char *args){
     clearScreenBuffer();
     enableCursor(14, 15);
     PRINT_K("\r\n\r\n********** GAME OVER **********\r\n\r\n", 0);
-    PRINT_K("       Your score: %d\r\n\r\n", gd.score);
-    PRINT_K("*******************************\r\n\r\n", 0);
+    PRINT_K("       Your score: %d", gd.score);
+    PRINT_K("\r\n\r\n*******************************\r\n\r\n", 0);
     setKeyPressHandler(NULL);
 }
