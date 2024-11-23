@@ -4,6 +4,7 @@
 #include "drivers/time.h"
 #include "drivers/keyboard.h"
 #include "klibc/converts.h"
+#include "klibc/random.h"
 #include "yonaShell/yonaShell.h"
 
 # define GRID_W 78
@@ -17,8 +18,9 @@ typedef enum {
     EMPTY = ' ',
     H_WALL = '_',   // horizontal Wall
     V_WALL = '|',   // vertical Wall
-    ALPHA = '.',    // Small food
-    ORAYN = '@',    // Big food
+    ALPHA = '.',    // Small Food
+    ORAYN = '@',    // Big Food
+    EGG = '0',      // Big Bonus Food
 } snakeGameElement;
 
 typedef enum {
@@ -52,19 +54,13 @@ typedef struct gameData {
     uint32_t    gameSpeed;
     uint8_t     difficulty;
     uint8_t     foodBar;
+    uint8_t     lastDirection;
+    _pos        currentEggPos;
 } _gameData;
 
 _gameData gd;
 
-
-
-uint32_t rand() {
-    static uint32_t seed = 123456789; // Initial seed value
-    seed = (1103515245 * seed + 12345) % (1 << 31); // LCG formula
-    return seed;
-}
-
-_pos    generateFood(){
+_pos    generateFood(bool generateBonusFlag){
     _pos    foodPos;
     uint8_t x, y;
 
@@ -72,9 +68,17 @@ _pos    generateFood(){
         x = rand() % GRID_W;
         y = rand() % GRID_H;
     } while (gd.grid[y][x] != EMPTY);
+
     foodPos.x = x;
     foodPos.y = y;
     gd.foodCount++;
+    if (generateBonusFlag){
+        gd.grid[y][x] = EGG;
+        gd.currentEggPos.x = x;
+        gd.currentEggPos.y = y;
+        gd.foodBar = MAX_FOOD_BAR;
+        return foodPos;
+    }
     gd.grid[y][x] = (rand() % 2) ? ALPHA : ORAYN;
     return foodPos;
 }
@@ -118,8 +122,6 @@ void    displayGameInfo(void){
 extern _ttySession tty;
 
 void    displayGame(void){
-    S_INFO("speed: %d\n", gd.gameSpeed);
-    S_INFO("Snake size: %d\n", gd.snakeSize);
     clearScreenBuffer();
     displayGameInfo();
     moveCursor(0, 1);
@@ -131,9 +133,8 @@ void    displayGame(void){
 void    setHeadDirection(direction dr){
     bool    dontInverse;
     
-    
-    dontInverse = (gd.snakeBody[0].dir == UP && dr == DOWN) || (gd.snakeBody[0].dir == DOWN && dr == UP) ||
-                (gd.snakeBody[0].dir == LEFT && dr == RIGHT) || (gd.snakeBody[0].dir == RIGHT && dr == LEFT);
+    dontInverse = (gd.lastDirection == UP && dr == DOWN) || (gd.lastDirection == DOWN && dr == UP) ||
+                (gd.lastDirection == LEFT && dr == RIGHT) || (gd.lastDirection == RIGHT && dr == LEFT);
 
     if (!dontInverse)
         gd.snakeBody[0].dir = dr;
@@ -142,8 +143,7 @@ void    setHeadDirection(direction dr){
 _pos    getNextPos(_bodyPart part){
     _pos    position = part.pos;
 
-    switch (part.dir)
-    {
+    switch (part.dir) {
     case LEFT:
         position.x -= 1;
         break;
@@ -170,7 +170,6 @@ void    setBodyPart(uint8_t x, uint8_t y, uint8_t isHead, direction dir){
     gd.snakeBody[gd.snakeSize].dir = dir;
     gd.grid[y][x] = isHead ? HEAD : BODY;
     gd.snakeSize++;
-    S_DEBUG("Snake size: %d\n", gd.snakeSize);
 }
 
 void    addBodyPart(){
@@ -199,29 +198,42 @@ void    addBodyPart(){
 
 void    handleFood(snakeGameElement element){
     uint32_t    toSub;
+    static uint8_t  smallFoodCount;
+    static uint32_t foodAte;
 
     switch (element)
     {
     case ALPHA:
         gd.score += 10;
-        addBodyPart();
+        smallFoodCount++;
+        if (smallFoodCount == 3)
+            addBodyPart(), smallFoodCount = 0;
         break;
     case ORAYN:
+        gd.score += 30;
+        addBodyPart();
+        break;
+    case EGG:
         gd.score += 50;
         addBodyPart();
         addBodyPart();
-        break;
+        gd.foodBar = 0;
     default:
         break;
     }
     gd.foodCount--;
     if (gd.snakeSize % 5 == 0){
-        toSub = gd.difficulty > 7 ? 15 : 30;
+        toSub =  30 / gd.difficulty;
         if (gd.gameSpeed > toSub){
             gd.gameSpeed -= toSub;
             gd.difficulty++;
         }
         displayGame();
+    }
+    foodAte++;
+    if (foodAte == 5){
+        generateFood(1);
+        foodAte = 0;
     }
 }
 
@@ -242,10 +254,15 @@ void    moveSnake(){
     if (getMsElapsed() - lastUpdate < gd.gameSpeed)
         return ;
 
-    if (!gd.foodBar)
-        gd.foodBar = MAX_FOOD_BAR;
-    else
-        gd.foodBar--;
+    gd.foodBar -= gd.foodBar ? 1: 0; 
+
+    if (gd.foodBar == 1){
+        gd.foodBar = 0;
+        gd.grid[gd.currentEggPos.y][gd.currentEggPos.x] = ' ';
+        gd.currentEggPos.x = -1;
+        gd.currentEggPos.y = -1;
+    }
+
     lastUpdate = getMsElapsed(); // Update lastUpdate after the time check
     // move the snake
     for (uint32_t i = 0; i < gd.snakeSize; i++)
@@ -258,7 +275,7 @@ void    moveSnake(){
             gd.isRunning = 0;
             return ;
         }
-        if (element == ALPHA || element == ORAYN)
+        if (element == ALPHA || element == ORAYN || element == EGG)
             handleFood(element);
         gd.grid[newPos.y][newPos.x] = gd.grid[gd.snakeBody[i].pos.y][gd.snakeBody[i].pos.x];
         gd.grid[gd.snakeBody[i].pos.y][gd.snakeBody[i].pos.x] = EMPTY;
@@ -269,6 +286,7 @@ void    moveSnake(){
     // update direction of the parts
     for (uint32_t i = gd.snakeSize - 1; i > 0; i--)
         gd.snakeBody[i].dir = gd.snakeBody[i - 1].dir;
+    gd.lastDirection = gd.snakeBody[0].dir;
 }
 
 void    inputFunc(uint8_t letter){
@@ -298,6 +316,9 @@ void    initGameData(){
     gd.gameSpeed = 250;
     gd.difficulty = 1;
     gd.foodBar = 0;
+    gd.currentEggPos.x = -1;
+    gd.currentEggPos.x = -1;
+    gd.lastDirection = NUN;
     setBodyPart(10, 10, 1, NUN);
     gd.grid[gd.snakeBody[0].pos.y][gd.snakeBody[0].pos.x] = HEAD;
 }
@@ -314,10 +335,8 @@ void    snakeGame(char *args){
         msSleep(50);
         displayGame();
         moveSnake();
-        if (gd.foodCount < MAX_FOOD_COUNT){
-            _pos pos = generateFood();
-            S_DEBUG("Food at %d, %d\n", pos.x, pos.y);
-        }
+        if (gd.foodCount < MAX_FOOD_COUNT)
+            generateFood(0);
     }
     clearScreenBuffer();
     enableCursor(14, 15);

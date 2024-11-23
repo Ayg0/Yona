@@ -89,12 +89,18 @@ void	initIdt();
 void	kInits(){
 	gdtTest();
 	initGdt();
+	S_SUCC("GDT Initialized\r\n", NULL);
 	gdtTest();
 	initIdt();
+	S_SUCC("IDT Initialized\r\n", NULL);
 	initTty();
+	S_SUCC("TTY Initialized\r\n", NULL);
 	initTimer(1000);
+	S_SUCC("Timer Initialized\r\n", NULL);
 	initKeyboard();
+	S_SUCC("Keyboard Initialized\r\n", NULL);
 	initShell();
+	S_SUCC("Shell Initialized\r\n", NULL);
 }
 
 void kmain(void) {
