@@ -4,7 +4,8 @@ YonaOs is a 32-bit hobby operating system made in C. This is my 4th attempt at b
 - ANSI-like escape sequences to handle coloring.
 - using serial communication for debugging.
 - printf and sprintf clones for both the VGA and serial communication.
-- a simple make file to build the OS. no need for setting up a VM or a cross-compiler.
+- as simple as possible to play test all you need is to use 'make'.
+- a minimalistic shell with various commands and games.
 
 ## Text Mode Colors
 To change color, just print `"\033[<color-ID>m"`. Here are the available colors:
