@@ -87,6 +87,8 @@ void gdtTest() {
 void	initIdt();
 
 void	kInits(){
+	initSerial();
+	S_SUCC("Serial Communication Initialized\r\n", NULL);
 	gdtTest();
 	initGdt();
 	S_SUCC("GDT Initialized\r\n", NULL);
@@ -108,8 +110,6 @@ void kmain(void) {
 	(void)s;
 
 	__asm__ __volatile__("mov %%ebp, %0" : "=r" (yona.mainEBP));
-
-	S_DEBUG("ebp %p\n", yona.mainEBP);
 
 	kInits();
 }

@@ -1,10 +1,14 @@
+BITS 32
+
 extern kmain
 ; Declare constants for the multiboot header.
-MBALIGN  equ  1 << 0
-MEMINFO  equ  1 << 1
-MBFLAGS  equ  MBALIGN | MEMINFO
-MAGIC    equ  0x1BADB002
-CHECKSUM equ -(MAGIC + MBFLAGS)
+MBALIGN		equ  1 << 0
+MEMINFO		equ  1 << 1
+; will help us when we want to change the video mode
+MUSEGFX		equ 0
+MBFLAGS		equ  MBALIGN | MEMINFO | MUSEGFX
+MAGIC		equ  0x1BADB002
+CHECKSUM	equ -(MAGIC + MBFLAGS)
 
 ; Declare a multiboot header that marks the program as a kernel. These are magic
 ; values that are documented in the multiboot standard. The bootloader will

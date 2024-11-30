@@ -22,7 +22,7 @@ void    echo(char *args){
 }
 
 void    peek(char *args){
-    uint32_t    addr;
+    size_t	addr;
 
     if (!strcmp(args, "--help")){
         PRINT_K("Usage: peek <address [HEX]>\n\r", NULL);
@@ -34,8 +34,8 @@ void    peek(char *args){
 }
 
 void    poke(char *args){
-    uint32_t    addr;
-    uint8_t     value;
+    size_t	addr;
+    uint8_t	value;
 
     if (!strcmp(args, "--help")){
         PRINT_K("Usage: poke <address [HEX]> <value [DEC]>\n\r", NULL);

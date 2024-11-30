@@ -11,6 +11,7 @@
 # define GRID_H 22
 # define MAX_FOOD_COUNT 5
 # define MAX_FOOD_BAR 15
+# define FOOD_DIFFICULTY_MODIFIER 5
 
 typedef enum {
     HEAD = '$',
@@ -222,7 +223,7 @@ void    handleFood(snakeGameElement element){
         break;
     }
     gd.foodCount--;
-    if (gd.snakeSize % 5 == 0){
+    if (gd.snakeSize % FOOD_DIFFICULTY_MODIFIER == 0){
         toSub =  30 / gd.difficulty;
         if (gd.gameSpeed > toSub){
             gd.gameSpeed -= toSub;
@@ -323,9 +324,30 @@ void    initGameData(){
     gd.grid[gd.snakeBody[0].pos.y][gd.snakeBody[0].pos.x] = HEAD;
 }
 
-void    snakeGame(char *args){
-    (void)args;
+bool	gameHelpers(char *args){
 
+	if (strcmp(args, "--help") == 0)
+        return PRINT_K("it's the snake game, for more info use --rules\r\n", 0);
+
+	if (strcmp(args, "--rules") == 0){
+        PRINT_K("********** SNAKE GAME RULES **********\r\n", 0);
+        PRINT_K("-> The game is simple, you control a snake and you need to eat food to grow.\r\n", 0);
+        PRINT_K("-> The game will end if you hit the wall or the snake body.\r\n", 0);
+        PRINT_K("-> The game speed will increase every %d food eaten.\r\n", FOOD_DIFFICULTY_MODIFIER);
+        PRINT_K("-> '%c' are the smaller version of food you need 3 of them to grow\r\n", ALPHA);
+        PRINT_K("-> '%c' are the bigger version of food you need 1 of them to grow\r\n", ORAYN);
+        PRINT_K("-> '%c' are the bonus food you need 1 of them to grow 2 body elements.\r\n", EGG);
+        PRINT_K("-> HAVE FUN!\r\n", 0);
+        PRINT_K("********************************\r\n", 0);
+        return 1;
+    }
+    return 0;
+}
+
+void	snakeGame(char *args){
+
+    if (gameHelpers(args))
+    	return ;
     initPositions();
     initGameData();
     displayGame();

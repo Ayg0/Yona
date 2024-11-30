@@ -4,9 +4,8 @@ AS=nasm
 SRC_DIR=src
 ARCH=arch/i386
 LDSCRIPT=$(SRC_DIR)/$(ARCH)/linker.ld
-# DO_I_SPEED=-O2
-DO_I_SPEED=
-CFLAGS=-std=gnu99 -ffreestanding ${DO_I_SPEED} -Wall -Wextra -Werror\
+
+CFLAGS=-std=gnu99 -ffreestanding -Wall -Wextra -Werror\
 		 -fno-builtin -nodefaultlibs -Isrc/include\
 		 -mno-red-zone -mno-80387 -mno-mmx -mno-3dnow -mno-sse -mno-sse2\
 		 -fno-stack-protector -fno-omit-frame-pointer

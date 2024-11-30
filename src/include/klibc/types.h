@@ -6,11 +6,8 @@
 # define int16_t    short
 # define int8_t     char
 # define int32_t    int
-
-# define physAddr  size_t 
-
 # define size_t   uint32_t
-// declare bool type
+
 # define bool  uint8_t
 # define true     1
 # define false    0

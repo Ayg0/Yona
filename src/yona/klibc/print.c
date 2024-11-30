@@ -59,7 +59,7 @@ static int putNbr(int32_t nbr, putCharFnc putChar){
 	return (printedSize);
 }
 
-static int appendPutPtr(physAddr ptr, char *base, size_t baseLen, putCharFnc putChar){
+static int appendPutPtr(size_t ptr, char *base, size_t baseLen, putCharFnc putChar){
 	int printedSize = 0;
 
 	// appendingWidth -= 2;
@@ -92,7 +92,10 @@ int	handleFormatModifiers(varg_ptr *vptr, char *fmtString, int *i, putCharFnc pu
 		printedSize = uAppendPutNbr(VARG_NEXT(*vptr, uint32_t), HEX_BASE, 16, putChar);
 		break;
 	case 'p':
-		printedSize = appendPutPtr(VARG_NEXT(*vptr, physAddr), HEX_BASE, 16, putChar);
+		printedSize = appendPutPtr(VARG_NEXT(*vptr, size_t), HEX_BASE, 16, putChar);
+		break;
+	case 'b':
+		printedSize = uAppendPutNbr(VARG_NEXT(*vptr, uint32_t), BIN_BASE, 2, putChar);
 		break;
 	default:
 		printedSize = putChar(fmtString[*i]);
@@ -112,7 +115,7 @@ int16_t	getApendingNbr(char *fmtString, int *i){
 }
 
 
-// implemented %c, %s, %u, %d, %x, %p, appending with ' ' and 0
+// implemented %c, %s, %u, %d, %x, %p, %b, appending with ' ' and 0
 int	print(putCharFnc putChar, char *fmtString, ...){
 	varg_ptr	vptr;
 	int			i, printedSize;

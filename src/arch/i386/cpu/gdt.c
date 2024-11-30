@@ -1,6 +1,7 @@
 #include "klibc/types.h"
 #include "klibc/memory.h"
 #include "arch/i386/idts.h"
+#include "klibc/print.h"
 
 _gdtEntry	gdtEntries[GDT_ENTRIES];
 _gdtPtr		gdtPtr;
@@ -8,6 +9,12 @@ _gdtPtr		gdtPtr;
 extern void	gdtLoader(_gdtPtr *gdtPtr);
 
 void	setGdtEntry(uint8_t index, uint32_t limit, uint32_t base, uint8_t accessByte, uint8_t flags){
+	
+	if (index >= GDT_ENTRIES){
+		S_ERR("GDT index out of range !!\r\n", NULL);
+		return ;
+	}
+	
 	// define the size of the segment:
 	gdtEntries[index].lowLimit = L16(limit);
 	gdtEntries[index].highLimit = (limit >> 16) & 0x0F;	// limit at the last for bits

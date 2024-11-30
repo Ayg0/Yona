@@ -48,16 +48,21 @@ int     print(putCharFnc fnc, char *fmtString, ...);
     setSprintBuff(NULL);\
 } while (0)
 
-
-
-#define S_INFO(FMT_STRING, ...)    print(SPutC, "\033[34mINFO\033[0m [%s] " FMT_STRING, __func__, __VA_ARGS__)
+// Prints a string to the serial Communication and updates the state of the yonaData.
+#define S_INFO(FMT_STRING, ...)    print(SPutC, "\033[34mINFO\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__)
 
 #define S_SUCC(FMT_STRING, ...)    do {\
-                                        print(SPutC, "\033[92mSUCC\033[0m [%s] " FMT_STRING, __func__, __VA_ARGS__);\
+                                        print(SPutC, "\033[92mSUCC\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__);\
                                         setYonaStatus(YONA_STATUS_STABLE);\
                                     } while (0)
 #define S_ERR(FMT_STRING, ...)     do {\
-                                        print(SPutC, "\033[31mERR\033[0m [%s] " FMT_STRING, __func__, __VA_ARGS__);\
+                                        print(SPutC, "\033[31mERR\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__);\
                                         setYonaStatus(YONA_STATUS_ERROR);\
                                     } while (0)
-#define S_DEBUG(FMT_STRING, ...)   print(SPutC, "\033[93mDEBUG\033[0m [%s] " FMT_STRING, __func__, __VA_ARGS__)
+#define S_DEBUG(FMT_STRING, ...)   print(SPutC, "\033[93mDEBUG\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__)
+
+// Prints a string to the VGA doesn't update the state of the yonaData.
+#define K_INFO(FMT_STRING, ...)    print(kPutC, "\033[34mINFO\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__)
+#define K_SUCC(FMT_STRING, ...)    print(kPutC, "\033[92mSUCC\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__)
+#define K_ERR(FMT_STRING, ...)     print(kPutC, "\033[31mERR\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__)
+#define K_DEBUG(FMT_STRING, ...)   print(kPutC, "\033[93mDEBUG\033[39m [%s] " FMT_STRING, __func__, __VA_ARGS__)
